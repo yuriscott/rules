@@ -13,6 +13,11 @@ groups:
         for: 10m
         labels:
           severity: critical
+          crd_rule_name: VirtAPIDown
+          resource_type: vm
+          custom_rule_type: P
+          resource_instance: VirtAPIDown
+          rule_type: '1'
 
       - record: kubevirt_allocatable_nodes_count
         expr: |
@@ -26,6 +31,11 @@ groups:
         for: 60m
         labels:
           severity: warning
+          crd_rule_name: LowVirtAPICount
+          resource_type: vm
+          custom_rule_type: P
+          resource_instance: LowVirtAPICount
+          rule_type: '1'
 
       - record: kubevirt_kvm_available_nodes_count
         expr: |
@@ -39,6 +49,11 @@ groups:
         for: 5m
         labels:
           severity: warning
+          crd_rule_name: LowKVMNodesCount
+          resource_type: vm
+          custom_rule_type: P
+          resource_instance: LowKVMNodesCount
+          rule_type: '1'
 
       - record: kubevirt_virt_controller_up_total
         expr: |
@@ -56,6 +71,11 @@ groups:
         for: 10m
         labels:
           severity: warning
+          crd_rule_name: LowReadyVirtControllersCount
+          resource_type: vm
+          custom_rule_type: P
+          resource_instance: LowReadyVirtControllersCount
+          rule_type: '1'
 
       - alert: NoReadyVirtController
         annotations:
@@ -65,6 +85,11 @@ groups:
         for: 10m
         labels:
           severity: critical
+          crd_rule_name: NoReadyVirtController
+          resource_type: vm
+          custom_rule_type: P
+          resource_instance: NoReadyVirtController
+          rule_type: '1'
 
       - alert: VirtControllerDown
         annotations:
@@ -74,6 +99,11 @@ groups:
         for: 10m
         labels:
           severity: critical
+          crd_rule_name: VirtControllerDown
+          resource_type: vm
+          custom_rule_type: P
+          resource_instance: VirtControllerDown
+          rule_type: '1'
 
 
       - alert: LowVirtControllersCount
@@ -84,6 +114,11 @@ groups:
         for: 10m
         labels:
           severity: warning
+          crd_rule_name: LowVirtControllersCount
+          resource_type: vm
+          custom_rule_type: P
+          resource_instance: LowVirtControllersCount
+          rule_type: '1'
 
       - alert: VirtControllerRESTErrorsHigh
         annotations:
@@ -93,6 +128,11 @@ groups:
            /sum(rate( rest_client_requests_total{namespace="kubevirt",pod=~"virt-controller-.*"} [60m] ) ) >= 0.05
         labels:
           severity: "warning"
+          crd_rule_name: VirtControllerRESTErrorsHigh
+          resource_type: vm
+          custom_rule_type: P
+          resource_instance: pod
+          rule_type: '1'
 
       - alert: VirtControllerRESTErrorsBurst
         annotations:
@@ -102,6 +142,11 @@ groups:
         for: 5m
         labels:
           severity: "critical"
+          crd_rule_name: VirtControllerRESTErrorsBurst
+          resource_type: vm
+          custom_rule_type: P
+          resource_instance: pod
+          rule_type: '1'
 
       - record: kubevirt_virt_operator_up_total
         expr: |
@@ -115,6 +160,11 @@ groups:
         for: 10m
         labels:
           severity: critical
+          crd_rule_name: VirtOperatorDown
+          resource_type: vm
+          custom_rule_type: P
+          resource_instance: VirtOperatorDown
+          rule_type: '1'
 
       - alert: LowVirtOperatorCount
         annotations:
@@ -124,6 +174,11 @@ groups:
         for: 10m
         labels:
           severity: warning
+          crd_rule_name: LowVirtOperatorCount
+          resource_type: vm
+          custom_rule_type: P
+          resource_instance: LowVirtOperatorCount
+          rule_type: '1'
 
       - alert: VirtOperatorRESTErrorsHigh
         annotations:
@@ -132,6 +187,11 @@ groups:
           sum(rate(rest_client_requests_total{namespace="kubevirt",pod=~"virt-operator-.*",code=~"(4|5)[0-9][0-9]"}[60m]))  /  sum(rate(rest_client_requests_total{namespace="kubevirt",pod=~"virt-operator-.*"}[60m]))>0.05
         labels:
           severity: warning
+          crd_rule_name: VirtOperatorRESTErrorsHigh
+          resource_type: vm
+          custom_rule_type: P
+          resource_instance: pod
+          rule_type: '1'
 
       - alert: VirtControllerRESTErrorsBurst
         annotations:
@@ -141,9 +201,14 @@ groups:
         for: 10m
         labels:
           severity: critical
+          crd_rule_name: VirtControllerRESTErrorsBurst
+          resource_type: vm
+          custom_rule_type: P
+          resource_instance: pod
+          rule_type: '1'
 
 
-      - record: kubevirt_virt_operator_up_total
+      - record: kubevirt_virt_operator_ready_total
         expr: |
           sum(kubevirt_virt_operator_ready{namespace='kubevirt'}) or vector(0)
 
@@ -156,12 +221,17 @@ groups:
         annotations:
           message: Some virt-operators are running but not ready.
         expr: |
-          kubevirt_virt_operator_ready_total<kubevirt_virt_operator_up_total
+          kubevirt_virt_operator_ready_total <  kubevirt_virt_operator_up_total
         for: 10m
         labels:
           severity: warning
+          crd_rule_name: LowReadyVirtOperatorsCount
+          resource_type: vm
+          custom_rule_type: P
+          resource_instance: NoReadyVirtController
+          rule_type: '1'
 
-      - alert: LowReadyVirtOperatorsCount
+      - alert: NoReadyVirtOperator
         annotations:
           message: No ready virt-operator was detected for the last 10 min.
         expr: |
@@ -169,6 +239,11 @@ groups:
         for: 10m
         labels:
           severity: critical
+          crd_rule_name: NoReadyVirtOperator
+          resource_type: vm
+          custom_rule_type: P
+          resource_instance: NoReadyVirtOperator
+          rule_type: '1'
 
       - alert: NoLeadingVirtOperator
         annotations:
@@ -178,6 +253,11 @@ groups:
         for: 10m
         labels:
           severity: critical
+          crd_rule_name: NoLeadingVirtOperator
+          resource_type: vm
+          custom_rule_type: P
+          resource_instance: NoLeadingVirtOperator
+          rule_type: '1'
 
       - record: kubevirt_virt_handler_up_total
         expr: |
@@ -191,6 +271,11 @@ groups:
         for: 15m
         labels:
           severity: warning
+          crd_rule_name: VirtHandlerDaemonSetRolloutFailing
+          resource_type: vm
+          custom_rule_type: P
+          resource_instance: VirtHandlerDaemonSetRolloutFailing
+          rule_type: '1'
 
       - alert: VirtHandlerRESTErrorsHigh
         annotations:
@@ -199,6 +284,11 @@ groups:
           sum(rate ( rest_client_requests_total{namespace="kubevirt",pod=~"virt-handler-.*",code=~"(4|5)[0-9][0-9]"} [60m] ) )  /  sum ( rate ( rest_client_requests_total{namespace="kubevirt",pod=~"virt-handler-.*"} [60m] ) ) >= 0.05
         labels:
           severity: warning
+          crd_rule_name: VirtHandlerRESTErrorsHigh
+          resource_type: vm
+          custom_rule_type: P
+          resource_instance: VirtHandlerRESTErrorsHigh
+          rule_type: '1'
 
 
       - alert: VirtHandlerRESTErrorsBurst
@@ -208,6 +298,11 @@ groups:
           sum(rate(rest_client_requests_total{namespace="kubevirt",pod=~"virt-handler-.*",code=~"(4|5)[0-9][0-9]"}[5m])) /sum(rate(rest_client_requests_total{namespace="kubevirt",pod=~"virt-handler-.*"}[5m]))>=0.8
         labels:
           severity: critical
+          crd_rule_name: VirtHandlerRESTErrorsBurst
+          resource_type: vm
+          custom_rule_type: P
+          resource_instance: VirtHandlerRESTErrorsBurst
+          rule_type: '1'
 
       - alert: VirtApiRESTErrorsHigh
         annotations:
@@ -216,6 +311,11 @@ groups:
           sum(rate(rest_client_requests_total{namespace="kubevirt",pod=~"virt-api-.*",code=~"(4|5)[0-9][0-9]"}[60m]))/sum(rate(rest_client_requests_total{namespace="kubevirt",pod=~"virt-api-.*"}[60m]))>= 0.05
         labels:
           severity: warning
+          crd_rule_name: VirtApiRESTErrorsHigh
+          resource_type: vm
+          custom_rule_type: P
+          resource_instance: VirtApiRESTErrorsHigh
+          rule_type: '1'
 
       - alert: VirtApiRESTErrorsBurst
         annotations:
@@ -224,6 +324,11 @@ groups:
           sum(rate(rest_client_requests_total{namespace="kubevirt",pod=~"virt-api-.*",code=~"(4|5)[0-9][0-9]"}[60m]))/sum(rate(rest_client_requests_total{namespace="kubevirt",pod=~"virt-api-.*"}[60m])) >= 0.8
         labels:
           severity: critical
+          crd_rule_name: VirtApiRESTErrorsBurst
+          resource_type: vm
+          custom_rule_type: P
+          resource_instance: VirtApiRESTErrorsBurst
+          rule_type: '1'
 
       - record: kubevirt_vmi_memory_used_bytes
         expr: |
@@ -245,6 +350,11 @@ groups:
         for: 1m
         labels:
           severity: warning
+          crd_rule_name: KubevirtVmHighMemoryUsage
+          resource_type: vm
+          custom_rule_type: P
+          resource_instance: KubevirtVmHighMemoryUsage
+          rule_type: '1'
 
       - alert: OrphanedVirtualMachineInstances
         annotations:
@@ -254,6 +364,11 @@ groups:
         for: 10m
         labels:
           severity: warning
+          crd_rule_name: OrphanedVirtualMachineInstances
+          resource_type: vm
+          custom_rule_type: P
+          resource_instance: OrphanedVirtualMachineInstances
+          rule_type: '1'
 
       - alert: VMCannotBeEvicted
         annotations:
@@ -264,6 +379,11 @@ groups:
         for: 1m
         labels:
           severity: warning
+          crd_rule_name: VMCannotBeEvicted
+          resource_type: vm
+          custom_rule_type: P
+          resource_instance: VMCannotBeEvicted
+          rule_type: '1'
 
       - alert: KubeVirtComponentExceedsRequestedMemory
         annotations:
@@ -274,6 +394,11 @@ groups:
         for: 5m
         labels:
           severity: warning
+          crd_rule_name: KubeVirtComponentExceedsRequestedMemory
+          resource_type: vm
+          custom_rule_type: P
+          resource_instance: KubeVirtComponentExceedsRequestedMemory
+          rule_type: '1'
 
       - alert: KubeVirtComponentExceedsRequestedCPU
         annotations:
@@ -284,6 +409,11 @@ groups:
         for: 5m
         labels:
           severity: warning
+          crd_rule_name: KubeVirtComponentExceedsRequestedCPU
+          resource_type: vm
+          custom_rule_type: P
+          resource_instance: KubeVirtComponentExceedsRequestedCPU
+          rule_type: '1'
 
       - record: kubevirt_vmsnapshot_persistentvolumeclaim_labels
         expr: |
@@ -305,6 +435,11 @@ groups:
           sum by(vmi) (max_over_time(kubevirt_migrate_vmi_succeeded_total[1d])) >= 12
         labels:
           severity: warning
+          crd_rule_name: KubeVirtVMIExcessiveMigrations
+          resource_type: vm
+          custom_rule_type: P
+          resource_instance: KubeVirtVMIExcessiveMigrations
+          rule_type: '1'
 
       - alert: KubeVirtVMStuckInStartingStatus
         annotations:
@@ -314,6 +449,11 @@ groups:
           time() - kubevirt_vm_starting_status_last_transition_timestamp_seconds >= 300 and kubevirt_vm_starting_status_last_transition_timestamp_seconds != 0
         labels:
           severity: warning
+          crd_rule_name: KubeVirtVMStuckInStartingStatus
+          resource_type: vm
+          custom_rule_type: P
+          resource_instance: KubeVirtVMStuckInStartingStatus
+          rule_type: '1'
 
       - alert: KubeVirtVMStuckInMigratingStatus
         annotations:
@@ -323,6 +463,11 @@ groups:
           time() - kubevirt_vm_migrating_status_last_transition_timestamp_seconds >= 300 and kubevirt_vm_starting_status_last_transition_timestamp_seconds != 0
         labels:
           severity: warning
+          crd_rule_name: KubeVirtVMStuckInMigratingStatus
+          resource_type: vm
+          custom_rule_type: P
+          resource_instance: KubeVirtVMStuckInMigratingStatus
+          rule_type: '1'
 
       - alert: KubeVirtVMStuckInErrorStatus
         annotations:
@@ -332,6 +477,11 @@ groups:
           time() - kubevirt_vm_error_status_last_transition_timestamp_seconds >= 300 and kubevirt_vm_error_status_last_transition_timestamp_seconds != 0
         labels:
           severity: warning
+          crd_rule_name: KubeVirtVMStuckInErrorStatus
+          resource_type: vm
+          custom_rule_type: P
+          resource_instance: KubeVirtVMStuckInErrorStatus
+          rule_type: '1'
 
       - alert: OutdatedVirtualMachineInstanceWorkloads
         annotations:
@@ -341,3 +491,8 @@ groups:
         for: 1440m
         labels:
           severity: warning
+          crd_rule_name: 636dc2d9bb55cf0001bb7093
+          resource_type: vm
+          custom_rule_type: P
+          resource_instance: OutdatedVirtualMachineInstanceWorkloads
+          rule_type: '1'
