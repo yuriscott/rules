@@ -220,6 +220,7 @@ groups:
       - alert: LowReadyVirtOperatorsCount
         annotations:
           message: Some virt-operators are running but not ready.
+          runbook_url: "https://kubevirt.io/monitoring/runbooks/LowReadyVirtOperatorsCount"
         expr: |
           kubevirt_virt_operator_ready_total <  kubevirt_virt_operator_up_total
         for: 10m
@@ -234,6 +235,7 @@ groups:
       - alert: NoReadyVirtOperator
         annotations:
           message: No ready virt-operator was detected for the last 10 min.
+          runbook_url: "https://kubevirt.io/monitoring/runbooks/NoReadyVirtOperator"
         expr: |
           kubevirt_virt_operator_ready_total==0
         for: 10m
