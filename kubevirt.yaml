@@ -462,7 +462,7 @@ groups:
           message: "VirtualMachine {{ $labels.name }} is in Migrating state for {{ humanizeDuration $value }}."
           summary: "A Virtual Machine has been in an unwanted migrating state for more than 5 minutes."
         expr: |
-          time() - kubevirt_vm_migrating_status_last_transition_timestamp_seconds >= 300 and kubevirt_vm_starting_status_last_transition_timestamp_seconds != 0
+          time() - kubevirt_vm_migrating_status_last_transition_timestamp_seconds >= 300 and kubevirt_vm_migrating_status_last_transition_timestamp_seconds != 0
         labels:
           severity: WARNING
           crd_rule_name: KubeVirtVMStuckInMigratingStatus
