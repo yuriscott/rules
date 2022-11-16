@@ -93,7 +93,7 @@ groups:
           crd_rule_name: NoReadyVirtController
           resource_type: platform
           custom_rule_type: P
-          resource_instance: pod
+          resource_instance: NoReadyVirtController
           rule_type: '1'
 
       - alert: VirtControllerDown
@@ -108,7 +108,7 @@ groups:
           crd_rule_name: VirtControllerDown
           resource_type: platform
           custom_rule_type: P
-          resource_instance: pod
+          resource_instance: VirtControllerDown
           rule_type: '1'
 
 
@@ -173,7 +173,7 @@ groups:
           crd_rule_name: VirtOperatorDown
           resource_type: platform
           custom_rule_type: P
-          resource_instance: pod
+          resource_instance: VirtOperatorDown
           rule_type: '1'
 
       - alert: LowVirtOperatorCount
@@ -188,7 +188,7 @@ groups:
           crd_rule_name: LowVirtOperatorCount
           resource_type: platform
           custom_rule_type: P
-          resource_instance: pod
+          resource_instance: LowVirtOperatorCount
           rule_type: '1'
 
       - alert: VirtOperatorRESTErrorsHigh
@@ -202,7 +202,7 @@ groups:
           crd_rule_name: VirtOperatorRESTErrorsHigh
           resource_type: platform
           custom_rule_type: P
-          resource_instance: pod
+          resource_instance: VirtOperatorRESTErrorsHigh
           rule_type: '1'
 
       - alert: VirtOperatorRESTErrorsBurst
@@ -217,7 +217,7 @@ groups:
           crd_rule_name: VirtOperatorRESTErrorsBurst
           resource_type: platform
           custom_rule_type: P
-          resource_instance: pod
+          resource_instance: VirtOperatorRESTErrorsBurst
           rule_type: '1'
 
 
@@ -243,7 +243,7 @@ groups:
           crd_rule_name: LowReadyVirtOperatorsCount
           resource_type: platform
           custom_rule_type: P
-          resource_instance: pod
+          resource_instance: LowReadyVirtOperatorsCount
           rule_type: '1'
 
       - alert: NoReadyVirtOperator
@@ -259,7 +259,7 @@ groups:
           crd_rule_name: NoReadyVirtOperator
           resource_type: platform
           custom_rule_type: P
-          resource_instance: pod
+          resource_instance: NoReadyVirtOperator
           rule_type: '1'
 
       - alert: NoLeadingVirtOperator
@@ -274,7 +274,7 @@ groups:
           crd_rule_name: NoLeadingVirtOperator
           resource_type: platform
           custom_rule_type: P
-          resource_instance: pod
+          resource_instance: NoLeadingVirtOperator
           rule_type: '1'
 
       - record: kubevirt_virt_handler_up_total
@@ -377,7 +377,7 @@ groups:
           crd_rule_name: KubevirtVmHighMemoryUsage
           resource_type: vm
           custom_rule_type: P
-          resource_instance: pod
+          resource_instance: KubevirtVmHighMemoryUsage
           rule_type: '2'
 
       - alert: OrphanedVirtualMachineInstances
@@ -392,7 +392,7 @@ groups:
           crd_rule_name: OrphanedVirtualMachineInstances
           resource_type: vm
           custom_rule_type: P
-          resource_instance: pod
+          resource_instance: OrphanedVirtualMachineInstances
           rule_type: '1'
 
       - alert: VMCannotBeEvicted
@@ -407,7 +407,7 @@ groups:
           crd_rule_name: VMCannotBeEvicted
           resource_type: vm
           custom_rule_type: P
-          resource_instance: pod
+          resource_instance: VMCannotBeEvicted
           rule_type: '1'
 
       - alert: KubeVirtComponentExceedsRequestedMemory
@@ -422,7 +422,7 @@ groups:
           crd_rule_name: KubeVirtComponentExceedsRequestedMemory
           resource_type: platform
           custom_rule_type: P
-          resource_instance: pod
+          resource_instance: KubeVirtComponentExceedsRequestedMemory
           rule_type: '2'
 
       - alert: KubeVirtComponentExceedsRequestedCPU
@@ -437,7 +437,7 @@ groups:
           crd_rule_name: KubeVirtComponentExceedsRequestedCPU
           resource_type: vm
           custom_rule_type: P
-          resource_instance: pod
+          resource_instance: KubeVirtComponentExceedsRequestedCPU
           rule_type: '2'
 
       - record: kubevirt_vmsnapshot_persistentvolumeclaim_labels
@@ -463,7 +463,7 @@ groups:
           crd_rule_name: KubeVirtVMIExcessiveMigrations
           resource_type: vm
           custom_rule_type: P
-          resource_instance: pod
+          resource_instance: KubeVirtVMIExcessiveMigrations
           rule_type: '1'
 
       - alert: KubeVirtVMStuckInStartingStatus
@@ -477,7 +477,7 @@ groups:
           crd_rule_name: KubeVirtVMStuckInStartingStatus
           resource_type: vm
           custom_rule_type: P
-          resource_instance: pod
+          resource_instance: KubeVirtVMStuckInStartingStatus
           rule_type: '1'
 
       - alert: KubeVirtVMStuckInMigratingStatus
@@ -491,7 +491,7 @@ groups:
           crd_rule_name: KubeVirtVMStuckInMigratingStatus
           resource_type: vm
           custom_rule_type: P
-          resource_instance: pod
+          resource_instance: KubeVirtVMStuckInMigratingStatus
           rule_type: '1'
 
       - alert: KubeVirtVMStuckInErrorStatus
@@ -505,7 +505,7 @@ groups:
           crd_rule_name: KubeVirtVMStuckInErrorStatus
           resource_type: vm
           custom_rule_type: P
-          resource_instance: pod
+          resource_instance: KubeVirtVMStuckInErrorStatus
           rule_type: '1'
 
       - alert: OutdatedVirtualMachineInstanceWorkloads
@@ -520,5 +520,5 @@ groups:
           crd_rule_name: OutdatedVirtualMachineInstanceWorkloads
           resource_type: vm
           custom_rule_type: P
-          resource_instance: pod
+          resource_instance: OutdatedVirtualMachineInstanceWorkloads
           rule_type: '1'
