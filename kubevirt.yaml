@@ -7,7 +7,8 @@ groups:
 
       - alert: VirtAPIDown
         annotations:
-          message: All virt-api servers are down.
+          message: 所有virt-api服务器都已关闭.
+          summary: All virt-api servers are down.
         expr: |
           kubevirt_virt_api_up_total == 0
         for: 10m
@@ -16,7 +17,7 @@ groups:
           crd_rule_name: VirtAPIDown
           resource_type: platform
           custom_rule_type: P
-          resource_instance: pod
+          resource_instance: VirtAPIDown
           rule_type: '1'
 
       - record: kubevirt_allocatable_nodes_count
@@ -25,7 +26,8 @@ groups:
 
       - alert: LowVirtAPICount
         annotations:
-          message: More than one virt-api should be running if more than one worker nodes exist.
+          message: virt-api数量少于所需的数量.
+          summary: More than one virt-api should be running if more than one worker nodes exist.
         expr: |
           (kubevirt_allocatable_nodes_count > 1) and (kubevirt_virt_api_up_total < 2)
         for: 60m
@@ -34,7 +36,7 @@ groups:
           crd_rule_name: LowVirtAPICount
           resource_type: platform
           custom_rule_type: P
-          resource_instance: pod
+          resource_instance: LowVirtAPICount
           rule_type: '1'
 
       - record: kubevirt_kvm_available_nodes_count
@@ -43,7 +45,8 @@ groups:
 
       - alert: LowKVMNodesCount
         annotations:
-          message: Low number of nodes with KVM resource available. At least two nodes with kvm resource required for VM live migration.
+          message: KVM资源可用的节点数较少，VM实时迁移需要至少两个具有kvm资源的节点.
+          summary: Low number of nodes with KVM resource available. At least two nodes with kvm resource required for VM live migration.
         expr: |
           (kubevirt_allocatable_nodes_count > 1) and (kubevirt_kvm_available_nodes_count < 2)
         for: 5m
@@ -52,7 +55,7 @@ groups:
           crd_rule_name: LowKVMNodesCount
           resource_type: platform
           custom_rule_type: P
-          resource_instance: pod
+          resource_instance: LowKVMNodesCount
           rule_type: '1'
 
       - record: kubevirt_virt_controller_up_total
@@ -65,7 +68,8 @@ groups:
 
       - alert: LowReadyVirtControllersCount
         annotations:
-          message: Some virt controllers are running but not ready.
+          message: 一些virt-controller正在运行，但尚未就绪.
+          summary: Some virt controllers are running but not ready.
         expr: |
           kubevirt_virt_controller_ready_total <  kubevirt_virt_controller_up_total
         for: 10m
@@ -74,12 +78,13 @@ groups:
           crd_rule_name: LowReadyVirtControllersCount
           resource_type: platform
           custom_rule_type: P
-          resource_instance: pod
+          resource_instance: LowReadyVirtControllersCount
           rule_type: '1'
 
       - alert: NoReadyVirtController
         annotations:
-          message: No ready virt-controller was detected for the last 10 min.
+          message: 在过去10分钟内未检测到就绪的virt-controller.
+          summary: No ready virt-controller was detected for the last 10 min.
         expr: |
           kubevirt_virt_controller_ready_total == 0
         for: 10m
@@ -93,7 +98,8 @@ groups:
 
       - alert: VirtControllerDown
         annotations:
-          message: No running virt-controller was detected for the last 10 min.
+          message: 在过去10分钟内未检测到正在运行的virt-controller..
+          summary: No running virt-controller was detected for the last 10 min.
         expr: |
           kubevirt_virt_controller_up_total == 0
         for: 10m
@@ -108,7 +114,8 @@ groups:
 
       - alert: LowVirtControllersCount
         annotations:
-          message: More than one virt-controller should be ready if more than one worker node.
+          message: virt-controller数量过少:当多于一个工作节点是，virt-controller数量需要大于1.
+          summary: More than one virt-controller should be ready if more than one worker node.
         expr: |
           (kubevirt_allocatable_nodes_count > 1) and (kubevirt_virt_controller_ready_total < 2)
         for: 10m
@@ -117,12 +124,13 @@ groups:
           crd_rule_name: LowVirtControllersCount
           resource_type: platform
           custom_rule_type: P
-          resource_instance: pod
+          resource_instance: LowVirtControllersCount
           rule_type: '1'
 
       - alert: VirtControllerRESTErrorsHigh
         annotations:
-          message: "More than 5% of the rest calls failed in virt-controller for the last hours."
+          message: "在过去的一个小时里，超过5%的对virt-controller的rest调用失败了"
+          summary: "More than 5% of the rest calls failed in virt-controller for the last hours."
         expr: |
           sum(rate(rest_client_requests_total{namespace="kubevirt",pod=~"virt-controller-.*",code=~"(4|5)[0-9][0-9]"} [60m] ) )
            /sum(rate( rest_client_requests_total{namespace="kubevirt",pod=~"virt-controller-.*"} [60m] ) ) >= 0.05
@@ -131,12 +139,13 @@ groups:
           crd_rule_name: VirtControllerRESTErrorsHigh
           resource_type: platform
           custom_rule_type: P
-          resource_instance: pod
+          resource_instance: VirtControllerRESTErrorsHigh
           rule_type: '1'
 
       - alert: VirtControllerRESTErrorsBurst
         annotations:
-          message: "More than 80% of the rest calls failed in virt-controller for the last 5 minutes."
+          message: "在过去5分钟内，virt-controller中超过80%的Rest调用失败."
+          summary: "More than 80% of the rest calls failed in virt-controller for the last 5 minutes."
         expr: |
             sum(rate(rest_client_requests_total{namespace="kubevirt",pod=~"virt-controller-.*",code=~"(4|5)[0-9][0-9]"}[5m])) / sum(rate(rest_client_requests_total{namespace="kubevirt",pod=~"virt-controller-.*"}[5m])) >= 0.8
         for: 5m
@@ -145,7 +154,7 @@ groups:
           crd_rule_name: VirtControllerRESTErrorsBurst
           resource_type: platform
           custom_rule_type: P
-          resource_instance: pod
+          resource_instance: VirtControllerRESTErrorsBurst
           rule_type: '1'
 
       - record: kubevirt_virt_operator_up_total
@@ -154,7 +163,8 @@ groups:
 
       - alert: VirtOperatorDown
         annotations:
-          message: All virt-operator servers are down.
+          message: 所有virt-Operator服务都已关闭.
+          summary: All virt-operator servers are down.
         expr: |
           kubevirt_virt_operator_up_total == 0
         for: 10m
@@ -168,7 +178,8 @@ groups:
 
       - alert: LowVirtOperatorCount
         annotations:
-          message: "More than one virt-operator should be running if more than one worker nodes exist."
+          message: "如果存在多个工作节点，则应运行多个virt-operator."
+          summary: "More than one virt-operator should be running if more than one worker nodes exist."
         expr: |
           (kubevirt_allocatable_nodes_count>1) and (kubevirt_virt_operator_up_total<2)
         for: 10m
@@ -182,7 +193,8 @@ groups:
 
       - alert: VirtOperatorRESTErrorsHigh
         annotations:
-          message: "More than 5% of the rest calls failed in virt-controller for the last hour."
+          message: "在过去一小时内，virt-controller超过5%的rest调用失败了."
+          summary: "More than 5% of the rest calls failed in virt-controller for the last hour."
         expr: |
           sum(rate(rest_client_requests_total{namespace="kubevirt",pod=~"virt-operator-.*",code=~"(4|5)[0-9][0-9]"}[60m]))  /  sum(rate(rest_client_requests_total{namespace="kubevirt",pod=~"virt-operator-.*"}[60m]))>0.05
         labels:
@@ -195,7 +207,8 @@ groups:
 
       - alert: VirtOperatorRESTErrorsBurst
         annotations:
-          message: More than 80% of the rest calls failed in virt-operator for the 5m
+          message: 在过去的5分钟内，virt-operator超过80%的Rest调用失败了
+          summary: More than 80% of the rest calls failed in virt-operator for the 5m
         expr: |
           sum(rate(rest_client_requests_total{namespace="kubevirt",pod=~"virt-operator-.*",code=~"(4|5)[0-9][0-9]"}[5m]))  /sum(rate(rest_client_requests_total{namespace="kubevirt",pod=~"virt-operator-.*"}[5m]))>0.8
         for: 10m
@@ -219,7 +232,8 @@ groups:
 
       - alert: LowReadyVirtOperatorsCount
         annotations:
-          message: Some virt-operators are running but not ready.
+          message: 一些virt-operators正在运行但尚未就绪.
+          summary: Some virt-operators are running but not ready.
           runbook_url: "https://kubevirt.io/monitoring/runbooks/LowReadyVirtOperatorsCount"
         expr: |
           kubevirt_virt_operator_ready_total <  kubevirt_virt_operator_up_total
@@ -234,7 +248,8 @@ groups:
 
       - alert: NoReadyVirtOperator
         annotations:
-          message: No ready virt-operator was detected for the last 10 min.
+          message: 在过去10分钟内未检测到就绪的virt-operator.
+          summary: No ready virt-operator was detected for the last 10 min.
           runbook_url: "https://kubevirt.io/monitoring/runbooks/NoReadyVirtOperator"
         expr: |
           kubevirt_virt_operator_ready_total==0
@@ -249,7 +264,8 @@ groups:
 
       - alert: NoLeadingVirtOperator
         annotations:
-          message: No leading virt-operator was detected for the last 10 min.
+          message: 在过去10分钟内未检测到Leading的virt-operator.
+          summary: No leading virt-operator was detected for the last 10 min.
         expr: |
           kubevirt_virt_operator_leading_total==0
         for: 10m
@@ -267,7 +283,8 @@ groups:
 
       - alert: VirtHandlerDaemonSetRolloutFailing
         annotations:
-          message: Some virt-handlers failed to roll out.
+          message: 一些virt-handlers无法成功部署.
+          summary: Some virt-handlers failed to roll out.
         expr: |
           (kube_daemonset_status_number_ready{namespace='kubevirt', daemonset='virt-handler'} - kube_daemonset_status_desired_number_scheduled{namespace='kubevirt', daemonset='virt-handler'})!=0
         for: 15m
@@ -281,7 +298,8 @@ groups:
 
       - alert: VirtHandlerRESTErrorsHigh
         annotations:
-          message: More than 5% of the rest calls failed in virt-handler for the last hour.
+          message: 在过去的一小时内，超过5%的virt-handler rest调用失败了.
+          summary: More than 5% of the rest calls failed in virt-handler for the last hour.
         expr: |
           sum(rate ( rest_client_requests_total{namespace="kubevirt",pod=~"virt-handler-.*",code=~"(4|5)[0-9][0-9]"} [60m] ) )  /  sum ( rate ( rest_client_requests_total{namespace="kubevirt",pod=~"virt-handler-.*"} [60m] ) ) >= 0.05
         labels:
@@ -295,7 +313,8 @@ groups:
 
       - alert: VirtHandlerRESTErrorsBurst
         annotations:
-          message: More than 80% of the rest calls failed in virt-handler for last five minutes.
+          message: 在过去的5分钟内，超过80%的virt-handler的rest调用失败了.
+          summary: More than 80% of the rest calls failed in virt-handler for last five minutes.
         expr: |
           sum(rate(rest_client_requests_total{namespace="kubevirt",pod=~"virt-handler-.*",code=~"(4|5)[0-9][0-9]"}[5m])) /sum(rate(rest_client_requests_total{namespace="kubevirt",pod=~"virt-handler-.*"}[5m]))>=0.8
         labels:
@@ -308,7 +327,8 @@ groups:
 
       - alert: VirtApiRESTErrorsHigh
         annotations:
-          message: More than 5% of the rest calls failed in virt-api for the last hour.
+          message: 过去一小时内，超过5%的virt-api的rest调用失败了.
+          summary: More than 5% of the rest calls failed in virt-api for the last hour.
         expr: |
           sum(rate(rest_client_requests_total{namespace="kubevirt",pod=~"virt-api-.*",code=~"(4|5)[0-9][0-9]"}[60m]))/sum(rate(rest_client_requests_total{namespace="kubevirt",pod=~"virt-api-.*"}[60m]))>= 0.05
         labels:
@@ -321,7 +341,8 @@ groups:
 
       - alert: VirtApiRESTErrorsBurst
         annotations:
-          message: More than 80% of the rest calls failed in virt-api for the last five minutes.
+          message: 过去一小时内，超过80%的virt-api的rest调用失败了.
+          summary: More than 80% of the rest calls failed in virt-api for the last five minutes.
         expr: |
           sum(rate(rest_client_requests_total{namespace="kubevirt",pod=~"virt-api-.*",code=~"(4|5)[0-9][0-9]"}[60m]))/sum(rate(rest_client_requests_total{namespace="kubevirt",pod=~"virt-api-.*"}[60m])) >= 0.8
         labels:
@@ -345,7 +366,8 @@ groups:
 
       - alert: KubevirtVmHighMemoryUsage
         annotations:
-          message: "Container {{ $labels.container }} in pod {{ $labels.pod }} in namespace {{ $labels.namespace }} free memory is less than 20 MB and it is close to requested memory."
+          message: "命名空间{{ $labels.namespace }} 容器组 {{ $labels.pod }} 容器 {{ $labels.container }}的空闲内存少于20 MB,且接近请求的内存."
+          annotation: "Container {{ $labels.container }} in pod {{ $labels.pod }} in namespace {{ $labels.namespace }} free memory is less than 20 MB and it is close to requested memory."
           summary: "VM is at risk of being evicted and in serious cases of memory exhaustion being terminated by the runtime."
         expr: |
           kubevirt_vm_container_free_memory_bytes_based_on_working_set_bytes < 20971520 or kubevirt_vm_container_free_memory_bytes_based_on_rss < 20971520
@@ -360,7 +382,8 @@ groups:
 
       - alert: OrphanedVirtualMachineInstances
         annotations:
-          message: "No ready virt-handler pod detected on node {{ $labels.node }} with running vmis for more than 10 minutes"
+          message: "在运行vmis超过10分钟的节点{{ $labels.node }}上未检测到就绪的virt-handler"
+          summary: "No ready virt-handler pod detected on node {{ $labels.node }} with running vmis for more than 10 minutes"
         expr: |
           (((sum by (node) (kube_pod_status_ready{condition='true',pod=~'virt-handler.*'} * on(pod) group_left(node) sum by(pod,node)(kube_pod_info{pod=~'virt-handler.*',node!=''})) ) == 1) or (count by (node)( kube_pod_info{pod=~'virt-launcher.*',node!=''})*0)) == 0
         for: 10m
@@ -374,7 +397,7 @@ groups:
 
       - alert: VMCannotBeEvicted
         annotations:
-          message: "Eviction policy for {{ $labels.name }} (on node {{ $labels.node }}) is set to Live Migration but the VM is not migratable"
+          message: " {{ $labels.name }} (节点 {{ $labels.node }}) 的推出策略为实时迁移，但是VM不可迁移."
           summary: "The VM's eviction strategy is set to Live Migration but the VM is not migratable"
         expr: |
           kubevirt_vmi_non_evictable > 0
@@ -389,7 +412,7 @@ groups:
 
       - alert: KubeVirtComponentExceedsRequestedMemory
         annotations:
-          message: "Container {{ $labels.container }} in pod {{ $labels.pod }} memory usage exceeds the memory requested"
+          message: "容器组{{ $labels.pod }} 容器 {{ $labels.container }} 的内存使用量超过请求的内存."
           summary: "The container is using more memory than what is defined in the containers resource requests"
         expr: |
           ((kube_pod_container_resource_requests{namespace="kubevirt",container=~"virt-controller|virt-api|virt-handler|virt-operator",resource="memory"}) - on(pod) group_left(node) container_memory_working_set_bytes{container="",namespace="kubevirt"}) < 0
@@ -400,11 +423,11 @@ groups:
           resource_type: platform
           custom_rule_type: P
           resource_instance: pod
-          rule_type: '1'
+          rule_type: '2'
 
       - alert: KubeVirtComponentExceedsRequestedCPU
         annotations:
-          message: "Container {{ $labels.container }} in pod {{ $labels.pod }} cpu usage exceeds the CPU requested"
+          message: "容器组{{ $labels.pod }}容器{{ $labels.container }}的CPU使用量超过了请求的CPU用量."
           summary: "The container is using more CPU than what is defined in the containers resource requests"
         expr: |
           ((kube_pod_container_resource_requests{namespace="kubevirt",container=~"virt-controller|virt-api|virt-handler|virt-operator",resource="cpu"}) - on(pod) group_left(node) node_namespace_pod_container:container_cpu_usage_seconds_total:sum_rate{namespace="kubevirt"}) < 0
@@ -415,7 +438,7 @@ groups:
           resource_type: vm
           custom_rule_type: P
           resource_instance: pod
-          rule_type: '1'
+          rule_type: '2'
 
       - record: kubevirt_vmsnapshot_persistentvolumeclaim_labels
         expr: |
@@ -431,7 +454,7 @@ groups:
 
       - alert: KubeVirtVMIExcessiveMigrations
         annotations:
-          message: "VirtualMachineInstance {{ $labels.vmi }} has been migrated more than 12 times during the last 24 hours"
+          message: "在过去的24小时内，虚机实例{{ $labels.vmi }}迁移次数超过12次"
           summary: "An excessive amount of migrations have been detected on a VirtualMachineInstance in the last 24 hours."
         expr: |
           sum by(vmi) (max_over_time(kubevirt_migrate_vmi_succeeded_total[1d])) >= 12
@@ -445,7 +468,7 @@ groups:
 
       - alert: KubeVirtVMStuckInStartingStatus
         annotations:
-          message: "VirtualMachine {{ $labels.name }} is in Starting state for {{ humanizeDuration $value }}."
+          message: "在过去{{ humanizeDuration $value }}内，虚机 {{ $labels.name }} 持续处于Starting状态."
           summary: "A Virtual Machine has been in an unwanted starting state for more than 5 minutes."
         expr: |
           time() - kubevirt_vm_starting_status_last_transition_timestamp_seconds >= 300 and kubevirt_vm_starting_status_last_transition_timestamp_seconds != 0
@@ -459,7 +482,7 @@ groups:
 
       - alert: KubeVirtVMStuckInMigratingStatus
         annotations:
-          message: "VirtualMachine {{ $labels.name }} is in Migrating state for {{ humanizeDuration $value }}."
+          message: "在过去{{ humanizeDuration $value }}内，虚机 {{ $labels.name }} 持续处于Migrating状态."
           summary: "A Virtual Machine has been in an unwanted migrating state for more than 5 minutes."
         expr: |
           time() - kubevirt_vm_migrating_status_last_transition_timestamp_seconds >= 300 and kubevirt_vm_migrating_status_last_transition_timestamp_seconds != 0
@@ -473,7 +496,7 @@ groups:
 
       - alert: KubeVirtVMStuckInErrorStatus
         annotations:
-          message: "VirtualMachine {{ $labels.name }} is in Stuck state for {{ humanizeDuration $value }}."
+          message: "在过去{{ humanizeDuration $value }}内，虚机 {{ $labels.name }} 持续处于Error状态."
           summary: "A Virtual Machine has been in an unwanted error state for more than 5 minutes."
         expr: |
           time() - kubevirt_vm_error_status_last_transition_timestamp_seconds >= 300 and kubevirt_vm_error_status_last_transition_timestamp_seconds != 0
@@ -487,7 +510,8 @@ groups:
 
       - alert: OutdatedVirtualMachineInstanceWorkloads
         annotations:
-          message: "Some running VMIs are still active in outdated pods after KubeVirt control plane update has completed."
+          message: "在KubeVirt控制平面更新完成后，一些正在运行的VMI仍然在过时的pod中活动."
+          summary: "Some running VMIs are still active in outdated pods after KubeVirt control plane update has completed."
         expr: |
           kubevirt_vmi_outdated_count != 0
         for: 1440m
