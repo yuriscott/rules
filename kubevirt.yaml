@@ -163,7 +163,7 @@ groups:
           crd_rule_name: VirtOperatorDown
           resource_type: platform
           custom_rule_type: P
-          resource_instance: VirtOperatorDown
+          resource_instance: pod
           rule_type: '1'
 
       - alert: LowVirtOperatorCount
@@ -177,7 +177,7 @@ groups:
           crd_rule_name: LowVirtOperatorCount
           resource_type: platform
           custom_rule_type: P
-          resource_instance: LowVirtOperatorCount
+          resource_instance: pod
           rule_type: '1'
 
       - alert: VirtOperatorRESTErrorsHigh
@@ -229,7 +229,7 @@ groups:
           crd_rule_name: LowReadyVirtOperatorsCount
           resource_type: platform
           custom_rule_type: P
-          resource_instance: NoReadyVirtController
+          resource_instance: pod
           rule_type: '1'
 
       - alert: NoReadyVirtOperator
@@ -244,7 +244,7 @@ groups:
           crd_rule_name: NoReadyVirtOperator
           resource_type: platform
           custom_rule_type: P
-          resource_instance: NoReadyVirtOperator
+          resource_instance: pod
           rule_type: '1'
 
       - alert: NoLeadingVirtOperator
@@ -258,7 +258,7 @@ groups:
           crd_rule_name: NoLeadingVirtOperator
           resource_type: platform
           custom_rule_type: P
-          resource_instance: NoLeadingVirtOperator
+          resource_instance: pod
           rule_type: '1'
 
       - record: kubevirt_virt_handler_up_total
