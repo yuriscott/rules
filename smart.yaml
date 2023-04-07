@@ -1,0 +1,33 @@
+groups:
+  - name: smart
+    rules:
+      - alert: ReallocatedEventCount
+        annotations:
+          message: {{ $labels.device}}/{{ $labels.instance }}磁盘坏道归一值小于阈值
+          summary: ReallocatedEventCount Blow The Threshold.
+        expr: |
+          sum (smartctl_device_attribute{attribute_name="Reallocated_Event_Count",attribute_value_type='value'}  ) by(instance,device)
+          - sum (smartctl_device_attribute{attribute_name="Reallocated_Event_Count",attribute_value_type='thresh'}) by(instance,device) <0
+        for: 10m
+        labels:
+          severity: CRITICAL
+      - alert: TemperatureHigh
+        annotations:
+          message: {{ $labels.device}}/{{ $labels.instance }}磁盘温度归一值的小于阈值
+          summary: Temperature_Celsius Blow The Threshold.
+        expr: |
+          sum (smartctl_device_attribute{attribute_name="Temperature_Celsius",attribute_value_type='value'}  ) by(instance,device) 
+          - sum (smartctl_device_attribute{attribute_name="Temperature_Celsius",attribute_value_type='thresh'}) by(instance,device) <0
+        for: 10m
+        labels:
+          severity: CRITICAL
+      - alert: AvailableReservedSpace
+        annotations:
+          message: {{ $labels.device}}/{{ $labels.instance }}预留的磁盘空间小于阈值.
+          summary: Available Reserved Space Is Not Enough.
+        expr: |
+          sum (smartctl_device_attribute{attribute_name="Available_Reservd_Space",attribute_value_type='value'}  ) by(instance,device)
+          - sum (smartctl_device_attribute{attribute_name="Available_Reservd_Space",attribute_value_type='thresh'}) by(instance,device)
+        for: 10m
+        labels:
+          severity: CRITICAL
