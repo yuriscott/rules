@@ -11,6 +11,15 @@ groups:
         for: 10m
         labels:
           severity: CRITICAL
+      - alert: ReallocatedEventCount
+        annotations:
+          message: { { $labels.device } }/{{ $labels.instance }}磁盘坏道大于10
+          summary: ReallocatedEventCount Blow The Threshold.
+        expr: |
+          sum (smartctl_device_attribute{attribute_name="Reallocated_Event_Count",attribute_value_type='raw'}  ) by(instance,device) > 10
+        for: 10m
+        labels:
+          severity: WARNING
       - alert: TemperatureHigh
         annotations:
           message: "{{ $labels.device }} {{ $labels.instance }}磁盘温度归一值的小于阈值"
