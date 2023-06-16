@@ -56,7 +56,7 @@
     {
       "datasource": {
         "type": "prometheus",
-        "uid": "P4169E866C3094E38"
+        "uid": "${ds}"
       },
       "fieldConfig": {
         "defaults": {
@@ -68,7 +68,7 @@
             "axisPlacement": "auto",
             "barAlignment": 0,
             "drawStyle": "line",
-            "fillOpacity": 25,
+            "fillOpacity": 0,
             "gradientMode": "none",
             "hideFrom": {
               "legend": false,
@@ -76,11 +76,8 @@
               "viz": false
             },
             "lineInterpolation": "linear",
-            "lineStyle": {
-              "fill": "solid"
-            },
-            "lineWidth": 2,
-            "pointSize": 2,
+            "lineWidth": 1,
+            "pointSize": 1,
             "scaleDistribution": {
               "type": "linear"
             },
@@ -88,7 +85,7 @@
             "spanNulls": false,
             "stacking": {
               "group": "A",
-              "mode": "normal"
+              "mode": "none"
             },
             "thresholdsStyle": {
               "mode": "off"
@@ -107,34 +104,10 @@
                 "value": 80
               }
             ]
-          }
+          },
+          "unit": "bytes"
         },
-        "overrides": [
-          {
-            "__systemRef": "hideSeriesFrom",
-            "matcher": {
-              "id": "byNames",
-              "options": {
-                "mode": "exclude",
-                "names": [
-                  "{name=\"kvtvm-2\", namespace=\"kvt\"}"
-                ],
-                "prefix": "All except:",
-                "readOnly": true
-              }
-            },
-            "properties": [
-              {
-                "id": "custom.hideFrom",
-                "value": {
-                  "legend": false,
-                  "tooltip": false,
-                  "viz": true
-                }
-              }
-            ]
-          }
-        ]
+        "overrides": []
       },
       "gridPos": {
         "h": 7,
@@ -161,13 +134,13 @@
         {
           "datasource": {
             "type": "prometheus",
-            "uid": "P4169E866C3094E38"
+            "uid": "${ds}"
           },
           "expr": "sort_desc(topk(5, sum (avg_over_time(kubevirt_vmi_memory_available_bytes[$__range]) - avg_over_time(kubevirt_vmi_memory_usable_bytes[$__range]))by(name, namespace)))>0",
           "refId": "A"
         }
       ],
-      "title": "Top Consumers of Memory",
+      "title": "Top  5 Consumers of Memory",
       "type": "timeseries"
     },
     {
@@ -185,16 +158,16 @@
             "axisPlacement": "auto",
             "barAlignment": 0,
             "drawStyle": "line",
-            "fillOpacity": 25,
+            "fillOpacity": 0,
             "gradientMode": "none",
             "hideFrom": {
               "legend": false,
               "tooltip": false,
               "viz": false
             },
-            "lineInterpolation": "linear",
+            "lineInterpolation": "smooth",
             "lineWidth": 1,
-            "pointSize": 3,
+            "pointSize": 2,
             "scaleDistribution": {
               "type": "linear"
             },
@@ -256,7 +229,7 @@
           "refId": "A"
         }
       ],
-      "title": "Top Consumers of CPU by virt-launcher Pods",
+      "title": "Top 5 Consumers of CPU by virt-launcher Pods",
       "type": "timeseries"
     },
     {
@@ -281,7 +254,7 @@
               "tooltip": false,
               "viz": false
             },
-            "lineInterpolation": "linear",
+            "lineInterpolation": "smooth",
             "lineWidth": 1,
             "pointSize": 3,
             "scaleDistribution": {
@@ -310,7 +283,8 @@
                 "value": 80
               }
             ]
-          }
+          },
+          "unit": "bytes"
         },
         "overrides": []
       },
@@ -345,7 +319,7 @@
           "refId": "A"
         }
       ],
-      "title": "Top Consumers of Storage Traffic",
+      "title": "Top 5 Consumers of Storage Traffic",
       "type": "timeseries"
     },
     {
@@ -363,14 +337,14 @@
             "axisPlacement": "auto",
             "barAlignment": 0,
             "drawStyle": "line",
-            "fillOpacity": 25,
+            "fillOpacity": 0,
             "gradientMode": "none",
             "hideFrom": {
               "legend": false,
               "tooltip": false,
               "viz": false
             },
-            "lineInterpolation": "linear",
+            "lineInterpolation": "smooth",
             "lineWidth": 1,
             "pointSize": 1,
             "scaleDistribution": {
@@ -380,7 +354,7 @@
             "spanNulls": false,
             "stacking": {
               "group": "A",
-              "mode": "percent"
+              "mode": "none"
             },
             "thresholdsStyle": {
               "mode": "off"
@@ -434,7 +408,7 @@
           "refId": "A"
         }
       ],
-      "title": "Top Consumers of Storage IOPS",
+      "title": "Top 5 Consumers of Storage IOPS",
       "type": "timeseries"
     },
     {
@@ -524,7 +498,7 @@
           "refId": "A"
         }
       ],
-      "title": "Top Consumers of Network Traffic",
+      "title": "Top 5 Consumers of Network Traffic",
       "type": "timeseries"
     },
     {
@@ -613,7 +587,7 @@
           "refId": "A"
         }
       ],
-      "title": "Top Consumers of vCPU Wait",
+      "title": "Top 5 Consumers of vCPU Wait",
       "type": "timeseries"
     },
     {
@@ -668,7 +642,8 @@
                 "value": 80
               }
             ]
-          }
+          },
+          "unit": "bytes"
         },
         "overrides": []
       },
@@ -703,7 +678,7 @@
           "refId": "A"
         }
       ],
-      "title": "Top Consumers of Memory Swap Traffic",
+      "title": "Top 5 Consumers of Memory Swap Traffic",
       "type": "timeseries"
     },
     {
@@ -1233,8 +1208,7 @@
             "mode": "absolute",
             "steps": [
               {
-                "color": "green",
-                "value": null
+                "color": "green"
               },
               {
                 "color": "red",
@@ -1325,8 +1299,7 @@
             "mode": "absolute",
             "steps": [
               {
-                "color": "green",
-                "value": null
+                "color": "green"
               },
               {
                 "color": "red",
@@ -1433,6 +1406,6 @@
   "timezone": "UTC",
   "title": "KubeVirt / Infrastructure Resources / Top Consumers",
   "uid": "Ml7SPcyMkk",
-  "version": 3,
+  "version": 4,
   "weekStart": ""
 }
