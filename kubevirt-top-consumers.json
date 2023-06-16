@@ -28,30 +28,196 @@
   "liveNow": false,
   "panels": [
     {
-      "collapsed": false,
       "datasource": {
-        "type": "datasource",
-        "uid": "grafana"
+        "type": "prometheus",
+        "uid": "${ds}"
+      },
+      "description": "",
+      "fieldConfig": {
+        "defaults": {
+          "color": {
+            "mode": "palette-classic"
+          },
+          "mappings": [],
+          "thresholds": {
+            "mode": "absolute",
+            "steps": [
+              {
+                "color": "green",
+                "value": null
+              },
+              {
+                "color": "orange",
+                "value": 70
+              },
+              {
+                "color": "red",
+                "value": 85
+              }
+            ]
+          }
+        },
+        "overrides": []
       },
       "gridPos": {
-        "h": 1,
-        "w": 24,
+        "h": 8,
+        "w": 12,
         "x": 0,
         "y": 0
       },
-      "id": 44,
-      "panels": [],
+      "id": 48,
+      "options": {
+        "orientation": "auto",
+        "reduceOptions": {
+          "calcs": [
+            "lastNotNull"
+          ],
+          "fields": "",
+          "values": false
+        },
+        "showThresholdLabels": false,
+        "showThresholdMarkers": false,
+        "text": {}
+      },
+      "pluginVersion": "9.0.5",
       "targets": [
         {
           "datasource": {
-            "type": "datasource",
-            "uid": "grafana"
+            "type": "prometheus",
+            "uid": "${ds}"
           },
+          "expr": "sum(kubevirt_vmi_phase_count{})by(phase)",
           "refId": "A"
         }
       ],
-      "title": "Top Consumers",
-      "type": "row"
+      "title": "VM Status Distrubition",
+      "transparent": true,
+      "type": "gauge"
+    },
+    {
+      "datasource": {
+        "type": "prometheus",
+        "uid": "${ds}"
+      },
+      "fieldConfig": {
+        "defaults": {
+          "mappings": [],
+          "thresholds": {
+            "mode": "percentage",
+            "steps": [
+              {
+                "color": "green",
+                "value": null
+              },
+              {
+                "color": "orange",
+                "value": 70
+              },
+              {
+                "color": "red",
+                "value": 85
+              }
+            ]
+          }
+        },
+        "overrides": []
+      },
+      "gridPos": {
+        "h": 8,
+        "w": 12,
+        "x": 12,
+        "y": 0
+      },
+      "id": 50,
+      "options": {
+        "orientation": "auto",
+        "reduceOptions": {
+          "calcs": [
+            "lastNotNull"
+          ],
+          "fields": "",
+          "values": false
+        },
+        "showThresholdLabels": false,
+        "showThresholdMarkers": true
+      },
+      "pluginVersion": "9.0.5",
+      "targets": [
+        {
+          "datasource": {
+            "type": "prometheus",
+            "uid": "${ds}"
+          },
+          "expr": "kubevirt_allocatable_nodes_count",
+          "refId": "A"
+        }
+      ],
+      "title": "Node Count",
+      "type": "gauge"
+    },
+    {
+      "datasource": {
+        "type": "prometheus",
+        "uid": "P4169E866C3094E38"
+      },
+      "fieldConfig": {
+        "defaults": {
+          "color": {
+            "mode": "continuous-GrYlRd"
+          },
+          "mappings": [],
+          "thresholds": {
+            "mode": "absolute",
+            "steps": [
+              {
+                "color": "green",
+                "value": null
+              },
+              {
+                "color": "red",
+                "value": 80
+              }
+            ]
+          }
+        },
+        "overrides": []
+      },
+      "gridPos": {
+        "h": 7,
+        "w": 12,
+        "x": 0,
+        "y": 8
+      },
+      "id": 35,
+      "interval": "1m",
+      "links": [],
+      "options": {
+        "displayMode": "lcd",
+        "minVizHeight": 10,
+        "minVizWidth": 0,
+        "orientation": "horizontal",
+        "reduceOptions": {
+          "calcs": [
+            "lastNotNull"
+          ],
+          "fields": "",
+          "values": false
+        },
+        "showUnfilled": true
+      },
+      "pluginVersion": "9.0.5",
+      "targets": [
+        {
+          "datasource": {
+            "type": "prometheus",
+            "uid": "P4169E866C3094E38"
+          },
+          "expr": "sort_desc(topk(5, sum(rate(container_cpu_usage_seconds_total{container=\"compute\",pod=~\"virt-launcher-.*\"}[$__range])) by (namespace,pod)))>0",
+          "refId": "A"
+        }
+      ],
+      "title": "Top 5 Consumers of CPU by virt-launcher Pods",
+      "type": "bargauge"
     },
     {
       "datasource": {
@@ -61,35 +227,7 @@
       "fieldConfig": {
         "defaults": {
           "color": {
-            "mode": "palette-classic"
-          },
-          "custom": {
-            "axisLabel": "",
-            "axisPlacement": "auto",
-            "barAlignment": 0,
-            "drawStyle": "line",
-            "fillOpacity": 0,
-            "gradientMode": "none",
-            "hideFrom": {
-              "legend": false,
-              "tooltip": false,
-              "viz": false
-            },
-            "lineInterpolation": "linear",
-            "lineWidth": 1,
-            "pointSize": 1,
-            "scaleDistribution": {
-              "type": "linear"
-            },
-            "showPoints": "auto",
-            "spanNulls": false,
-            "stacking": {
-              "group": "A",
-              "mode": "none"
-            },
-            "thresholdsStyle": {
-              "mode": "off"
-            }
+            "mode": "continuous-GrYlRd"
           },
           "mappings": [],
           "thresholds": {
@@ -112,24 +250,27 @@
       "gridPos": {
         "h": 7,
         "w": 12,
-        "x": 0,
-        "y": 1
+        "x": 12,
+        "y": 8
       },
       "id": 45,
       "interval": "1m",
       "links": [],
       "options": {
-        "legend": {
-          "calcs": [],
-          "displayMode": "list",
-          "placement": "bottom"
+        "displayMode": "lcd",
+        "minVizHeight": 10,
+        "minVizWidth": 0,
+        "orientation": "horizontal",
+        "reduceOptions": {
+          "calcs": [
+            "lastNotNull"
+          ],
+          "fields": "",
+          "values": false
         },
-        "tooltip": {
-          "mode": "single",
-          "sort": "none"
-        }
+        "showUnfilled": true
       },
-      "pluginVersion": "9.0.3",
+      "pluginVersion": "9.0.5",
       "targets": [
         {
           "datasource": {
@@ -140,97 +281,34 @@
           "refId": "A"
         }
       ],
-      "title": "Top  5 Consumers of Memory",
-      "type": "timeseries"
+      "title": "Top 5 Consumers of Memory",
+      "type": "bargauge"
     },
     {
+      "collapsed": false,
       "datasource": {
-        "type": "prometheus",
-        "uid": "P4169E866C3094E38"
-      },
-      "fieldConfig": {
-        "defaults": {
-          "color": {
-            "mode": "palette-classic"
-          },
-          "custom": {
-            "axisLabel": "",
-            "axisPlacement": "auto",
-            "barAlignment": 0,
-            "drawStyle": "line",
-            "fillOpacity": 0,
-            "gradientMode": "none",
-            "hideFrom": {
-              "legend": false,
-              "tooltip": false,
-              "viz": false
-            },
-            "lineInterpolation": "smooth",
-            "lineWidth": 1,
-            "pointSize": 2,
-            "scaleDistribution": {
-              "type": "linear"
-            },
-            "showPoints": "auto",
-            "spanNulls": false,
-            "stacking": {
-              "group": "A",
-              "mode": "none"
-            },
-            "thresholdsStyle": {
-              "mode": "off"
-            }
-          },
-          "mappings": [],
-          "thresholds": {
-            "mode": "absolute",
-            "steps": [
-              {
-                "color": "green",
-                "value": null
-              },
-              {
-                "color": "red",
-                "value": 80
-              }
-            ]
-          }
-        },
-        "overrides": []
+        "type": "datasource",
+        "uid": "grafana"
       },
       "gridPos": {
-        "h": 7,
-        "w": 12,
-        "x": 12,
-        "y": 1
+        "h": 1,
+        "w": 24,
+        "x": 0,
+        "y": 15
       },
-      "id": 35,
-      "interval": "1m",
-      "links": [],
-      "options": {
-        "legend": {
-          "calcs": [],
-          "displayMode": "list",
-          "placement": "bottom"
-        },
-        "tooltip": {
-          "mode": "single",
-          "sort": "none"
-        }
-      },
-      "pluginVersion": "9.0.3",
+      "id": 44,
+      "panels": [],
       "targets": [
         {
           "datasource": {
-            "type": "prometheus",
-            "uid": "P4169E866C3094E38"
+            "type": "datasource",
+            "uid": "grafana"
           },
-          "expr": "sort_desc(topk(5, sum(rate(container_cpu_usage_seconds_total{container=\"compute\",pod=~\"virt-launcher-.*\"}[$__range])) by (namespace,pod)))>0",
           "refId": "A"
         }
       ],
-      "title": "Top 5 Consumers of CPU by virt-launcher Pods",
-      "type": "timeseries"
+      "title": "Top Consumers",
+      "type": "row"
     },
     {
       "datasource": {
@@ -292,7 +370,7 @@
         "h": 7,
         "w": 12,
         "x": 0,
-        "y": 8
+        "y": 16
       },
       "id": 37,
       "interval": "1m",
@@ -381,7 +459,7 @@
         "h": 7,
         "w": 12,
         "x": 12,
-        "y": 8
+        "y": 16
       },
       "id": 38,
       "interval": "1m",
@@ -471,7 +549,7 @@
         "h": 7,
         "w": 12,
         "x": 0,
-        "y": 15
+        "y": 23
       },
       "id": 36,
       "interval": "1m",
@@ -560,7 +638,7 @@
         "h": 7,
         "w": 12,
         "x": 12,
-        "y": 15
+        "y": 23
       },
       "id": 40,
       "interval": "1m",
@@ -651,7 +729,7 @@
         "h": 7,
         "w": 12,
         "x": 0,
-        "y": 22
+        "y": 30
       },
       "id": 39,
       "interval": "1m",
@@ -691,7 +769,7 @@
         "h": 1,
         "w": 24,
         "x": 0,
-        "y": 29
+        "y": 37
       },
       "id": 42,
       "panels": [],
@@ -722,7 +800,7 @@
         "h": 7,
         "w": 24,
         "x": 0,
-        "y": 30
+        "y": 38
       },
       "hiddenSeries": false,
       "id": 46,
@@ -815,7 +893,7 @@
         "h": 7,
         "w": 24,
         "x": 0,
-        "y": 37
+        "y": 45
       },
       "hiddenSeries": false,
       "id": 19,
@@ -907,7 +985,7 @@
         "h": 7,
         "w": 24,
         "x": 0,
-        "y": 44
+        "y": 52
       },
       "hiddenSeries": false,
       "id": 30,
@@ -1000,7 +1078,7 @@
         "h": 7,
         "w": 24,
         "x": 0,
-        "y": 51
+        "y": 59
       },
       "hiddenSeries": false,
       "id": 33,
@@ -1135,7 +1213,7 @@
         "h": 7,
         "w": 24,
         "x": 0,
-        "y": 58
+        "y": 66
       },
       "id": 29,
       "interval": "1m",
@@ -1208,7 +1286,8 @@
             "mode": "absolute",
             "steps": [
               {
-                "color": "green"
+                "color": "green",
+                "value": null
               },
               {
                 "color": "red",
@@ -1224,7 +1303,7 @@
         "h": 7,
         "w": 24,
         "x": 0,
-        "y": 65
+        "y": 73
       },
       "id": 25,
       "interval": "1m",
@@ -1315,7 +1394,7 @@
         "h": 7,
         "w": 24,
         "x": 0,
-        "y": 72
+        "y": 80
       },
       "id": 23,
       "interval": "1m",
@@ -1406,6 +1485,6 @@
   "timezone": "UTC",
   "title": "KubeVirt / Infrastructure Resources / Top Consumers",
   "uid": "Ml7SPcyMkk",
-  "version": 4,
+  "version": 5,
   "weekStart": ""
 }
