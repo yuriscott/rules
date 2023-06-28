@@ -23,18 +23,17 @@
     ]
   },
   "description": "Detailed interface stats from prometheus snmp exporter",
-  "editable": true,
+  "editable": false,
   "fiscalYearStartMonth": 0,
   "gnetId": 12492,
   "graphTooltip": 0,
-  "id": 43,
   "links": [],
   "liveNow": false,
   "panels": [
     {
       "datasource": {
         "type": "prometheus",
-        "uid": "${source}"
+        "uid": "$datasource"
       },
       "fieldConfig": {
         "defaults": {
@@ -105,7 +104,7 @@
         {
           "datasource": {
             "type": "prometheus",
-            "uid": "${source}"
+            "uid": "$datasource"
           },
           "exemplar": false,
           "expr": "ifAdminStatus_info{target=\"$device\",ifIndex=\"$ifName\"}",
@@ -1184,7 +1183,8 @@
             "mode": "absolute",
             "steps": [
               {
-                "color": "green"
+                "color": "green",
+                "value": null
               },
               {
                 "color": "red",
@@ -1316,7 +1316,8 @@
             "mode": "absolute",
             "steps": [
               {
-                "color": "green"
+                "color": "green",
+                "value": null
               },
               {
                 "color": "red",
@@ -1504,6 +1505,6 @@
   "timezone": "",
   "title": "SNMP Interface Detail",
   "uid": "GiHKsW9Vk",
-  "version": 3,
+  "version": 22,
   "weekStart": ""
 }
