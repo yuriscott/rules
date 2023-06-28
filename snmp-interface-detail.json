@@ -23,10 +23,11 @@
     ]
   },
   "description": "Detailed interface stats from prometheus snmp exporter",
-  "editable": false,
+  "editable": true,
   "fiscalYearStartMonth": 0,
   "gnetId": 12492,
   "graphTooltip": 0,
+  "id": 44,
   "links": [],
   "liveNow": false,
   "panels": [
@@ -1183,8 +1184,7 @@
             "mode": "absolute",
             "steps": [
               {
-                "color": "green",
-                "value": null
+                "color": "green"
               },
               {
                 "color": "red",
@@ -1316,8 +1316,7 @@
             "mode": "absolute",
             "steps": [
               {
-                "color": "green",
-                "value": null
+                "color": "green"
               },
               {
                 "color": "red",
@@ -1393,7 +1392,11 @@
   "refresh": false,
   "schemaVersion": 36,
   "style": "dark",
-  "tags": [],
+  "tags": [
+    "prometheus",
+    "snmp",
+    "network interface"
+  ],
   "templating": {
     "list": [
       {
@@ -1417,9 +1420,9 @@
       },
       {
         "current": {
-          "selected": false,
-          "text": "172.16.245.28:161",
-          "value": "172.16.245.28:161"
+          "selected": true,
+          "text": "172.16.245.46:161",
+          "value": "172.16.245.46:161"
         },
         "datasource": {
           "uid": "$datasource"
@@ -1445,10 +1448,9 @@
       },
       {
         "current": {
-          "isNone": true,
           "selected": false,
-          "text": "None",
-          "value": ""
+          "text": "Bridge-Aggregation1",
+          "value": "35"
         },
         "datasource": {
           "uid": "$datasource"
@@ -1504,7 +1506,7 @@
   },
   "timezone": "",
   "title": "SNMP Interface Detail",
-  "uid": "GiHKsW9Vk",
-  "version": 22,
+  "uid": "3iSx8WrVz",
+  "version": 3,
   "weekStart": ""
 }
