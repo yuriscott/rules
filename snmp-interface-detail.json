@@ -27,7 +27,7 @@
   "fiscalYearStartMonth": 0,
   "gnetId": 12492,
   "graphTooltip": 0,
-  "id": 41,
+  "id": 43,
   "links": [],
   "liveNow": false,
   "panels": [
@@ -61,7 +61,8 @@
             "mode": "absolute",
             "steps": [
               {
-                "color": "#299c46"
+                "color": "#299c46",
+                "value": null
               },
               {
                 "color": "rgba(237, 129, 40, 0.89)",
@@ -120,7 +121,7 @@
     {
       "datasource": {
         "type": "prometheus",
-        "uid": "$source"
+        "uid": "$datasource"
       },
       "fieldConfig": {
         "defaults": {
@@ -159,7 +160,8 @@
             "mode": "absolute",
             "steps": [
               {
-                "color": "#299c46"
+                "color": "#299c46",
+                "value": null
               },
               {
                 "color": "rgba(237, 129, 40, 0.89)",
@@ -201,7 +203,7 @@
       "targets": [
         {
           "datasource": {
-            "uid": "$source"
+            "uid": "$datasource"
           },
           "expr": "ifOperStatus_info{target=\"$device\",ifIndex=\"$ifName\"}",
           "instant": true,
@@ -216,7 +218,7 @@
     {
       "datasource": {
         "type": "prometheus",
-        "uid": "$source"
+        "uid": "$datasource"
       },
       "fieldConfig": {
         "defaults": {
@@ -228,7 +230,8 @@
             "mode": "absolute",
             "steps": [
               {
-                "color": "#d44a3a"
+                "color": "#d44a3a",
+                "value": null
               },
               {
                 "color": "rgba(237, 129, 40, 0.89)",
@@ -271,7 +274,7 @@
       "targets": [
         {
           "datasource": {
-            "uid": "$source"
+            "uid": "$datasource"
           },
           "expr": "sysUpTime{target=\"$device\"} - on(target) ifLastChange{target=\"$device\",ifIndex=\"$ifName\"}",
           "instant": true,
@@ -286,7 +289,7 @@
     {
       "datasource": {
         "type": "prometheus",
-        "uid": "$source"
+        "uid": "$datasource"
       },
       "fieldConfig": {
         "defaults": {
@@ -310,7 +313,8 @@
             "mode": "absolute",
             "steps": [
               {
-                "color": "#56A64B"
+                "color": "#56A64B",
+                "value": null
               },
               {
                 "color": "rgba(237, 129, 40, 0.89)",
@@ -352,7 +356,7 @@
       "targets": [
         {
           "datasource": {
-            "uid": "$source"
+            "uid": "$datasource"
           },
           "expr": "ifConnectorPresent{target=\"$device\",ifIndex=\"$ifName\"}",
           "instant": true,
@@ -367,7 +371,7 @@
     {
       "datasource": {
         "type": "prometheus",
-        "uid": "$source"
+        "uid": "$datasource"
       },
       "fieldConfig": {
         "defaults": {
@@ -391,7 +395,8 @@
             "mode": "absolute",
             "steps": [
               {
-                "color": "#FF9830"
+                "color": "#FF9830",
+                "value": null
               },
               {
                 "color": "#56A64B",
@@ -434,7 +439,7 @@
       "targets": [
         {
           "datasource": {
-            "uid": "$source"
+            "uid": "$datasource"
           },
           "expr": "ifPromiscuousMode{instance=\"$instance\",ifName=\"$ifName\"}",
           "instant": true,
@@ -449,7 +454,7 @@
     {
       "datasource": {
         "type": "prometheus",
-        "uid": "$source"
+        "uid": "$datasource"
       },
       "fieldConfig": {
         "defaults": {
@@ -470,7 +475,8 @@
             "mode": "absolute",
             "steps": [
               {
-                "color": "green"
+                "color": "green",
+                "value": null
               },
               {
                 "color": "red",
@@ -510,7 +516,7 @@
       "targets": [
         {
           "datasource": {
-            "uid": "$source"
+            "uid": "$datasource"
           },
           "expr": "ifHighSpeed{target=\"$device\",ifIndex=\"$ifName\"}*1000000 or ifSpeed{target=\"$device\",ifIndex=\"$ifName\"}",
           "instant": true,
@@ -525,7 +531,7 @@
     {
       "datasource": {
         "type": "prometheus",
-        "uid": "$source"
+        "uid": "$datasource"
       },
       "fieldConfig": {
         "defaults": {
@@ -549,7 +555,8 @@
             "mode": "absolute",
             "steps": [
               {
-                "color": "green"
+                "color": "green",
+                "value": null
               },
               {
                 "color": "red",
@@ -589,7 +596,7 @@
       "targets": [
         {
           "datasource": {
-            "uid": "$source"
+            "uid": "$datasource"
           },
           "expr": "ifMtu{target=\"$device\",ifIndex=\"$ifName\"}",
           "instant": true,
@@ -604,7 +611,7 @@
     {
       "datasource": {
         "type": "prometheus",
-        "uid": "$source"
+        "uid": "$datasource"
       },
       "fieldConfig": {
         "defaults": {
@@ -623,7 +630,8 @@
             "mode": "absolute",
             "steps": [
               {
-                "color": "green"
+                "color": "green",
+                "value": null
               },
               {
                 "color": "red",
@@ -707,7 +715,7 @@
     {
       "datasource": {
         "type": "prometheus",
-        "uid": "$source"
+        "uid": "$datasource"
       },
       "fieldConfig": {
         "defaults": {
@@ -748,7 +756,8 @@
             "mode": "absolute",
             "steps": [
               {
-                "color": "green"
+                "color": "green",
+                "value": null
               },
               {
                 "color": "red",
@@ -783,7 +792,7 @@
       "targets": [
         {
           "datasource": {
-            "uid": "$source"
+            "uid": "$datasource"
           },
           "editorMode": "code",
           "expr": "(rate(ifHCInOctets{target=\"$device\",ifIndex=\"$ifName\"}[$__rate_interval]) or rate(ifInOctets{target=\"$device\",ifIndex=\"$ifName\"}[$__rate_interval]))*8",
@@ -797,7 +806,7 @@
         },
         {
           "datasource": {
-            "uid": "$source"
+            "uid": "$datasource"
           },
           "editorMode": "code",
           "expr": "(rate(ifHCOutOctets{target=\"$device\",ifIndex=\"$ifName\"}[$__rate_interval]) or rate(ifOutOctets{target=\"$device\",ifIndex=\"$ifName\"}[$__rate_interval]))*8",
@@ -816,7 +825,7 @@
     {
       "datasource": {
         "type": "prometheus",
-        "uid": "$source"
+        "uid": "$datasource"
       },
       "fieldConfig": {
         "defaults": {
@@ -857,7 +866,8 @@
             "mode": "absolute",
             "steps": [
               {
-                "color": "green"
+                "color": "green",
+                "value": null
               },
               {
                 "color": "red",
@@ -892,7 +902,7 @@
       "targets": [
         {
           "datasource": {
-            "uid": "$source"
+            "uid": "$datasource"
           },
           "editorMode": "code",
           "expr": "rate(ifHCInBroadcastPkts{target=\"$device\",ifIndex=\"$ifName\"}[$__rate_interval]) or rate(ifInBroadcastPkts{target=\"$device\",ifIndex=\"$ifName\"}[$__rate_interval])",
@@ -905,7 +915,7 @@
         },
         {
           "datasource": {
-            "uid": "$source"
+            "uid": "$datasource"
           },
           "editorMode": "code",
           "expr": "rate(ifHCOutBroadcastPkts{target=\"$device\",ifIndex=\"$ifName\"}[$__rate_interval]) or rate(ifOutBroadcastPkts{target=\"$device\",ifIndex=\"$ifName\"}[$__rate_interval])",
@@ -923,7 +933,7 @@
     {
       "datasource": {
         "type": "prometheus",
-        "uid": "$source"
+        "uid": "$datasource"
       },
       "fieldConfig": {
         "defaults": {
@@ -964,7 +974,8 @@
             "mode": "absolute",
             "steps": [
               {
-                "color": "green"
+                "color": "green",
+                "value": null
               },
               {
                 "color": "red",
@@ -999,7 +1010,7 @@
       "targets": [
         {
           "datasource": {
-            "uid": "$source"
+            "uid": "$datasource"
           },
           "expr": "rate(ifHCInUcastPkts{target=\"$device\",ifIndex=\"$ifName\"}[$__rate_interval]) or rate(ifInUcastPkts{target=\"$device\",ifIndex=\"$ifName\"}[$__rate_interval])",
           "format": "time_series",
@@ -1011,7 +1022,7 @@
         },
         {
           "datasource": {
-            "uid": "$source"
+            "uid": "$datasource"
           },
           "expr": "rate(ifHCOutUcastPkts{target=\"$device\",ifIndex=\"$ifName\"}[$__rate_interval]) or rate(ifOutUcastPkts{target=\"$device\",ifIndex=\"$ifName\"}[$__rate_interval])",
           "format": "time_series",
@@ -1027,7 +1038,7 @@
     {
       "datasource": {
         "type": "prometheus",
-        "uid": "$source"
+        "uid": "$datasource"
       },
       "fieldConfig": {
         "defaults": {
@@ -1068,7 +1079,8 @@
             "mode": "absolute",
             "steps": [
               {
-                "color": "green"
+                "color": "green",
+                "value": null
               },
               {
                 "color": "red",
@@ -1103,7 +1115,7 @@
       "targets": [
         {
           "datasource": {
-            "uid": "$source"
+            "uid": "$datasource"
           },
           "expr": "rate(ifHCInMulticastPkts{target=\"$device\",ifIndex=\"$ifName\"}[$__rate_interval]) or rate(ifInMulticastPkts{target=\"$device\",ifIndex=\"$ifName\"}[$__rate_interval])",
           "format": "time_series",
@@ -1115,7 +1127,7 @@
         },
         {
           "datasource": {
-            "uid": "$source"
+            "uid": "$datasource"
           },
           "expr": "rate(ifHCOutMulticastPkts{target=\"$device\",ifIndex=\"$ifName\"}[$__rate_interval]) or rate(ifOutMulticastPkts{target=\"$device\",ifIndex=\"$ifName\"}[$__rate_interval])",
           "format": "time_series",
@@ -1131,7 +1143,7 @@
     {
       "datasource": {
         "type": "prometheus",
-        "uid": "$source"
+        "uid": "$datasource"
       },
       "fieldConfig": {
         "defaults": {
@@ -1232,7 +1244,7 @@
       "targets": [
         {
           "datasource": {
-            "uid": "$source"
+            "uid": "$datasource"
           },
           "editorMode": "code",
           "expr": "rate(ifInErrors{target=\"$device\",ifIndex=\"$ifName\"}[$__rate_interval])",
@@ -1245,7 +1257,7 @@
         },
         {
           "datasource": {
-            "uid": "$source"
+            "uid": "$datasource"
           },
           "editorMode": "code",
           "expr": "rate(ifOutErrors{target=\"$device\",ifIndex=\"$ifName\"}[$__rate_interval])",
@@ -1263,7 +1275,7 @@
     {
       "datasource": {
         "type": "prometheus",
-        "uid": "$source"
+        "uid": "$datasource"
       },
       "fieldConfig": {
         "defaults": {
@@ -1339,7 +1351,7 @@
       "targets": [
         {
           "datasource": {
-            "uid": "$source"
+            "uid": "$datasource"
           },
           "expr": "rate(ifInDiscards{target=\"$device\",ifIndex=\"$ifName\"}[$__rate_interval])",
           "format": "time_series",
@@ -1351,7 +1363,7 @@
         },
         {
           "datasource": {
-            "uid": "$source"
+            "uid": "$datasource"
           },
           "expr": "rate(ifInUnknownProtos{target=\"$device\",ifIndex=\"$ifName\"}[$__rate_interval])",
           "format": "time_series",
@@ -1363,7 +1375,7 @@
         },
         {
           "datasource": {
-            "uid": "$source"
+            "uid": "$datasource"
           },
           "expr": "rate(ifOutDiscards{instance=\"$instance\",ifName=\"$ifName\"}[$__rate_interval])",
           "format": "time_series",
@@ -1391,9 +1403,9 @@
         },
         "hide": 0,
         "includeAll": false,
-        "label": "Source",
+        "label": "Data Source",
         "multi": false,
-        "name": "source",
+        "name": "datasource",
         "options": [],
         "query": "prometheus",
         "queryValue": "",
@@ -1409,7 +1421,7 @@
           "value": "172.16.245.28:161"
         },
         "datasource": {
-          "uid": "$source"
+          "uid": "$datasource"
         },
         "definition": "label_values(ifOperStatus_info, target)",
         "hide": 0,
@@ -1438,7 +1450,7 @@
           "value": ""
         },
         "datasource": {
-          "uid": "$source"
+          "uid": "$datasource"
         },
         "definition": "query_result(ifName{target=\"$device\"})",
         "hide": 0,
@@ -1491,7 +1503,7 @@
   },
   "timezone": "",
   "title": "SNMP Interface Detail",
-  "uid": "Fi96pMWGk",
-  "version": 18,
+  "uid": "GiHKsW9Vk",
+  "version": 3,
   "weekStart": ""
 }
