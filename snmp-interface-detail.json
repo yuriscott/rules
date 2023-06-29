@@ -1349,7 +1349,11 @@
   "refresh": false,
   "schemaVersion": 36,
   "style": "dark",
-  "tags": [],
+  "tags": [
+    "promethues",
+    "snmp",
+    "networking"
+  ],
   "templating": {
     "list": [
       {
@@ -1431,9 +1435,9 @@
       },
       {
         "current": {
-          "selected": false,
-          "text": "GigabitEthernet1/0/19",
-          "value": "19"
+          "selected": true,
+          "text": "GigabitEthernet1/0/17",
+          "value": "17"
         },
         "datasource": {
           "uid": "$datasource"
@@ -1491,6 +1495,6 @@
   "timezone": "",
   "title": "SNMP Interface Detail",
   "uid": "I1NjrnrVz",
-  "version": 5,
+  "version": 7,
   "weekStart": ""
 }
