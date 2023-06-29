@@ -27,6 +27,7 @@
   "fiscalYearStartMonth": 0,
   "gnetId": 12492,
   "graphTooltip": 0,
+  "id": 45,
   "links": [],
   "liveNow": false,
   "panels": [
@@ -107,7 +108,7 @@
             "uid": "$datasource"
           },
           "exemplar": false,
-          "expr": "ifAdminStatus_info{target=\"$device\",ifIndex=\"$ifName\"}",
+          "expr": "ifAdminStatus_info{target=\"$device\", module=\"$module\",ifIndex=\"$ifName\"}",
           "instant": true,
           "interval": "",
           "legendFormat": "",
@@ -204,7 +205,7 @@
           "datasource": {
             "uid": "$datasource"
           },
-          "expr": "ifOperStatus_info{target=\"$device\",ifIndex=\"$ifName\"}",
+          "expr": "ifOperStatus_info{target=\"$device\", module=\"$module\",ifIndex=\"$ifName\"}",
           "instant": true,
           "interval": "",
           "legendFormat": "",
@@ -275,7 +276,7 @@
           "datasource": {
             "uid": "$datasource"
           },
-          "expr": "sysUpTime{target=\"$device\"} - on(target) ifLastChange{target=\"$device\",ifIndex=\"$ifName\"}",
+          "expr": "sysUpTime{target=\"$device\", module=\"$module\"} - on(target) ifLastChange{target=\"$device\",ifIndex=\"$ifName\", module=\"$module\"}",
           "instant": true,
           "interval": "",
           "legendFormat": "",
@@ -357,7 +358,7 @@
           "datasource": {
             "uid": "$datasource"
           },
-          "expr": "ifConnectorPresent{target=\"$device\",ifIndex=\"$ifName\"}",
+          "expr": "ifConnectorPresent_info{target=\"$device\",ifIndex=\"$ifName\",module=\"$module\"}",
           "instant": true,
           "interval": "",
           "legendFormat": "",
@@ -440,7 +441,7 @@
           "datasource": {
             "uid": "$datasource"
           },
-          "expr": "ifPromiscuousMode{instance=\"$instance\",ifName=\"$ifName\"}",
+          "expr": "ifPromiscuousMode_info{target=\"$device\",ifIndex=\"$ifName\"}",
           "instant": true,
           "interval": "",
           "legendFormat": "",
@@ -517,7 +518,7 @@
           "datasource": {
             "uid": "$datasource"
           },
-          "expr": "ifHighSpeed{target=\"$device\",ifIndex=\"$ifName\"}*1000000 or ifSpeed{target=\"$device\",ifIndex=\"$ifName\"}",
+          "expr": "ifHighSpeed{target=\"$device\",ifIndex=\"$ifName\", module=\"$module\"}*1000000 or ifSpeed{target=\"$device\",ifIndex=\"$ifName\", module=\"$module\"}",
           "instant": true,
           "interval": "",
           "legendFormat": "",
@@ -617,11 +618,6 @@
           "color": {
             "mode": "thresholds"
           },
-          "custom": {
-            "align": "right",
-            "displayMode": "auto",
-            "inspect": false
-          },
           "decimals": 2,
           "displayName": "",
           "mappings": [],
@@ -640,32 +636,7 @@
           },
           "unit": "short"
         },
-        "overrides": [
-          {
-            "matcher": {
-              "id": "byRegexp",
-              "options": ".*"
-            },
-            "properties": [
-              {
-                "id": "custom.hidden",
-                "value": true
-              }
-            ]
-          },
-          {
-            "matcher": {
-              "id": "byRegexp",
-              "options": "/ifType|ifAlias|ifDescr/"
-            },
-            "properties": [
-              {
-                "id": "custom.hidden",
-                "value": false
-              }
-            ]
-          }
-        ]
+        "overrides": []
       },
       "gridPos": {
         "h": 3,
@@ -676,14 +647,18 @@
       "id": 16,
       "links": [],
       "options": {
-        "footer": {
-          "fields": "",
-          "reducer": [
-            "sum"
+        "colorMode": "value",
+        "graphMode": "area",
+        "justifyMode": "auto",
+        "orientation": "auto",
+        "reduceOptions": {
+          "calcs": [
+            "lastNotNull"
           ],
-          "show": false
+          "fields": "",
+          "values": false
         },
-        "showHeader": true
+        "textMode": "auto"
       },
       "pluginVersion": "9.0.5",
       "targets": [
@@ -693,7 +668,7 @@
             "uid": "P4169E866C3094E38"
           },
           "exemplar": false,
-          "expr": "ifType_info{instance=\"$instance\",ifName=\"$ifName\"}",
+          "expr": "ifType_info{target=\"$device\",ifIndex=\"$ifName\", module=\"$module\"}",
           "format": "table",
           "instant": true,
           "interval": "",
@@ -709,7 +684,7 @@
           }
         }
       ],
-      "type": "table"
+      "type": "stat"
     },
     {
       "datasource": {
@@ -794,7 +769,7 @@
             "uid": "$datasource"
           },
           "editorMode": "code",
-          "expr": "(rate(ifHCInOctets{target=\"$device\",ifIndex=\"$ifName\"}[$__rate_interval]) or rate(ifInOctets{target=\"$device\",ifIndex=\"$ifName\"}[$__rate_interval]))*8",
+          "expr": "(rate(ifHCInOctets{target=\"$device\",ifIndex=\"$ifName\",module=\"$module\"}[$__rate_interval]) or rate(ifInOctets{target=\"$device\",ifIndex=\"$ifName\",module=\"$module\"}[$__rate_interval]))*8",
           "format": "time_series",
           "hide": false,
           "instant": false,
@@ -808,7 +783,7 @@
             "uid": "$datasource"
           },
           "editorMode": "code",
-          "expr": "(rate(ifHCOutOctets{target=\"$device\",ifIndex=\"$ifName\"}[$__rate_interval]) or rate(ifOutOctets{target=\"$device\",ifIndex=\"$ifName\"}[$__rate_interval]))*8",
+          "expr": "(rate(ifHCOutOctets{target=\"$device\",ifIndex=\"$ifName\",module=\"$module\"}[$__rate_interval]) or rate(ifOutOctets{target=\"$device\",ifIndex=\"$ifName\",module=\"$module\"}[$__rate_interval]))*8",
           "format": "time_series",
           "hide": false,
           "interval": "",
@@ -904,7 +879,7 @@
             "uid": "$datasource"
           },
           "editorMode": "code",
-          "expr": "rate(ifHCInBroadcastPkts{target=\"$device\",ifIndex=\"$ifName\"}[$__rate_interval]) or rate(ifInBroadcastPkts{target=\"$device\",ifIndex=\"$ifName\"}[$__rate_interval])",
+          "expr": "rate(ifHCInBroadcastPkts{target=\"$device\",ifIndex=\"$ifName\",module=\"$module\"}[$__rate_interval]) or rate(ifInBroadcastPkts{target=\"$device\",ifIndex=\"$ifName\",module=\"$module\"}[$__rate_interval])",
           "format": "time_series",
           "instant": false,
           "interval": "",
@@ -917,7 +892,7 @@
             "uid": "$datasource"
           },
           "editorMode": "code",
-          "expr": "rate(ifHCOutBroadcastPkts{target=\"$device\",ifIndex=\"$ifName\"}[$__rate_interval]) or rate(ifOutBroadcastPkts{target=\"$device\",ifIndex=\"$ifName\"}[$__rate_interval])",
+          "expr": "rate(ifHCOutBroadcastPkts{target=\"$device\",ifIndex=\"$ifName\",module=\"$module\"}[$__rate_interval]) or rate(ifOutBroadcastPkts{target=\"$device\",ifIndex=\"$ifName\",module=\"$module\"}[$__rate_interval])",
           "format": "time_series",
           "interval": "",
           "intervalFactor": 1,
@@ -997,7 +972,7 @@
       "options": {
         "legend": {
           "calcs": [],
-          "displayMode": "hidden",
+          "displayMode": "list",
           "placement": "right"
         },
         "tooltip": {
@@ -1011,23 +986,26 @@
           "datasource": {
             "uid": "$datasource"
           },
-          "expr": "rate(ifHCInUcastPkts{target=\"$device\",ifIndex=\"$ifName\"}[$__rate_interval]) or rate(ifInUcastPkts{target=\"$device\",ifIndex=\"$ifName\"}[$__rate_interval])",
+          "editorMode": "code",
+          "expr": "rate(ifHCInUcastPkts{target=\"$device\",ifIndex=\"$ifName\",module=\"$module\"}[$__rate_interval]) or rate(ifInUcastPkts{target=\"$device\",ifIndex=\"$ifName\",module=\"$module\"}[$__rate_interval])",
           "format": "time_series",
           "instant": false,
           "interval": "",
           "intervalFactor": 1,
-          "legendFormat": "IN: {{ifName}}",
+          "legendFormat": "IN",
           "refId": "A"
         },
         {
           "datasource": {
             "uid": "$datasource"
           },
-          "expr": "rate(ifHCOutUcastPkts{target=\"$device\",ifIndex=\"$ifName\"}[$__rate_interval]) or rate(ifOutUcastPkts{target=\"$device\",ifIndex=\"$ifName\"}[$__rate_interval])",
+          "editorMode": "code",
+          "expr": "rate(ifHCOutUcastPkts{target=\"$device\",ifIndex=\"$ifName\",module=\"$module\"}[$__rate_interval]) or rate(ifOutUcastPkts{target=\"$device\",ifIndex=\"$ifName\",module=\"$module\"}[$__rate_interval])",
           "format": "time_series",
           "interval": "",
           "intervalFactor": 1,
-          "legendFormat": "OUT: {{ifName}}",
+          "legendFormat": "OUT",
+          "range": true,
           "refId": "B"
         }
       ],
@@ -1116,7 +1094,7 @@
           "datasource": {
             "uid": "$datasource"
           },
-          "expr": "rate(ifHCInMulticastPkts{target=\"$device\",ifIndex=\"$ifName\"}[$__rate_interval]) or rate(ifInMulticastPkts{target=\"$device\",ifIndex=\"$ifName\"}[$__rate_interval])",
+          "expr": "rate(ifHCInMulticastPkts{target=\"$device\",ifIndex=\"$ifName\",module=\"$module\"}[$__rate_interval]) or rate(ifInMulticastPkts{target=\"$device\",ifIndex=\"$ifName\",module=\"$module\"}[$__rate_interval])",
           "format": "time_series",
           "instant": false,
           "interval": "",
@@ -1128,7 +1106,7 @@
           "datasource": {
             "uid": "$datasource"
           },
-          "expr": "rate(ifHCOutMulticastPkts{target=\"$device\",ifIndex=\"$ifName\"}[$__rate_interval]) or rate(ifOutMulticastPkts{target=\"$device\",ifIndex=\"$ifName\"}[$__rate_interval])",
+          "expr": "rate(ifHCOutMulticastPkts{target=\"$device\",ifIndex=\"$ifName\",module=\"$module\"}[$__rate_interval]) or rate(ifOutMulticastPkts{target=\"$device\",ifIndex=\"$ifName\",module=\"$module\"}[$__rate_interval])",
           "format": "time_series",
           "interval": "",
           "intervalFactor": 1,
@@ -1194,32 +1172,7 @@
           },
           "unit": "pps"
         },
-        "overrides": [
-          {
-            "__systemRef": "hideSeriesFrom",
-            "matcher": {
-              "id": "byNames",
-              "options": {
-                "mode": "exclude",
-                "names": [
-                  "OUT: errors"
-                ],
-                "prefix": "All except:",
-                "readOnly": true
-              }
-            },
-            "properties": [
-              {
-                "id": "custom.hideFrom",
-                "value": {
-                  "legend": false,
-                  "tooltip": false,
-                  "viz": true
-                }
-              }
-            ]
-          }
-        ]
+        "overrides": []
       },
       "gridPos": {
         "h": 9,
@@ -1247,7 +1200,7 @@
             "uid": "$datasource"
           },
           "editorMode": "code",
-          "expr": "rate(ifInErrors{target=\"$device\",ifIndex=\"$ifName\"}[$__rate_interval])",
+          "expr": "rate(ifInErrors{target=\"$device\",ifIndex=\"$ifName\",module=\"$module\"}[$__rate_interval])",
           "format": "time_series",
           "instant": false,
           "interval": "",
@@ -1260,7 +1213,7 @@
             "uid": "$datasource"
           },
           "editorMode": "code",
-          "expr": "rate(ifOutErrors{target=\"$device\",ifIndex=\"$ifName\"}[$__rate_interval])",
+          "expr": "rate(ifOutErrors{target=\"$device\",ifIndex=\"$ifName\",module=\"$module\"}[$__rate_interval])",
           "format": "time_series",
           "interval": "",
           "intervalFactor": 1,
@@ -1340,7 +1293,7 @@
       "options": {
         "legend": {
           "calcs": [],
-          "displayMode": "hidden",
+          "displayMode": "list",
           "placement": "right"
         },
         "tooltip": {
@@ -1354,7 +1307,7 @@
           "datasource": {
             "uid": "$datasource"
           },
-          "expr": "rate(ifInDiscards{target=\"$device\",ifIndex=\"$ifName\"}[$__rate_interval])",
+          "expr": "rate(ifInDiscards{target=\"$device\",ifIndex=\"$ifName\",module=\"$module\"}[$__rate_interval])",
           "format": "time_series",
           "instant": false,
           "interval": "",
@@ -1366,23 +1319,26 @@
           "datasource": {
             "uid": "$datasource"
           },
-          "expr": "rate(ifInUnknownProtos{target=\"$device\",ifIndex=\"$ifName\"}[$__rate_interval])",
+          "editorMode": "code",
+          "expr": "rate(ifInUnknownProtos{target=\"$device\",ifIndex=\"$ifName\",module=\"$module\"}[$__rate_interval])",
           "format": "time_series",
           "instant": false,
           "interval": "",
           "intervalFactor": 1,
-          "legendFormat": "IN: unknown protos: {{ifName}}",
+          "legendFormat": "IN: unknown protos",
           "refId": "C"
         },
         {
           "datasource": {
             "uid": "$datasource"
           },
-          "expr": "rate(ifOutDiscards{instance=\"$instance\",ifName=\"$ifName\"}[$__rate_interval])",
+          "editorMode": "code",
+          "expr": "rate(ifOutDiscards{target=\"$device\",ifIndex=\"$ifName\",module=\"$module\"}[$__rate_interval])",
           "format": "time_series",
           "interval": "",
           "intervalFactor": 1,
-          "legendFormat": "OUT: discards: {{ifName}}",
+          "legendFormat": "OUT: discards",
+          "range": true,
           "refId": "B"
         }
       ],
@@ -1393,11 +1349,7 @@
   "refresh": false,
   "schemaVersion": 36,
   "style": "dark",
-  "tags": [
-    "prometheus",
-    "snmp",
-    "network interface"
-  ],
+  "tags": [],
   "templating": {
     "list": [
       {
@@ -1431,6 +1383,7 @@
         "definition": "label_values(ifOperStatus_info, snmp_ip)",
         "hide": 0,
         "includeAll": false,
+        "label": "Device",
         "multi": false,
         "name": "device",
         "options": [],
@@ -1450,8 +1403,37 @@
       {
         "current": {
           "selected": false,
-          "text": "Bridge-Aggregation1",
-          "value": "35"
+          "text": "maipu",
+          "value": "maipu"
+        },
+        "datasource": {
+          "uid": "$datasource"
+        },
+        "definition": "label_values(ifOperStatus_info, module)",
+        "hide": 0,
+        "includeAll": false,
+        "label": "Module",
+        "multi": false,
+        "name": "module",
+        "options": [],
+        "query": {
+          "query": "label_values(ifOperStatus_info, module)",
+          "refId": "StandardVariableQuery"
+        },
+        "refresh": 1,
+        "regex": "",
+        "skipUrlSync": false,
+        "sort": 1,
+        "tagValuesQuery": "",
+        "tagsQuery": "",
+        "type": "query",
+        "useTags": false
+      },
+      {
+        "current": {
+          "selected": false,
+          "text": "GigabitEthernet1/0/19",
+          "value": "19"
         },
         "datasource": {
           "uid": "$datasource"
@@ -1459,6 +1441,7 @@
         "definition": "query_result(ifName{target=\"$device\"})",
         "hide": 0,
         "includeAll": false,
+        "label": "Interface Name",
         "multi": false,
         "name": "ifName",
         "options": [],
@@ -1507,7 +1490,7 @@
   },
   "timezone": "",
   "title": "SNMP Interface Detail",
-  "uid": "3iSx8WrVz",
-  "version": 24,
+  "uid": "I1NjrnrVz",
+  "version": 5,
   "weekStart": ""
 }
