@@ -789,7 +789,8 @@
             "mode": "absolute",
             "steps": [
               {
-                "color": "green"
+                "color": "green",
+                "value": null
               }
             ]
           },
@@ -953,6 +954,6 @@
   "timezone": "",
   "title": "SNMP Router&Switch Stats",
   "uid": "7qKD6I1Wk",
-  "version": 14,
+  "version": 16,
   "weekStart": ""
 }
