@@ -4846,10 +4846,10 @@
         "current": {
           "selected": true,
           "text": [
-            "meo"
+            "All"
           ],
           "value": [
-            "meo"
+            "$__all"
           ]
         },
         "datasource": {
@@ -4878,10 +4878,10 @@
         "current": {
           "selected": true,
           "text": [
-            "中心节点"
+            "All"
           ],
           "value": [
-            "中心节点"
+            "$__all"
           ]
         },
         "datasource": {
@@ -4908,13 +4908,9 @@
       {
         "allValue": ".*",
         "current": {
-          "selected": true,
-          "text": [
-            "vmagent-victoria-metrics-k8s-stack"
-          ],
-          "value": [
-            "vmagent-victoria-metrics-k8s-stack"
-          ]
+          "selected": false,
+          "text": "All",
+          "value": "$__all"
         },
         "datasource": {
           "uid": "$ds"
@@ -4943,10 +4939,10 @@
         "current": {
           "selected": true,
           "text": [
-            "10.231.180.39:8429"
+            "All"
           ],
           "value": [
-            "10.231.180.39:8429"
+            "$__all"
           ]
         },
         "datasource": {
@@ -4974,13 +4970,9 @@
       {
         "allValue": ".*",
         "current": {
-          "selected": true,
-          "text": [
-            "All"
-          ],
-          "value": [
-            "$__all"
-          ]
+          "selected": false,
+          "text": "All",
+          "value": "$__all"
         },
         "datasource": {
           "uid": "$ds"
@@ -5035,6 +5027,6 @@
   "timezone": "",
   "title": "VictoriaMetrics - vmagent Copy",
   "uid": "RDLq-TrVz",
-  "version": 7,
+  "version": 8,
   "weekStart": ""
 }
