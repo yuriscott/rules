@@ -4820,7 +4820,10 @@
   "refresh": "",
   "schemaVersion": 36,
   "style": "dark",
-  "tags": [],
+  "tags": [
+    "victoriametrics",
+    "vmagent"
+  ],
   "templating": {
     "list": [
       {
@@ -5027,6 +5030,6 @@
   "timezone": "",
   "title": "VictoriaMetrics - vmagent",
   "uid": "G7Z9GzMGz",
-  "version": 8,
+  "version": 1,
   "weekStart": ""
 }
