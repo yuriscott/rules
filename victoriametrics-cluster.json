@@ -49,6 +49,7 @@
   "editable": true,
   "fiscalYearStartMonth": 0,
   "graphTooltip": 1,
+  "id": 32,
   "links": [
     {
       "icon": "doc",
@@ -1125,7 +1126,8 @@
             "mode": "absolute",
             "steps": [
               {
-                "color": "green"
+                "color": "green",
+                "value": null
               },
               {
                 "color": "red",
@@ -1232,7 +1234,8 @@
             "mode": "absolute",
             "steps": [
               {
-                "color": "green"
+                "color": "green",
+                "value": null
               },
               {
                 "color": "red",
@@ -8474,7 +8477,10 @@
   "refresh": "1m",
   "schemaVersion": 36,
   "style": "dark",
-  "tags": [],
+  "tags": [
+    "victoriametrics",
+    "cluster"
+  ],
   "templating": {
     "list": [
       {
@@ -8527,6 +8533,7 @@
         "type": "query"
       },
       {
+        "allValue": "",
         "current": {
           "selected": true,
           "text": [
@@ -8570,14 +8577,14 @@
           "type": "prometheus",
           "uid": "$ds"
         },
-        "definition": "label_values(vm_app_version{version=~\"^vm(insert|select|storage).*\",node_name=\"$node\"}, job)",
+        "definition": "label_values(vm_app_version{version=~\"^vm(insert|select|storage).*\",node_name=~\"$node\"}, job)",
         "hide": 0,
         "includeAll": true,
         "multi": true,
         "name": "job",
         "options": [],
         "query": {
-          "query": "label_values(vm_app_version{version=~\"^vm(insert|select|storage).*\",node_name=\"$node\"}, job)",
+          "query": "label_values(vm_app_version{version=~\"^vm(insert|select|storage).*\",node_name=~\"$node\"}, job)",
           "refId": "StandardVariableQuery"
         },
         "refresh": 1,
@@ -8599,14 +8606,14 @@
           "type": "prometheus",
           "uid": "$ds"
         },
-        "definition": "label_values(vm_app_version{job=~\"$job\", version=~\"^vminsert.*\",node_name=\"$node\"}, job)",
+        "definition": "label_values(vm_app_version{job=~\"$job\", version=~\"^vminsert.*\",node_name=~\"$node\"}, job)",
         "hide": 2,
         "includeAll": false,
         "multi": false,
         "name": "job_insert",
         "options": [],
         "query": {
-          "query": "label_values(vm_app_version{job=~\"$job\", version=~\"^vminsert.*\",node_name=\"$node\"}, job)",
+          "query": "label_values(vm_app_version{job=~\"$job\", version=~\"^vminsert.*\",node_name=~\"$node\"}, job)",
           "refId": "StandardVariableQuery"
         },
         "refresh": 1,
@@ -8628,14 +8635,14 @@
           "type": "prometheus",
           "uid": "$ds"
         },
-        "definition": "label_values(vm_app_version{job=~\"$job\", version=~\"^vmselect.*\",node_name=\"$node\"}, job)",
+        "definition": "label_values(vm_app_version{job=~\"$job\", version=~\"^vmselect.*\",node_name=~\"$node\"}, job)",
         "hide": 2,
         "includeAll": false,
         "multi": false,
         "name": "job_select",
         "options": [],
         "query": {
-          "query": "label_values(vm_app_version{job=~\"$job\", version=~\"^vmselect.*\",node_name=\"$node\"}, job)",
+          "query": "label_values(vm_app_version{job=~\"$job\", version=~\"^vmselect.*\",node_name=~\"$node\"}, job)",
           "refId": "StandardVariableQuery"
         },
         "refresh": 1,
@@ -8657,14 +8664,14 @@
           "type": "prometheus",
           "uid": "$ds"
         },
-        "definition": "label_values(vm_app_version{job=~\"$job\", version=~\"^vmstorage.*\",node_name=\"$node\"}, job)",
+        "definition": "label_values(vm_app_version{job=~\"$job\", version=~\"^vmstorage.*\",node_name=~\"$node\"}, job)",
         "hide": 2,
         "includeAll": false,
         "multi": false,
         "name": "job_storage",
         "options": [],
         "query": {
-          "query": "label_values(vm_app_version{job=~\"$job\", version=~\"^vmstorage.*\",node_name=\"$node\"}, job)",
+          "query": "label_values(vm_app_version{job=~\"$job\", version=~\"^vmstorage.*\",node_name=~\"$node\"}, job)",
           "refId": "StandardVariableQuery"
         },
         "refresh": 1,
@@ -8691,14 +8698,14 @@
           "type": "prometheus",
           "uid": "$ds"
         },
-        "definition": "label_values(vm_app_version{job=~\"$job\",node_name=\"$node\"}, instance)",
+        "definition": "label_values(vm_app_version{job=~\"$job\",node_name=~\"$node\"}, instance)",
         "hide": 0,
         "includeAll": true,
         "multi": true,
         "name": "instance",
         "options": [],
         "query": {
-          "query": "label_values(vm_app_version{job=~\"$job\",node_name=\"$node\"}, instance)",
+          "query": "label_values(vm_app_version{job=~\"$job\",node_name=~\"$node\"}, instance)",
           "refId": "StandardVariableQuery"
         },
         "refresh": 1,
@@ -8740,6 +8747,6 @@
   "timezone": "",
   "title": "VictoriaMetrics - cluster",
   "uid": "oS7Bi_0Wz",
-  "version": 3,
+  "version": 1,
   "weekStart": ""
 }
