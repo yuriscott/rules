@@ -49,7 +49,6 @@
   "editable": true,
   "fiscalYearStartMonth": 0,
   "graphTooltip": 1,
-  "id": 32,
   "links": [
     {
       "icon": "doc",
@@ -1338,7 +1337,8 @@
             "mode": "absolute",
             "steps": [
               {
-                "color": "green"
+                "color": "green",
+                "value": null
               },
               {
                 "color": "red",
@@ -1441,7 +1441,8 @@
             "mode": "absolute",
             "steps": [
               {
-                "color": "green"
+                "color": "green",
+                "value": null
               },
               {
                 "color": "red",
@@ -8505,10 +8506,12 @@
         "current": {
           "selected": true,
           "text": [
-            "All"
+            "mep",
+            "meo"
           ],
           "value": [
-            "$__all"
+            "mep",
+            "meo"
           ]
         },
         "datasource": {
@@ -8537,10 +8540,10 @@
         "current": {
           "selected": true,
           "text": [
-            "All"
+            "中心节点"
           ],
           "value": [
-            "$__all"
+            "中心节点"
           ]
         },
         "datasource": {
@@ -8564,6 +8567,7 @@
         "type": "query"
       },
       {
+        "allValue": ".*",
         "current": {
           "selected": true,
           "text": [
