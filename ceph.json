@@ -25,7 +25,6 @@
   "editable": true,
   "fiscalYearStartMonth": 0,
   "graphTooltip": 0,
-  "id": 32,
   "links": [],
   "liveNow": false,
   "panels": [
@@ -1106,7 +1105,8 @@
             "mode": "absolute",
             "steps": [
               {
-                "color": "green"
+                "color": "green",
+                "value": null
               }
             ]
           },
@@ -1253,7 +1253,8 @@
             "mode": "absolute",
             "steps": [
               {
-                "color": "green"
+                "color": "green",
+                "value": null
               }
             ]
           },
@@ -1315,7 +1316,8 @@
             "mode": "absolute",
             "steps": [
               {
-                "color": "green"
+                "color": "green",
+                "value": null
               }
             ]
           },
@@ -1693,8 +1695,23 @@
             "type": "prometheus",
             "uid": "${DataSource}"
           },
+          "editorMode": "code",
           "expr": "rate(ceph_osd_op_r[5m]) * on (ceph_daemon) group_left(hostname)ceph_osd_metadata",
+          "legendFormat": "{{ceph_daemon}}/{{namespace}}",
+          "range": true,
           "refId": "A"
+        },
+        {
+          "datasource": {
+            "type": "prometheus",
+            "uid": "${DataSource}"
+          },
+          "editorMode": "code",
+          "expr": "rate(ceph_osd_op_w[5m]) * on (ceph_daemon) group_left(hostname)ceph_osd_metadata",
+          "hide": false,
+          "legendFormat": "{{ceph_daemon}}/{{namespace}}",
+          "range": true,
+          "refId": "B"
         }
       ],
       "title": "IOPS",
@@ -1778,8 +1795,23 @@
             "type": "prometheus",
             "uid": "${DataSource}"
           },
+          "editorMode": "code",
           "expr": "irate(ceph_osd_op_r_out_bytes[5m]) * on (ceph_daemon) group_left(hostname)ceph_osd_metadata",
+          "legendFormat": "{{ceph_daemon}}/read",
+          "range": true,
           "refId": "A"
+        },
+        {
+          "datasource": {
+            "type": "prometheus",
+            "uid": "${DataSource}"
+          },
+          "editorMode": "code",
+          "expr": "irate(ceph_osd_op_w_in_bytes[5m]) * on (ceph_daemon) group_left(hostname)ceph_osd_metadata",
+          "hide": false,
+          "legendFormat": "{{ceph_daemon}}/write",
+          "range": true,
+          "refId": "B"
         }
       ],
       "title": "Throughput",
