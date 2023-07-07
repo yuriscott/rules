@@ -61,6 +61,7 @@
     },
     {
       "datasource": {
+        "type": "prometheus",
         "uid": "$datasource"
       },
       "description": "How many percent of requests (both read and write) in 30 days have been answered successfully and fast enough?",
@@ -85,7 +86,8 @@
             "mode": "absolute",
             "steps": [
               {
-                "color": "green"
+                "color": "green",
+                "value": null
               },
               {
                 "color": "red",
@@ -127,7 +129,7 @@
           "datasource": {
             "uid": "$datasource"
           },
-          "expr": "apiserver_request:availability30d{verb=\"all\", cluster=\"$cluster\"}",
+          "expr": "round(apiserver_request:availability30d{verb=\"all\", cluster=\"$cluster\", node_name=\"$node\"})",
           "format": "time_series",
           "intervalFactor": 2,
           "legendFormat": "",
@@ -143,6 +145,7 @@
       "dashLength": 10,
       "dashes": false,
       "datasource": {
+        "type": "prometheus",
         "uid": "$datasource"
       },
       "decimals": 3,
@@ -190,7 +193,7 @@
           "datasource": {
             "uid": "$datasource"
           },
-          "expr": "100 * (apiserver_request:availability30d{verb=\"all\", cluster=\"$cluster\"} - 0.990000)",
+          "expr": "100 * (apiserver_request:availability30d{verb=\"all\", cluster=\"$cluster\", node_name=\"$node\"} - 0.990000)",
           "format": "time_series",
           "intervalFactor": 2,
           "legendFormat": "errorbudget",
@@ -231,6 +234,7 @@
     },
     {
       "datasource": {
+        "type": "prometheus",
         "uid": "$datasource"
       },
       "description": "How many percent of read requests (LIST,GET) in 30 days have been answered successfully and fast enough?",
@@ -255,7 +259,8 @@
             "mode": "absolute",
             "steps": [
               {
-                "color": "green"
+                "color": "green",
+                "value": null
               },
               {
                 "color": "red",
@@ -297,7 +302,7 @@
           "datasource": {
             "uid": "$datasource"
           },
-          "expr": "apiserver_request:availability30d{verb=\"read\", cluster=\"$cluster\"}",
+          "expr": "round(apiserver_request:availability30d{verb=\"read\", cluster=\"$cluster\", node_name=\"$node\"})",
           "format": "time_series",
           "intervalFactor": 2,
           "legendFormat": "",
@@ -313,6 +318,7 @@
       "dashLength": 10,
       "dashes": false,
       "datasource": {
+        "type": "prometheus",
         "uid": "$datasource"
       },
       "description": "How many read requests (LIST,GET) per second do the apiservers get by code?",
@@ -376,7 +382,7 @@
           "datasource": {
             "uid": "$datasource"
           },
-          "expr": "sum by (code) (code_resource:apiserver_request_total:rate5m{verb=\"read\", cluster=\"$cluster\"})",
+          "expr": "sum by (code) (code_resource:apiserver_request_total:rate5m{verb=\"read\", cluster=\"$cluster\", node_name=\"$node\"})",
           "format": "time_series",
           "intervalFactor": 2,
           "legendFormat": "{{ code }}",
@@ -419,6 +425,7 @@
       "dashLength": 10,
       "dashes": false,
       "datasource": {
+        "type": "prometheus",
         "uid": "$datasource"
       },
       "description": "How many percent of read requests (LIST,GET) per second are returned with errors (5xx)?",
@@ -465,7 +472,7 @@
           "datasource": {
             "uid": "$datasource"
           },
-          "expr": "sum by (resource) (code_resource:apiserver_request_total:rate5m{verb=\"read\",code=~\"5..\", cluster=\"$cluster\"}) / sum by (resource) (code_resource:apiserver_request_total:rate5m{verb=\"read\", cluster=\"$cluster\"})",
+          "expr": "sum by (resource) (code_resource:apiserver_request_total:rate5m{verb=\"read\",code=~\"5..\", cluster=\"$cluster\", node_name=\"$node\"}) / sum by (resource) (code_resource:apiserver_request_total:rate5m{verb=\"read\", cluster=\"$cluster\", node_name=\"$node\"})",
           "format": "time_series",
           "intervalFactor": 2,
           "legendFormat": "{{ resource }}",
@@ -510,6 +517,7 @@
       "dashLength": 10,
       "dashes": false,
       "datasource": {
+        "type": "prometheus",
         "uid": "$datasource"
       },
       "description": "How many seconds is the 99th percentile for reading (LIST|GET) a given resource?",
@@ -556,7 +564,7 @@
           "datasource": {
             "uid": "$datasource"
           },
-          "expr": "cluster_quantile:apiserver_request_slo_duration_seconds:histogram_quantile{verb=\"read\", cluster=\"$cluster\"}",
+          "expr": "cluster_quantile:apiserver_request_slo_duration_seconds:histogram_quantile{verb=\"read\", cluster=\"$cluster\", node_name=\"$node\"}",
           "format": "time_series",
           "intervalFactor": 2,
           "legendFormat": "{{ resource }}",
@@ -595,6 +603,7 @@
     },
     {
       "datasource": {
+        "type": "prometheus",
         "uid": "$datasource"
       },
       "description": "How many percent of write requests (POST|PUT|PATCH|DELETE) in 30 days have been answered successfully and fast enough?",
@@ -619,7 +628,8 @@
             "mode": "absolute",
             "steps": [
               {
-                "color": "green"
+                "color": "green",
+                "value": null
               },
               {
                 "color": "red",
@@ -661,7 +671,7 @@
           "datasource": {
             "uid": "$datasource"
           },
-          "expr": "apiserver_request:availability30d{verb=\"write\", cluster=\"$cluster\"}",
+          "expr": "round(apiserver_request:availability30d{verb=\"write\", cluster=\"$cluster\", node_name=\"$node\"})",
           "format": "time_series",
           "intervalFactor": 2,
           "legendFormat": "",
@@ -783,6 +793,7 @@
       "dashLength": 10,
       "dashes": false,
       "datasource": {
+        "type": "prometheus",
         "uid": "$datasource"
       },
       "description": "How many percent of write requests (POST|PUT|PATCH|DELETE) per second are returned with errors (5xx)?",
@@ -829,7 +840,7 @@
           "datasource": {
             "uid": "$datasource"
           },
-          "expr": "sum by (resource) (code_resource:apiserver_request_total:rate5m{verb=\"write\",code=~\"5..\", cluster=\"$cluster\"}) / sum by (resource) (code_resource:apiserver_request_total:rate5m{verb=\"write\", cluster=\"$cluster\"})",
+          "expr": "sum by (resource) (code_resource:apiserver_request_total:rate5m{verb=\"write\",code=~\"5..\", cluster=\"$cluster\", node_name=\"$node\"}) / sum by (resource) (code_resource:apiserver_request_total:rate5m{verb=\"write\", cluster=\"$cluster\", node_name=\"$node\"})",
           "format": "time_series",
           "intervalFactor": 2,
           "legendFormat": "{{ resource }}",
@@ -874,6 +885,7 @@
       "dashLength": 10,
       "dashes": false,
       "datasource": {
+        "type": "prometheus",
         "uid": "$datasource"
       },
       "description": "How many seconds is the 99th percentile for writing (POST|PUT|PATCH|DELETE) a given resource?",
@@ -920,7 +932,7 @@
           "datasource": {
             "uid": "$datasource"
           },
-          "expr": "cluster_quantile:apiserver_request_slo_duration_seconds:histogram_quantile{verb=\"write\", cluster=\"$cluster\"}",
+          "expr": "cluster_quantile:apiserver_request_slo_duration_seconds:histogram_quantile{verb=\"write\", cluster=\"$cluster\", node_name=\"$node\"}",
           "format": "time_series",
           "intervalFactor": 2,
           "legendFormat": "{{ resource }}",
@@ -963,6 +975,7 @@
       "dashLength": 10,
       "dashes": false,
       "datasource": {
+        "type": "prometheus",
         "uid": "$datasource"
       },
       "fill": 1,
@@ -1008,7 +1021,7 @@
           "datasource": {
             "uid": "$datasource"
           },
-          "expr": "sum(rate(workqueue_adds_total{job=\"apiserver\", instance=~\"$instance\", cluster=\"$cluster\"}[$__rate_interval])) by (instance, name)",
+          "expr": "sum(rate(workqueue_adds_total{job=\"apiserver\", instance=~\"$instance\", cluster=\"$cluster\", node_name=\"$node\"}[$__rate_interval])) by (instance, name)",
           "format": "time_series",
           "intervalFactor": 2,
           "legendFormat": "{{instance}} {{name}}",
@@ -1053,6 +1066,7 @@
       "dashLength": 10,
       "dashes": false,
       "datasource": {
+        "type": "prometheus",
         "uid": "$datasource"
       },
       "fill": 1,
@@ -1098,7 +1112,7 @@
           "datasource": {
             "uid": "$datasource"
           },
-          "expr": "sum(rate(workqueue_depth{job=\"apiserver\", instance=~\"$instance\", cluster=\"$cluster\"}[$__rate_interval])) by (instance, name)",
+          "expr": "sum(rate(workqueue_depth{job=\"apiserver\", instance=~\"$instance\", cluster=\"$cluster\", node_name=\"$node\"}[$__rate_interval])) by (instance, name)",
           "format": "time_series",
           "intervalFactor": 2,
           "legendFormat": "{{instance}} {{name}}",
@@ -1143,6 +1157,7 @@
       "dashLength": 10,
       "dashes": false,
       "datasource": {
+        "type": "prometheus",
         "uid": "$datasource"
       },
       "fill": 1,
@@ -1188,7 +1203,7 @@
           "datasource": {
             "uid": "$datasource"
           },
-          "expr": "histogram_quantile(0.99, sum(rate(workqueue_queue_duration_seconds_bucket{job=\"apiserver\", instance=~\"$instance\", cluster=\"$cluster\"}[$__rate_interval])) by (instance, name, le))",
+          "expr": "histogram_quantile(0.99, sum(rate(workqueue_queue_duration_seconds_bucket{job=\"apiserver\", instance=~\"$instance\", cluster=\"$cluster\", node_name=\"$node\"}[$__rate_interval])) by (instance, name, le))",
           "format": "time_series",
           "intervalFactor": 2,
           "legendFormat": "{{instance}} {{name}}",
@@ -1231,6 +1246,7 @@
       "dashLength": 10,
       "dashes": false,
       "datasource": {
+        "type": "prometheus",
         "uid": "$datasource"
       },
       "fill": 1,
@@ -1276,7 +1292,7 @@
           "datasource": {
             "uid": "$datasource"
           },
-          "expr": "process_resident_memory_bytes{job=\"apiserver\",instance=~\"$instance\", cluster=\"$cluster\"}",
+          "expr": "process_resident_memory_bytes{job=\"apiserver\",instance=~\"$instance\", cluster=\"$cluster\", node_name=\"$node\"}",
           "format": "time_series",
           "intervalFactor": 2,
           "legendFormat": "{{instance}}",
@@ -1319,6 +1335,7 @@
       "dashLength": 10,
       "dashes": false,
       "datasource": {
+        "type": "prometheus",
         "uid": "$datasource"
       },
       "fill": 1,
@@ -1364,7 +1381,7 @@
           "datasource": {
             "uid": "$datasource"
           },
-          "expr": "rate(process_cpu_seconds_total{job=\"apiserver\",instance=~\"$instance\", cluster=\"$cluster\"}[$__rate_interval])",
+          "expr": "rate(process_cpu_seconds_total{job=\"apiserver\",instance=~\"$instance\", cluster=\"$cluster\", node_name=\"$node\"}[$__rate_interval])",
           "format": "time_series",
           "intervalFactor": 2,
           "legendFormat": "{{instance}}",
@@ -1409,6 +1426,7 @@
       "dashLength": 10,
       "dashes": false,
       "datasource": {
+        "type": "prometheus",
         "uid": "$datasource"
       },
       "fill": 1,
@@ -1454,7 +1472,7 @@
           "datasource": {
             "uid": "$datasource"
           },
-          "expr": "go_goroutines{job=\"apiserver\",instance=~\"$instance\", cluster=\"$cluster\"}",
+          "expr": "go_goroutines{job=\"apiserver\",instance=~\"$instance\", cluster=\"$cluster\", node_name=\"$node\"}",
           "format": "time_series",
           "intervalFactor": 2,
           "legendFormat": "{{instance}}",
@@ -1504,8 +1522,8 @@
       {
         "current": {
           "selected": false,
-          "text": "default",
-          "value": "default"
+          "text": "VictoriaMetrics",
+          "value": "VictoriaMetrics"
         },
         "hide": 0,
         "includeAll": false,
@@ -1521,7 +1539,9 @@
       },
       {
         "current": {
-
+          "selected": false,
+          "text": "meo",
+          "value": "meo"
         },
         "datasource": {
           "type": "datasource",
@@ -1549,21 +1569,23 @@
       },
       {
         "current": {
-
+          "selected": false,
+          "text": "中心节点",
+          "value": "中心节点"
         },
         "datasource": {
           "type": "datasource",
           "uid": "$datasource"
         },
-        "definition": "label_values(up{job=\"apiserver\",cluster=\"$cluster\"}, node_name)",
+        "definition": "label_values(up{job=\"apiserver\",cluster=\"$cluster\"},node_name)",
         "hide": 0,
         "includeAll": false,
-        "label": "node",
+        "label": "cluster",
         "multi": false,
         "name": "node",
         "options": [],
         "query": {
-          "query": "label_values(up{job=\"apiserver\",cluster=\"$cluster\"}, node_name)",
+          "query": "label_values(up{job=\"apiserver\",cluster=\"$cluster\"},node_name)",
           "refId": "StandardVariableQuery"
         },
         "refresh": 2,
@@ -1635,8 +1657,8 @@
       "30d"
     ]
   },
-  "timezone": "CST",
-  "title": "Kubernetes / API server",
+  "timezone": "UTC",
+  "title": "Kubernetes / API server Copy",
   "uid": "09ec8aa1e996d6ffcd6817bbaff4db1b",
   "version": 0,
   "weekStart": ""
