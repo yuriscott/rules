@@ -1,75 +1,40 @@
 {
-  "__inputs": [
-    {
-      "name": "DS_CEPHTHANOS",
-      "label": "CephPrometheus",
-      "description": "",
-      "type": "datasource",
-      "pluginId": "prometheus",
-      "pluginName": "Prometheus"
-    }
-  ],
-  "__requires": [
-    {
-      "type": "grafana",
-      "id": "grafana",
-      "name": "Grafana",
-      "version": "5.4.0"
-    },
-    {
-      "type": "panel",
-      "id": "graph",
-      "name": "Graph",
-      "version": "5.0.0"
-    },
-    {
-      "type": "panel",
-      "id": "heatmap",
-      "name": "Heatmap",
-      "version": "5.0.0"
-    },
-    {
-      "type": "datasource",
-      "id": "prometheus",
-      "name": "Prometheus",
-      "version": "5.0.0"
-    },
-    {
-      "type": "panel",
-      "id": "singlestat",
-      "name": "Singlestat",
-      "version": "5.0.0"
-    },
-    {
-      "type": "panel",
-      "id": "table",
-      "name": "Table",
-      "version": "5.0.0"
-    }
-  ],
   "annotations": {
     "list": [
       {
         "builtIn": 1,
-        "datasource": "-- Grafana --",
+        "datasource": {
+          "type": "datasource",
+          "uid": "grafana"
+        },
         "enable": true,
         "hide": true,
         "iconColor": "rgba(0, 211, 255, 1)",
         "name": "Annotations & Alerts",
+        "target": {
+          "limit": 100,
+          "matchAny": false,
+          "tags": [],
+          "type": "dashboard"
+        },
         "type": "dashboard"
       }
     ]
   },
   "description": "Ceph Cluster overview.\r\n",
   "editable": true,
+  "fiscalYearStartMonth": 0,
   "gnetId": 7056,
   "graphTooltip": 0,
-  "id": null,
-  "iteration": 1544179872437,
   "links": [],
+  "liveNow": false,
   "panels": [
     {
       "collapsed": false,
+      "datasource": {
+        "type": "datasource",
+        "uid": "grafana"
+      },
       "gridPos": {
         "h": 1,
         "w": 24,
@@ -78,29 +43,73 @@
       },
       "id": 37,
       "panels": [],
-      "repeat": null,
+      "targets": [
+        {
+          "datasource": {
+            "type": "datasource",
+            "uid": "grafana"
+          },
+          "refId": "A"
+        }
+      ],
       "title": "CLUSTER STATE",
       "type": "row"
     },
     {
-      "cacheTimeout": null,
-      "colorBackground": false,
-      "colorValue": true,
-      "colors": [
-        "#9ac48a",
-        "rgba(237, 129, 40, 0.89)",
-        "rgba(245, 54, 54, 0.9)"
-      ],
-      "datasource": "${DS_CEPHTHANOS}",
-      "editable": true,
-      "error": false,
-      "format": "none",
-      "gauge": {
-        "maxValue": 100,
-        "minValue": 0,
-        "show": false,
-        "thresholdLabels": false,
-        "thresholdMarkers": true
+      "datasource": {
+        "type": "prometheus",
+        "uid": "${DataSource}"
+      },
+      "fieldConfig": {
+        "defaults": {
+          "color": {
+            "mode": "thresholds"
+          },
+          "mappings": [
+            {
+              "options": {
+                "0": {
+                  "text": "HEALTHY"
+                },
+                "1": {
+                  "text": "WARNING"
+                },
+                "2": {
+                  "text": "ERROR"
+                }
+              },
+              "type": "value"
+            },
+            {
+              "options": {
+                "match": "null",
+                "result": {
+                  "text": "N/A"
+                }
+              },
+              "type": "special"
+            }
+          ],
+          "thresholds": {
+            "mode": "absolute",
+            "steps": [
+              {
+                "color": "#9ac48a",
+                "value": null
+              },
+              {
+                "color": "rgba(237, 129, 40, 0.89)",
+                "value": 1
+              },
+              {
+                "color": "rgba(245, 54, 54, 0.9)",
+                "value": 2
+              }
+            ]
+          },
+          "unit": "none"
+        },
+        "overrides": []
       },
       "gridPos": {
         "h": 3,
@@ -111,96 +120,80 @@
       "id": 21,
       "interval": "1m",
       "links": [],
-      "mappingType": 1,
-      "mappingTypes": [
-        {
-          "name": "value to text",
-          "value": 1
-        },
-        {
-          "name": "range to text",
-          "value": 2
-        }
-      ],
       "maxDataPoints": 100,
-      "nullPointMode": "connected",
-      "nullText": null,
-      "postfix": "",
-      "postfixFontSize": "50%",
-      "prefix": "",
-      "prefixFontSize": "50%",
-      "rangeMaps": [
-        {
-          "from": "null",
-          "text": "N/A",
-          "to": "null"
-        }
-      ],
-      "sparkline": {
-        "fillColor": "rgba(31, 118, 189, 0.18)",
-        "full": false,
-        "lineColor": "rgb(31, 120, 193)",
-        "show": false
+      "options": {
+        "colorMode": "value",
+        "graphMode": "none",
+        "justifyMode": "auto",
+        "orientation": "horizontal",
+        "reduceOptions": {
+          "calcs": [
+            "lastNotNull"
+          ],
+          "fields": "",
+          "values": false
+        },
+        "textMode": "auto"
       },
-      "tableColumn": "",
+      "pluginVersion": "9.0.5",
       "targets": [
         {
-          "expr": "ceph_health_status{cluster=\"$cluster\"}",
+          "datasource": {
+            "uid": "${DataSource}"
+          },
+          "editorMode": "code",
+          "exemplar": false,
+          "expr": "ceph_health_status{cluster=\"$cluster\",node_name=\"$node\"}",
           "format": "time_series",
-          "instant": true,
-          "interval": "$interval",
+          "instant": false,
+          "interval": "",
           "intervalFactor": 1,
+          "range": true,
           "refId": "A",
           "step": 300
         }
       ],
-      "thresholds": "1,2",
-      "title": "",
+      "title": "Ceph Status",
       "transparent": true,
-      "type": "singlestat",
-      "valueFontSize": "70%",
-      "valueMaps": [
-        {
-          "op": "=",
-          "text": "N/A",
-          "value": "null"
-        },
-        {
-          "op": "=",
-          "text": "WARNING",
-          "value": "1"
-        },
-        {
-          "op": "=",
-          "text": "HEALTHY",
-          "value": "0"
-        },
-        {
-          "op": "=",
-          "text": "ERROR",
-          "value": "2"
-        }
-      ],
-      "valueName": "current"
+      "type": "stat"
     },
     {
-      "cacheTimeout": null,
-      "colorBackground": true,
-      "colorValue": false,
-      "colors": [
-        "#299c46",
-        "#f4d598",
-        "#d44a3a"
-      ],
-      "datasource": "${DS_CEPHTHANOS}",
-      "decimals": 1,
-      "format": "Bps",
-      "gauge": {
-        "maxValue": 100,
-        "minValue": 0,
-        "show": false,
-        "thresholdLabels": false,
-        "thresholdMarkers": true
+      "datasource": {
+        "uid": "${DataSource}"
+      },
+      "fieldConfig": {
+        "defaults": {
+          "color": {
+            "mode": "thresholds"
+          },
+          "decimals": 1,
+          "mappings": [
+            {
+              "options": {
+                "match": "null",
+                "result": {
+                  "text": "N/A"
+                }
+              },
+              "type": "special"
+            }
+          ],
+          "thresholds": {
+            "mode": "absolute",
+            "steps": [
+              {
+                "color": "green",
+                "value": null
+              },
+              {
+                "color": "red",
+                "value": 80
+              }
+            ]
+          },
+          "unit": "Bps"
+        },
+        "overrides": []
       },
       "gridPos": {
         "h": 3,
@@ -209,43 +202,29 @@
         "y": 1
       },
       "id": 92,
-      "interval": null,
       "links": [],
-      "mappingType": 1,
-      "mappingTypes": [
-        {
-          "name": "value to text",
-          "value": 1
-        },
-        {
-          "name": "range to text",
-          "value": 2
-        }
-      ],
       "maxDataPoints": 100,
-      "nullPointMode": "connected",
-      "nullText": null,
-      "postfix": "",
-      "postfixFontSize": "50%",
-      "prefix": "",
-      "prefixFontSize": "50%",
-      "rangeMaps": [
-        {
-          "from": "null",
-          "text": "N/A",
-          "to": "null"
-        }
-      ],
-      "sparkline": {
-        "fillColor": "rgba(31, 118, 189, 0.18)",
-        "full": false,
-        "lineColor": "#7eb26d",
-        "show": false
+      "options": {
+        "colorMode": "background",
+        "graphMode": "none",
+        "justifyMode": "auto",
+        "orientation": "horizontal",
+        "reduceOptions": {
+          "calcs": [
+            "lastNotNull"
+          ],
+          "fields": "",
+          "values": false
+        },
+        "textMode": "auto"
       },
-      "tableColumn": "",
+      "pluginVersion": "9.0.5",
       "targets": [
         {
-          "expr": "sum(irate(ceph_osd_op_w_in_bytes{cluster=\"$cluster\"}[5m]))",
+          "datasource": {
+            "uid": "${DataSource}"
+          },
+          "expr": "sum(irate(ceph_osd_op_w_in_bytes{cluster=\"$cluster\",node_name=\"$node\"}[5m]))",
           "format": "time_series",
           "instant": true,
           "interval": "$interval",
@@ -253,37 +232,50 @@
           "refId": "A"
         }
       ],
-      "thresholds": "",
       "title": "Write Throughput",
-      "type": "singlestat",
-      "valueFontSize": "70%",
-      "valueMaps": [
-        {
-          "op": "=",
-          "text": "N/A",
-          "value": "null"
-        }
-      ],
-      "valueName": "current"
+      "type": "stat"
     },
     {
-      "cacheTimeout": null,
-      "colorBackground": true,
-      "colorValue": false,
-      "colors": [
-        "#d44a3a",
-        "rgba(237, 129, 40, 0.89)",
-        "#9ac48a"
-      ],
-      "datasource": "${DS_CEPHTHANOS}",
-      "decimals": 1,
-      "format": "Bps",
-      "gauge": {
-        "maxValue": 100,
-        "minValue": 0,
-        "show": false,
-        "thresholdLabels": false,
-        "thresholdMarkers": true
+      "datasource": {
+        "uid": "${DataSource}"
+      },
+      "fieldConfig": {
+        "defaults": {
+          "color": {
+            "mode": "thresholds"
+          },
+          "decimals": 1,
+          "mappings": [
+            {
+              "options": {
+                "match": "null",
+                "result": {
+                  "text": "N/A"
+                }
+              },
+              "type": "special"
+            }
+          ],
+          "thresholds": {
+            "mode": "absolute",
+            "steps": [
+              {
+                "color": "#d44a3a",
+                "value": null
+              },
+              {
+                "color": "rgba(237, 129, 40, 0.89)",
+                "value": 0
+              },
+              {
+                "color": "#9ac48a",
+                "value": 0
+              }
+            ]
+          },
+          "unit": "Bps"
+        },
+        "overrides": []
       },
       "gridPos": {
         "h": 3,
@@ -292,43 +284,29 @@
         "y": 1
       },
       "id": 93,
-      "interval": null,
       "links": [],
-      "mappingType": 1,
-      "mappingTypes": [
-        {
-          "name": "value to text",
-          "value": 1
-        },
-        {
-          "name": "range to text",
-          "value": 2
-        }
-      ],
       "maxDataPoints": 100,
-      "nullPointMode": "connected",
-      "nullText": null,
-      "postfix": "",
-      "postfixFontSize": "50%",
-      "prefix": "",
-      "prefixFontSize": "50%",
-      "rangeMaps": [
-        {
-          "from": "null",
-          "text": "N/A",
-          "to": "null"
-        }
-      ],
-      "sparkline": {
-        "fillColor": "rgba(229, 172, 14, 0.22)",
-        "full": false,
-        "lineColor": "#e5ac0e",
-        "show": false
+      "options": {
+        "colorMode": "background",
+        "graphMode": "none",
+        "justifyMode": "auto",
+        "orientation": "horizontal",
+        "reduceOptions": {
+          "calcs": [
+            "lastNotNull"
+          ],
+          "fields": "",
+          "values": false
+        },
+        "textMode": "auto"
       },
-      "tableColumn": "",
+      "pluginVersion": "9.0.5",
       "targets": [
         {
-          "expr": "sum(irate(ceph_osd_op_r_out_bytes{cluster=\"$cluster\"}[5m]))",
+          "datasource": {
+            "uid": "${DataSource}"
+          },
+          "expr": "sum(irate(ceph_osd_op_r_out_bytes{cluster=\"$cluster\",node_name=\"$node\"}[5m]))",
           "format": "time_series",
           "instant": true,
           "interval": "$interval",
@@ -336,38 +314,50 @@
           "refId": "A"
         }
       ],
-      "thresholds": "0,0",
       "title": "Read Throughput",
-      "type": "singlestat",
-      "valueFontSize": "70%",
-      "valueMaps": [
-        {
-          "op": "=",
-          "text": "N/A",
-          "value": "null"
-        }
-      ],
-      "valueName": "current"
+      "type": "stat"
     },
     {
-      "cacheTimeout": null,
-      "colorBackground": false,
-      "colorValue": false,
-      "colors": [
-        "rgba(50, 172, 45, 0.97)",
-        "rgba(237, 129, 40, 0.89)",
-        "rgba(245, 54, 54, 0.9)"
-      ],
-      "datasource": "${DS_CEPHTHANOS}",
-      "editable": true,
-      "error": false,
-      "format": "decbytes",
-      "gauge": {
-        "maxValue": 100,
-        "minValue": 0,
-        "show": false,
-        "thresholdLabels": false,
-        "thresholdMarkers": true
+      "datasource": {
+        "uid": "${DataSource}"
+      },
+      "fieldConfig": {
+        "defaults": {
+          "color": {
+            "fixedColor": "rgb(31, 120, 193)",
+            "mode": "fixed"
+          },
+          "mappings": [
+            {
+              "options": {
+                "match": "null",
+                "result": {
+                  "text": "N/A"
+                }
+              },
+              "type": "special"
+            }
+          ],
+          "thresholds": {
+            "mode": "absolute",
+            "steps": [
+              {
+                "color": "rgba(50, 172, 45, 0.97)",
+                "value": null
+              },
+              {
+                "color": "rgba(237, 129, 40, 0.89)",
+                "value": 0.025
+              },
+              {
+                "color": "rgba(245, 54, 54, 0.9)",
+                "value": 0.1
+              }
+            ]
+          },
+          "unit": "decbytes"
+        },
+        "overrides": []
       },
       "gridPos": {
         "h": 3,
@@ -378,41 +368,28 @@
       "id": 33,
       "interval": "1m",
       "links": [],
-      "mappingType": 1,
-      "mappingTypes": [
-        {
-          "name": "value to text",
-          "value": 1
-        },
-        {
-          "name": "range to text",
-          "value": 2
-        }
-      ],
       "maxDataPoints": 100,
-      "nullPointMode": "connected",
-      "nullText": null,
-      "postfix": "",
-      "postfixFontSize": "50%",
-      "prefix": "",
-      "prefixFontSize": "50%",
-      "rangeMaps": [
-        {
-          "from": "null",
-          "text": "N/A",
-          "to": "null"
-        }
-      ],
-      "sparkline": {
-        "fillColor": "rgba(31, 118, 189, 0.18)",
-        "full": true,
-        "lineColor": "rgb(31, 120, 193)",
-        "show": true
+      "options": {
+        "colorMode": "none",
+        "graphMode": "area",
+        "justifyMode": "auto",
+        "orientation": "horizontal",
+        "reduceOptions": {
+          "calcs": [
+            "lastNotNull"
+          ],
+          "fields": "",
+          "values": false
+        },
+        "textMode": "auto"
       },
-      "tableColumn": "",
+      "pluginVersion": "9.0.5",
       "targets": [
         {
-          "expr": "ceph_cluster_total_bytes{cluster=\"$cluster\"}",
+          "datasource": {
+            "uid": "${DataSource}"
+          },
+          "expr": "ceph_cluster_total_bytes{cluster=\"$cluster\",node_name=\"$node\"}",
           "format": "time_series",
           "instant": true,
           "interval": "$interval",
@@ -422,39 +399,51 @@
           "step": 300
         }
       ],
-      "thresholds": "0.025,0.1",
       "title": "Cluster Capacity",
-      "transparent": false,
-      "type": "singlestat",
-      "valueFontSize": "70%",
-      "valueMaps": [
-        {
-          "op": "=",
-          "text": "N/A",
-          "value": "null"
-        }
-      ],
-      "valueName": "current"
+      "type": "stat"
     },
     {
-      "cacheTimeout": null,
-      "colorBackground": false,
-      "colorValue": true,
-      "colors": [
-        "rgba(245, 54, 54, 0.9)",
-        "rgba(237, 129, 40, 0.89)",
-        "rgba(50, 172, 45, 0.97)"
-      ],
-      "datasource": "${DS_CEPHTHANOS}",
-      "editable": true,
-      "error": false,
-      "format": "percentunit",
-      "gauge": {
-        "maxValue": 1,
-        "minValue": 0,
-        "show": true,
-        "thresholdLabels": false,
-        "thresholdMarkers": true
+      "datasource": {
+        "uid": "${DataSource}"
+      },
+      "fieldConfig": {
+        "defaults": {
+          "color": {
+            "mode": "thresholds"
+          },
+          "mappings": [
+            {
+              "options": {
+                "match": "null",
+                "result": {
+                  "text": "N/A"
+                }
+              },
+              "type": "special"
+            }
+          ],
+          "max": 1,
+          "min": 0,
+          "thresholds": {
+            "mode": "absolute",
+            "steps": [
+              {
+                "color": "rgba(245, 54, 54, 0.9)",
+                "value": null
+              },
+              {
+                "color": "rgba(237, 129, 40, 0.89)",
+                "value": 0.1
+              },
+              {
+                "color": "rgba(50, 172, 45, 0.97)",
+                "value": 0.3
+              }
+            ]
+          },
+          "unit": "percentunit"
+        },
+        "overrides": []
       },
       "gridPos": {
         "h": 6,
@@ -465,41 +454,26 @@
       "id": 23,
       "interval": "1m",
       "links": [],
-      "mappingType": 1,
-      "mappingTypes": [
-        {
-          "name": "value to text",
-          "value": 1
-        },
-        {
-          "name": "range to text",
-          "value": 2
-        }
-      ],
       "maxDataPoints": 100,
-      "nullPointMode": "connected",
-      "nullText": null,
-      "postfix": "",
-      "postfixFontSize": "50%",
-      "prefix": "",
-      "prefixFontSize": "50%",
-      "rangeMaps": [
-        {
-          "from": "null",
-          "text": "N/A",
-          "to": "null"
-        }
-      ],
-      "sparkline": {
-        "fillColor": "rgba(31, 118, 189, 0.18)",
-        "full": true,
-        "lineColor": "rgb(31, 120, 193)",
-        "show": false
+      "options": {
+        "orientation": "horizontal",
+        "reduceOptions": {
+          "calcs": [
+            "lastNotNull"
+          ],
+          "fields": "",
+          "values": false
+        },
+        "showThresholdLabels": false,
+        "showThresholdMarkers": true
       },
-      "tableColumn": "",
+      "pluginVersion": "9.0.5",
       "targets": [
         {
-          "expr": "(ceph_cluster_total_bytes{cluster=\"$cluster\"}-ceph_cluster_total_used_bytes{cluster=\"$cluster\"})/ceph_cluster_total_bytes{cluster=\"$cluster\"}",
+          "datasource": {
+            "uid": "${DataSource}"
+          },
+          "expr": "(ceph_cluster_total_bytes{cluster=\"$cluster\",node_name=\"$node\"}-ceph_cluster_total_used_bytes{cluster=\"$cluster\",node_name=\"$node\"})/ceph_cluster_total_bytes{cluster=\"$cluster\",node_name=\"$node\"}",
           "format": "time_series",
           "instant": true,
           "interval": "$interval",
@@ -509,37 +483,45 @@
           "step": 300
         }
       ],
-      "thresholds": "0.10,0.3",
       "title": "Available Capacity",
-      "transparent": false,
-      "type": "singlestat",
-      "valueFontSize": "70%",
-      "valueMaps": [
-        {
-          "op": "=",
-          "text": "N/A",
-          "value": "null"
-        }
-      ],
-      "valueName": "current"
+      "type": "gauge"
     },
     {
-      "cacheTimeout": null,
-      "colorBackground": false,
-      "colorValue": false,
-      "colors": [
-        "#e5a8e2",
-        "#052b51",
-        "#d44a3a"
-      ],
-      "datasource": "${DS_CEPHTHANOS}",
-      "format": "short",
-      "gauge": {
-        "maxValue": 100,
-        "minValue": 0,
-        "show": false,
-        "thresholdLabels": false,
-        "thresholdMarkers": true
+      "datasource": {
+        "uid": "${DataSource}"
+      },
+      "fieldConfig": {
+        "defaults": {
+          "color": {
+            "mode": "thresholds"
+          },
+          "mappings": [
+            {
+              "options": {
+                "match": "null",
+                "result": {
+                  "text": "N/A"
+                }
+              },
+              "type": "special"
+            }
+          ],
+          "thresholds": {
+            "mode": "absolute",
+            "steps": [
+              {
+                "color": "green",
+                "value": null
+              },
+              {
+                "color": "red",
+                "value": 80
+              }
+            ]
+          },
+          "unit": "short"
+        },
+        "overrides": []
       },
       "gridPos": {
         "h": 3,
@@ -548,43 +530,29 @@
         "y": 1
       },
       "id": 48,
-      "interval": null,
       "links": [],
-      "mappingType": 1,
-      "mappingTypes": [
-        {
-          "name": "value to text",
-          "value": 1
-        },
-        {
-          "name": "range to text",
-          "value": 2
-        }
-      ],
       "maxDataPoints": 100,
-      "nullPointMode": "connected",
-      "nullText": null,
-      "postfix": "",
-      "postfixFontSize": "50%",
-      "prefix": "",
-      "prefixFontSize": "50%",
-      "rangeMaps": [
-        {
-          "from": "null",
-          "text": "N/A",
-          "to": "null"
-        }
-      ],
-      "sparkline": {
-        "fillColor": "rgba(31, 118, 189, 0.18)",
-        "full": false,
-        "lineColor": "rgb(31, 120, 193)",
-        "show": false
+      "options": {
+        "colorMode": "none",
+        "graphMode": "none",
+        "justifyMode": "auto",
+        "orientation": "horizontal",
+        "reduceOptions": {
+          "calcs": [
+            "lastNotNull"
+          ],
+          "fields": "",
+          "values": false
+        },
+        "textMode": "auto"
       },
-      "tableColumn": "",
+      "pluginVersion": "9.0.5",
       "targets": [
         {
-          "expr": "ceph_cluster_total_objects{cluster=\"$cluster\"}",
+          "datasource": {
+            "uid": "${DataSource}"
+          },
+          "expr": "ceph_cluster_total_objects{cluster=\"$cluster\",node_name=\"$node\"}",
           "format": "time_series",
           "instant": true,
           "interval": "$interval",
@@ -592,37 +560,46 @@
           "refId": "A"
         }
       ],
-      "thresholds": "",
       "title": "Number of Objects",
-      "type": "singlestat",
-      "valueFontSize": "50%",
-      "valueMaps": [
-        {
-          "op": "=",
-          "text": "N/A",
-          "value": "null"
-        }
-      ],
-      "valueName": "current"
+      "type": "stat"
     },
     {
-      "cacheTimeout": null,
-      "colorBackground": true,
-      "colorValue": false,
-      "colors": [
-        "#299c46",
-        "#82b5d8",
-        "#d44a3a"
-      ],
-      "datasource": "${DS_CEPHTHANOS}",
-      "decimals": 1,
-      "format": "decbytes",
-      "gauge": {
-        "maxValue": 100,
-        "minValue": 0,
-        "show": false,
-        "thresholdLabels": false,
-        "thresholdMarkers": true
+      "datasource": {
+        "uid": "${DataSource}"
+      },
+      "fieldConfig": {
+        "defaults": {
+          "color": {
+            "mode": "thresholds"
+          },
+          "decimals": 1,
+          "mappings": [
+            {
+              "options": {
+                "match": "null",
+                "result": {
+                  "text": "N/A"
+                }
+              },
+              "type": "special"
+            }
+          ],
+          "thresholds": {
+            "mode": "absolute",
+            "steps": [
+              {
+                "color": "green",
+                "value": null
+              },
+              {
+                "color": "red",
+                "value": 80
+              }
+            ]
+          },
+          "unit": "decbytes"
+        },
+        "overrides": []
       },
       "gridPos": {
         "h": 3,
@@ -631,43 +608,29 @@
         "y": 1
       },
       "id": 99,
-      "interval": null,
       "links": [],
-      "mappingType": 1,
-      "mappingTypes": [
-        {
-          "name": "value to text",
-          "value": 1
-        },
-        {
-          "name": "range to text",
-          "value": 2
-        }
-      ],
       "maxDataPoints": 100,
-      "nullPointMode": "connected",
-      "nullText": null,
-      "postfix": "",
-      "postfixFontSize": "50%",
-      "prefix": "",
-      "prefixFontSize": "50%",
-      "rangeMaps": [
-        {
-          "from": "null",
-          "text": "N/A",
-          "to": "null"
-        }
-      ],
-      "sparkline": {
-        "fillColor": "rgba(31, 118, 189, 0.18)",
-        "full": false,
-        "lineColor": "#7eb26d",
-        "show": false
+      "options": {
+        "colorMode": "background",
+        "graphMode": "none",
+        "justifyMode": "auto",
+        "orientation": "horizontal",
+        "reduceOptions": {
+          "calcs": [
+            "delta"
+          ],
+          "fields": "",
+          "values": false
+        },
+        "textMode": "auto"
       },
-      "tableColumn": "",
+      "pluginVersion": "9.0.5",
       "targets": [
         {
-          "expr": "sum(ceph_osd_op_w_in_bytes{cluster=\"$cluster\"})",
+          "datasource": {
+            "uid": "${DataSource}"
+          },
+          "expr": "sum(ceph_osd_op_w_in_bytes{cluster=\"$cluster\",node_name=\"$node\"})",
           "format": "time_series",
           "instant": false,
           "interval": "$interval",
@@ -675,37 +638,46 @@
           "refId": "A"
         }
       ],
-      "thresholds": "",
       "title": "Bytes Written",
-      "type": "singlestat",
-      "valueFontSize": "70%",
-      "valueMaps": [
-        {
-          "op": "=",
-          "text": "N/A",
-          "value": "null"
-        }
-      ],
-      "valueName": "delta"
+      "type": "stat"
     },
     {
-      "cacheTimeout": null,
-      "colorBackground": true,
-      "colorValue": false,
-      "colors": [
-        "#299c46",
-        "#aea2e0",
-        "#d44a3a"
-      ],
-      "datasource": "${DS_CEPHTHANOS}",
-      "decimals": 1,
-      "format": "decbytes",
-      "gauge": {
-        "maxValue": 100,
-        "minValue": 0,
-        "show": false,
-        "thresholdLabels": false,
-        "thresholdMarkers": true
+      "datasource": {
+        "uid": "${DataSource}"
+      },
+      "fieldConfig": {
+        "defaults": {
+          "color": {
+            "mode": "thresholds"
+          },
+          "decimals": 1,
+          "mappings": [
+            {
+              "options": {
+                "match": "null",
+                "result": {
+                  "text": "N/A"
+                }
+              },
+              "type": "special"
+            }
+          ],
+          "thresholds": {
+            "mode": "absolute",
+            "steps": [
+              {
+                "color": "green",
+                "value": null
+              },
+              {
+                "color": "red",
+                "value": 80
+              }
+            ]
+          },
+          "unit": "decbytes"
+        },
+        "overrides": []
       },
       "gridPos": {
         "h": 3,
@@ -714,43 +686,29 @@
         "y": 1
       },
       "id": 100,
-      "interval": null,
       "links": [],
-      "mappingType": 1,
-      "mappingTypes": [
-        {
-          "name": "value to text",
-          "value": 1
-        },
-        {
-          "name": "range to text",
-          "value": 2
-        }
-      ],
       "maxDataPoints": 100,
-      "nullPointMode": "connected",
-      "nullText": null,
-      "postfix": "",
-      "postfixFontSize": "50%",
-      "prefix": "",
-      "prefixFontSize": "50%",
-      "rangeMaps": [
-        {
-          "from": "null",
-          "text": "N/A",
-          "to": "null"
-        }
-      ],
-      "sparkline": {
-        "fillColor": "rgba(31, 118, 189, 0.18)",
-        "full": false,
-        "lineColor": "#7eb26d",
-        "show": false
+      "options": {
+        "colorMode": "background",
+        "graphMode": "none",
+        "justifyMode": "auto",
+        "orientation": "horizontal",
+        "reduceOptions": {
+          "calcs": [
+            "delta"
+          ],
+          "fields": "",
+          "values": false
+        },
+        "textMode": "auto"
       },
-      "tableColumn": "",
+      "pluginVersion": "9.0.5",
       "targets": [
         {
-          "expr": "sum(ceph_osd_op_r_out_bytes{cluster=\"$cluster\"})",
+          "datasource": {
+            "uid": "${DataSource}"
+          },
+          "expr": "sum(ceph_osd_op_r_out_bytes{cluster=\"$cluster\",node_name=\"$node\"})",
           "format": "time_series",
           "instant": false,
           "interval": "$interval",
@@ -758,36 +716,39 @@
           "refId": "A"
         }
       ],
-      "thresholds": "",
       "title": "Bytes Read",
-      "type": "singlestat",
-      "valueFontSize": "70%",
-      "valueMaps": [
-        {
-          "op": "=",
-          "text": "N/A",
-          "value": "null"
-        }
-      ],
-      "valueName": "delta"
+      "type": "stat"
     },
     {
-      "cacheTimeout": null,
-      "colorBackground": true,
-      "colorValue": false,
-      "colors": [
-        "#9ac48a",
-        "rgba(237, 129, 40, 0.89)",
-        "#e24d42"
-      ],
-      "datasource": "${DS_CEPHTHANOS}",
-      "format": "short",
-      "gauge": {
-        "maxValue": 100,
-        "minValue": 0,
-        "show": false,
-        "thresholdLabels": false,
-        "thresholdMarkers": true
+      "datasource": {
+        "uid": "${DataSource}"
+      },
+      "fieldConfig": {
+        "defaults": {
+          "color": {
+            "mode": "thresholds"
+          },
+          "mappings": [],
+          "thresholds": {
+            "mode": "absolute",
+            "steps": [
+              {
+                "color": "#9ac48a",
+                "value": null
+              },
+              {
+                "color": "rgba(237, 129, 40, 0.89)",
+                "value": 1
+              },
+              {
+                "color": "#e24d42",
+                "value": 1
+              }
+            ]
+          },
+          "unit": "short"
+        },
+        "overrides": []
       },
       "gridPos": {
         "h": 3,
@@ -796,75 +757,76 @@
         "y": 4
       },
       "id": 75,
-      "interval": null,
       "links": [],
-      "mappingType": 1,
-      "mappingTypes": [
-        {
-          "name": "value to text",
-          "value": 1
-        },
-        {
-          "name": "range to text",
-          "value": 2
-        }
-      ],
       "maxDataPoints": 100,
-      "nullPointMode": "connected",
-      "nullText": null,
-      "postfix": "",
-      "postfixFontSize": "50%",
-      "prefix": "",
-      "prefixFontSize": "70%",
-      "rangeMaps": [
-        {
-          "from": "null",
-          "text": "N/A",
-          "to": "null"
-        }
-      ],
-      "sparkline": {
-        "fillColor": "rgba(31, 118, 189, 0.18)",
-        "full": false,
-        "lineColor": "rgb(31, 120, 193)",
-        "show": false
+      "options": {
+        "colorMode": "background",
+        "graphMode": "none",
+        "justifyMode": "auto",
+        "orientation": "horizontal",
+        "reduceOptions": {
+          "calcs": [
+            "lastNotNull"
+          ],
+          "fields": "",
+          "values": false
+        },
+        "textMode": "auto"
       },
-      "tableColumn": "",
+      "pluginVersion": "9.0.5",
       "targets": [
         {
-          "expr": "count(ALERTS{cluster='$cluster', alertstate='firing'}) OR vector(0)",
+          "datasource": {
+            "uid": "${DataSource}"
+          },
+          "expr": "count(ALERTS{cluster=\"$cluster\",node_name=\"$node\", alertstate='firing'}) OR vector(0)",
           "format": "time_series",
           "instant": true,
           "intervalFactor": 1,
           "refId": "A"
         }
       ],
-      "thresholds": "1,1",
       "title": "Alerts",
       "transparent": true,
-      "type": "singlestat",
-      "valueFontSize": "70%",
-      "valueMaps": [],
-      "valueName": "current"
+      "type": "stat"
     },
     {
-      "cacheTimeout": null,
-      "colorBackground": true,
-      "colorValue": false,
-      "colors": [
-        "#299c46",
-        "#f4d598",
-        "#d44a3a"
-      ],
-      "datasource": "${DS_CEPHTHANOS}",
-      "decimals": 2,
-      "format": "ops",
-      "gauge": {
-        "maxValue": 100,
-        "minValue": 0,
-        "show": false,
-        "thresholdLabels": false,
-        "thresholdMarkers": true
+      "datasource": {
+        "uid": "${DataSource}"
+      },
+      "fieldConfig": {
+        "defaults": {
+          "color": {
+            "mode": "thresholds"
+          },
+          "decimals": 2,
+          "mappings": [
+            {
+              "options": {
+                "match": "null",
+                "result": {
+                  "text": "N/A"
+                }
+              },
+              "type": "special"
+            }
+          ],
+          "thresholds": {
+            "mode": "absolute",
+            "steps": [
+              {
+                "color": "green",
+                "value": null
+              },
+              {
+                "color": "red",
+                "value": 80
+              }
+            ]
+          },
+          "unit": "ops"
+        },
+        "overrides": []
       },
       "gridPos": {
         "h": 3,
@@ -873,43 +835,29 @@
         "y": 4
       },
       "id": 97,
-      "interval": null,
       "links": [],
-      "mappingType": 1,
-      "mappingTypes": [
-        {
-          "name": "value to text",
-          "value": 1
-        },
-        {
-          "name": "range to text",
-          "value": 2
-        }
-      ],
       "maxDataPoints": 100,
-      "nullPointMode": "connected",
-      "nullText": null,
-      "postfix": "",
-      "postfixFontSize": "50%",
-      "prefix": "",
-      "prefixFontSize": "50%",
-      "rangeMaps": [
-        {
-          "from": "null",
-          "text": "N/A",
-          "to": "null"
-        }
-      ],
-      "sparkline": {
-        "fillColor": "rgba(31, 118, 189, 0.18)",
-        "full": false,
-        "lineColor": "#629e51",
-        "show": false
+      "options": {
+        "colorMode": "background",
+        "graphMode": "none",
+        "justifyMode": "auto",
+        "orientation": "horizontal",
+        "reduceOptions": {
+          "calcs": [
+            "lastNotNull"
+          ],
+          "fields": "",
+          "values": false
+        },
+        "textMode": "auto"
       },
-      "tableColumn": "",
+      "pluginVersion": "9.0.5",
       "targets": [
         {
-          "expr": "sum(irate(ceph_osd_op_w{cluster=\"$cluster\"}[5m]))",
+          "datasource": {
+            "uid": "${DataSource}"
+          },
+          "expr": "sum(irate(ceph_osd_op_w{cluster=\"$cluster\",node_name=\"$node\"}[5m]))",
           "format": "time_series",
           "instant": true,
           "interval": "$interval",
@@ -917,37 +865,50 @@
           "refId": "A"
         }
       ],
-      "thresholds": "",
       "title": "Write IOPS",
-      "type": "singlestat",
-      "valueFontSize": "70%",
-      "valueMaps": [
-        {
-          "op": "=",
-          "text": "N/A",
-          "value": "null"
-        }
-      ],
-      "valueName": "current"
+      "type": "stat"
     },
     {
-      "cacheTimeout": null,
-      "colorBackground": true,
-      "colorValue": false,
-      "colors": [
-        "#d44a3a",
-        "rgba(237, 129, 40, 0.89)",
-        "#9ac48a"
-      ],
-      "datasource": "${DS_CEPHTHANOS}",
-      "decimals": 2,
-      "format": "ops",
-      "gauge": {
-        "maxValue": 100,
-        "minValue": 0,
-        "show": false,
-        "thresholdLabels": false,
-        "thresholdMarkers": true
+      "datasource": {
+        "uid": "${DataSource}"
+      },
+      "fieldConfig": {
+        "defaults": {
+          "color": {
+            "mode": "thresholds"
+          },
+          "decimals": 2,
+          "mappings": [
+            {
+              "options": {
+                "match": "null",
+                "result": {
+                  "text": "N/A"
+                }
+              },
+              "type": "special"
+            }
+          ],
+          "thresholds": {
+            "mode": "absolute",
+            "steps": [
+              {
+                "color": "#d44a3a",
+                "value": null
+              },
+              {
+                "color": "rgba(237, 129, 40, 0.89)",
+                "value": 0
+              },
+              {
+                "color": "#9ac48a",
+                "value": 0
+              }
+            ]
+          },
+          "unit": "ops"
+        },
+        "overrides": []
       },
       "gridPos": {
         "h": 3,
@@ -956,43 +917,29 @@
         "y": 4
       },
       "id": 96,
-      "interval": null,
       "links": [],
-      "mappingType": 1,
-      "mappingTypes": [
-        {
-          "name": "value to text",
-          "value": 1
-        },
-        {
-          "name": "range to text",
-          "value": 2
-        }
-      ],
       "maxDataPoints": 100,
-      "nullPointMode": "connected",
-      "nullText": null,
-      "postfix": "",
-      "postfixFontSize": "50%",
-      "prefix": "",
-      "prefixFontSize": "50%",
-      "rangeMaps": [
-        {
-          "from": "null",
-          "text": "N/A",
-          "to": "null"
-        }
-      ],
-      "sparkline": {
-        "fillColor": "rgba(229, 172, 14, 0.14)",
-        "full": false,
-        "lineColor": "#e5ac0e",
-        "show": false
+      "options": {
+        "colorMode": "background",
+        "graphMode": "none",
+        "justifyMode": "auto",
+        "orientation": "horizontal",
+        "reduceOptions": {
+          "calcs": [
+            "lastNotNull"
+          ],
+          "fields": "",
+          "values": false
+        },
+        "textMode": "auto"
       },
-      "tableColumn": "",
+      "pluginVersion": "9.0.5",
       "targets": [
         {
-          "expr": "sum(irate(ceph_osd_op_r{cluster=\"$cluster\"}[5m]))",
+          "datasource": {
+            "uid": "${DataSource}"
+          },
+          "expr": "sum(irate(ceph_osd_op_r{cluster=\"$cluster\",node_name=\"$node\"}[5m]))",
           "format": "time_series",
           "instant": true,
           "interval": "$interval",
@@ -1000,38 +947,50 @@
           "refId": "A"
         }
       ],
-      "thresholds": "0,0",
       "title": "Read IOPS",
-      "type": "singlestat",
-      "valueFontSize": "70%",
-      "valueMaps": [
-        {
-          "op": "=",
-          "text": "N/A",
-          "value": "null"
-        }
-      ],
-      "valueName": "current"
+      "type": "stat"
     },
     {
-      "cacheTimeout": null,
-      "colorBackground": false,
-      "colorValue": false,
-      "colors": [
-        "rgba(50, 172, 45, 0.97)",
-        "rgba(237, 129, 40, 0.89)",
-        "rgba(245, 54, 54, 0.9)"
-      ],
-      "datasource": "${DS_CEPHTHANOS}",
-      "editable": true,
-      "error": false,
-      "format": "decbytes",
-      "gauge": {
-        "maxValue": 100,
-        "minValue": 0,
-        "show": false,
-        "thresholdLabels": false,
-        "thresholdMarkers": true
+      "datasource": {
+        "uid": "${DataSource}"
+      },
+      "fieldConfig": {
+        "defaults": {
+          "color": {
+            "fixedColor": "rgb(31, 120, 193)",
+            "mode": "fixed"
+          },
+          "mappings": [
+            {
+              "options": {
+                "match": "null",
+                "result": {
+                  "text": "N/A"
+                }
+              },
+              "type": "special"
+            }
+          ],
+          "thresholds": {
+            "mode": "absolute",
+            "steps": [
+              {
+                "color": "rgba(50, 172, 45, 0.97)",
+                "value": null
+              },
+              {
+                "color": "rgba(237, 129, 40, 0.89)",
+                "value": 0.025
+              },
+              {
+                "color": "rgba(245, 54, 54, 0.9)",
+                "value": 0.1
+              }
+            ]
+          },
+          "unit": "decbytes"
+        },
+        "overrides": []
       },
       "gridPos": {
         "h": 3,
@@ -1042,41 +1001,28 @@
       "id": 34,
       "interval": "1m",
       "links": [],
-      "mappingType": 1,
-      "mappingTypes": [
-        {
-          "name": "value to text",
-          "value": 1
-        },
-        {
-          "name": "range to text",
-          "value": 2
-        }
-      ],
       "maxDataPoints": 100,
-      "nullPointMode": "connected",
-      "nullText": null,
-      "postfix": "",
-      "postfixFontSize": "50%",
-      "prefix": "",
-      "prefixFontSize": "50%",
-      "rangeMaps": [
-        {
-          "from": "null",
-          "text": "N/A",
-          "to": "null"
-        }
-      ],
-      "sparkline": {
-        "fillColor": "rgba(31, 118, 189, 0.18)",
-        "full": true,
-        "lineColor": "rgb(31, 120, 193)",
-        "show": true
+      "options": {
+        "colorMode": "none",
+        "graphMode": "area",
+        "justifyMode": "auto",
+        "orientation": "horizontal",
+        "reduceOptions": {
+          "calcs": [
+            "lastNotNull"
+          ],
+          "fields": "",
+          "values": false
+        },
+        "textMode": "auto"
       },
-      "tableColumn": "",
+      "pluginVersion": "9.0.5",
       "targets": [
         {
-          "expr": "ceph_cluster_total_used_bytes{cluster=\"$cluster\"}",
+          "datasource": {
+            "uid": "${DataSource}"
+          },
+          "expr": "ceph_cluster_total_used_bytes{cluster=\"$cluster\",node_name=\"$node\"}",
           "format": "time_series",
           "instant": true,
           "interval": "$interval",
@@ -1086,38 +1032,50 @@
           "step": 300
         }
       ],
-      "thresholds": "0.025,0.1",
       "title": "Used Capacity",
-      "transparent": false,
-      "type": "singlestat",
-      "valueFontSize": "70%",
-      "valueMaps": [
-        {
-          "op": "=",
-          "text": "N/A",
-          "value": "null"
-        }
-      ],
-      "valueName": "current"
+      "type": "stat"
     },
     {
-      "cacheTimeout": null,
-      "colorBackground": true,
-      "colorValue": false,
-      "colors": [
-        "#ea6460",
-        "#052b51",
-        "#508642"
-      ],
-      "datasource": "${DS_CEPHTHANOS}",
-      "decimals": 2,
-      "format": "short",
-      "gauge": {
-        "maxValue": 100,
-        "minValue": 0,
-        "show": false,
-        "thresholdLabels": false,
-        "thresholdMarkers": true
+      "datasource": {
+        "uid": "${DataSource}"
+      },
+      "fieldConfig": {
+        "defaults": {
+          "color": {
+            "mode": "thresholds"
+          },
+          "decimals": 2,
+          "mappings": [
+            {
+              "options": {
+                "match": "null",
+                "result": {
+                  "text": "N/A"
+                }
+              },
+              "type": "special"
+            }
+          ],
+          "thresholds": {
+            "mode": "absolute",
+            "steps": [
+              {
+                "color": "#ea6460",
+                "value": null
+              },
+              {
+                "color": "#052b51",
+                "value": 0
+              },
+              {
+                "color": "#508642",
+                "value": 0
+              }
+            ]
+          },
+          "unit": "short"
+        },
+        "overrides": []
       },
       "gridPos": {
         "h": 3,
@@ -1126,43 +1084,29 @@
         "y": 4
       },
       "id": 98,
-      "interval": null,
       "links": [],
-      "mappingType": 1,
-      "mappingTypes": [
-        {
-          "name": "value to text",
-          "value": 1
-        },
-        {
-          "name": "range to text",
-          "value": 2
-        }
-      ],
       "maxDataPoints": 100,
-      "nullPointMode": "connected",
-      "nullText": null,
-      "postfix": "",
-      "postfixFontSize": "50%",
-      "prefix": "",
-      "prefixFontSize": "50%",
-      "rangeMaps": [
-        {
-          "from": "null",
-          "text": "N/A",
-          "to": "null"
-        }
-      ],
-      "sparkline": {
-        "fillColor": "rgba(31, 118, 189, 0.18)",
-        "full": false,
-        "lineColor": "rgb(31, 120, 193)",
-        "show": false
+      "options": {
+        "colorMode": "background",
+        "graphMode": "none",
+        "justifyMode": "auto",
+        "orientation": "horizontal",
+        "reduceOptions": {
+          "calcs": [
+            "diff"
+          ],
+          "fields": "",
+          "values": false
+        },
+        "textMode": "auto"
       },
-      "tableColumn": "",
+      "pluginVersion": "9.0.5",
       "targets": [
         {
-          "expr": "ceph_cluster_total_objects{cluster=\"$cluster\"}",
+          "datasource": {
+            "uid": "${DataSource}"
+          },
+          "expr": "ceph_cluster_total_objects{cluster=\"$cluster\",node_name=\"$node\"}",
           "format": "time_series",
           "instant": false,
           "interval": "$interval",
@@ -1170,37 +1114,45 @@
           "refId": "A"
         }
       ],
-      "thresholds": "0,0",
       "title": "Difference",
-      "transparent": false,
-      "type": "singlestat",
-      "valueFontSize": "50%",
-      "valueMaps": [
-        {
-          "op": "=",
-          "text": "N/A",
-          "value": "null"
-        }
-      ],
-      "valueName": "diff"
+      "type": "stat"
     },
     {
-      "cacheTimeout": null,
-      "colorBackground": true,
-      "colorValue": false,
-      "colors": [
-        "#299c46",
-        "#e0752d",
-        "#d44a3a"
-      ],
-      "datasource": "${DS_CEPHTHANOS}",
-      "format": "short",
-      "gauge": {
-        "maxValue": 100,
-        "minValue": 0,
-        "show": false,
-        "thresholdLabels": false,
-        "thresholdMarkers": true
+      "datasource": {
+        "uid": "${DataSource}"
+      },
+      "fieldConfig": {
+        "defaults": {
+          "color": {
+            "mode": "thresholds"
+          },
+          "mappings": [
+            {
+              "options": {
+                "match": "null",
+                "result": {
+                  "text": "N/A"
+                }
+              },
+              "type": "special"
+            }
+          ],
+          "thresholds": {
+            "mode": "absolute",
+            "steps": [
+              {
+                "color": "green",
+                "value": null
+              },
+              {
+                "color": "red",
+                "value": 80
+              }
+            ]
+          },
+          "unit": "short"
+        },
+        "overrides": []
       },
       "gridPos": {
         "h": 3,
@@ -1209,80 +1161,77 @@
         "y": 4
       },
       "id": 102,
-      "interval": null,
       "links": [],
-      "mappingType": 1,
-      "mappingTypes": [
-        {
-          "name": "value to text",
-          "value": 1
-        },
-        {
-          "name": "range to text",
-          "value": 2
-        }
-      ],
       "maxDataPoints": 100,
-      "nullPointMode": "connected",
-      "nullText": null,
-      "postfix": "",
-      "postfixFontSize": "50%",
-      "prefix": "",
-      "prefixFontSize": "50%",
-      "rangeMaps": [
-        {
-          "from": "null",
-          "text": "N/A",
-          "to": "null"
-        }
-      ],
-      "sparkline": {
-        "fillColor": "rgba(31, 118, 189, 0.18)",
-        "full": false,
-        "lineColor": "rgb(31, 120, 193)",
-        "show": false
+      "options": {
+        "colorMode": "background",
+        "graphMode": "none",
+        "justifyMode": "auto",
+        "orientation": "horizontal",
+        "reduceOptions": {
+          "calcs": [
+            "lastNotNull"
+          ],
+          "fields": "",
+          "values": false
+        },
+        "textMode": "auto"
       },
-      "tableColumn": "",
+      "pluginVersion": "9.0.5",
       "targets": [
         {
-          "expr": "sum(ceph_mon_num_sessions{cluster='$cluster'})",
+          "datasource": {
+            "uid": "${DataSource}"
+          },
+          "expr": "sum(ceph_mon_num_sessions{cluster=\"$cluster\",node_name=\"$node\"})",
           "format": "time_series",
           "intervalFactor": 1,
           "refId": "A"
         }
       ],
-      "thresholds": "",
       "title": "Mon Session Num",
-      "type": "singlestat",
-      "valueFontSize": "70%",
-      "valueMaps": [
-        {
-          "op": "=",
-          "text": "N/A",
-          "value": "null"
-        }
-      ],
-      "valueName": "current"
+      "type": "stat"
     },
     {
-      "cacheTimeout": null,
-      "colorBackground": false,
-      "colorValue": true,
-      "colors": [
-        "rgba(245, 54, 54, 0.9)",
-        "rgba(237, 129, 40, 0.89)",
-        "rgba(50, 172, 45, 0.97)"
-      ],
-      "datasource": "${DS_CEPHTHANOS}",
-      "editable": true,
-      "error": false,
-      "format": "none",
-      "gauge": {
-        "maxValue": 100,
-        "minValue": 0,
-        "show": false,
-        "thresholdLabels": false,
-        "thresholdMarkers": true
+      "datasource": {
+        "uid": "${DataSource}"
+      },
+      "fieldConfig": {
+        "defaults": {
+          "color": {
+            "mode": "thresholds"
+          },
+          "mappings": [
+            {
+              "options": {
+                "match": "null",
+                "result": {
+                  "text": "N/A"
+                }
+              },
+              "type": "special"
+            }
+          ],
+          "thresholds": {
+            "mode": "absolute",
+            "steps": [
+              {
+                "color": "rgba(245, 54, 54, 0.9)",
+                "value": null
+              },
+              {
+                "color": "rgba(237, 129, 40, 0.89)",
+                "value": 2
+              },
+              {
+                "color": "rgba(50, 172, 45, 0.97)",
+                "value": 3
+              }
+            ]
+          },
+          "unit": "none"
+        },
+        "overrides": []
       },
       "gridPos": {
         "h": 3,
@@ -1293,41 +1242,28 @@
       "id": 14,
       "interval": "1m",
       "links": [],
-      "mappingType": 1,
-      "mappingTypes": [
-        {
-          "name": "value to text",
-          "value": 1
-        },
-        {
-          "name": "range to text",
-          "value": 2
-        }
-      ],
       "maxDataPoints": 100,
-      "nullPointMode": "connected",
-      "nullText": null,
-      "postfix": "",
-      "postfixFontSize": "50%",
-      "prefix": "",
-      "prefixFontSize": "50%",
-      "rangeMaps": [
-        {
-          "from": "null",
-          "text": "N/A",
-          "to": "null"
-        }
-      ],
-      "sparkline": {
-        "fillColor": "rgba(31, 118, 189, 0.18)",
-        "full": false,
-        "lineColor": "rgb(31, 120, 193)",
-        "show": false
+      "options": {
+        "colorMode": "value",
+        "graphMode": "none",
+        "justifyMode": "auto",
+        "orientation": "horizontal",
+        "reduceOptions": {
+          "calcs": [
+            "lastNotNull"
+          ],
+          "fields": "",
+          "values": false
+        },
+        "textMode": "auto"
       },
-      "tableColumn": "",
+      "pluginVersion": "9.0.5",
       "targets": [
         {
-          "expr": "count(ceph_mon_quorum_status{cluster=\"$cluster\"})",
+          "datasource": {
+            "uid": "${DataSource}"
+          },
+          "expr": "count(ceph_mon_quorum_status{cluster=\"$cluster\",node_name=\"$node\"})",
           "format": "time_series",
           "instant": true,
           "interval": "$interval",
@@ -1337,22 +1273,15 @@
           "step": 300
         }
       ],
-      "thresholds": "2,3",
       "title": "Monitors In Quorum",
-      "transparent": false,
-      "type": "singlestat",
-      "valueFontSize": "70%",
-      "valueMaps": [
-        {
-          "op": "=",
-          "text": "N/A",
-          "value": "null"
-        }
-      ],
-      "valueName": "current"
+      "type": "stat"
     },
     {
       "collapsed": false,
+      "datasource": {
+        "type": "datasource",
+        "uid": "grafana"
+      },
       "gridPos": {
         "h": 1,
         "w": 24,
@@ -1361,29 +1290,58 @@
       },
       "id": 38,
       "panels": [],
-      "repeat": null,
+      "targets": [
+        {
+          "datasource": {
+            "type": "datasource",
+            "uid": "grafana"
+          },
+          "refId": "A"
+        }
+      ],
       "title": "OSD STATE",
       "type": "row"
     },
     {
-      "cacheTimeout": null,
-      "colorBackground": true,
-      "colorValue": false,
-      "colors": [
-        "#9ac48a",
-        "rgba(237, 40, 40, 0.89)",
-        "rgba(245, 54, 54, 0.9)"
-      ],
-      "datasource": "${DS_CEPHTHANOS}",
-      "editable": true,
-      "error": false,
-      "format": "none",
-      "gauge": {
-        "maxValue": 100,
-        "minValue": 0,
-        "show": false,
-        "thresholdLabels": false,
-        "thresholdMarkers": true
+      "datasource": {
+        "uid": "${DataSource}"
+      },
+      "fieldConfig": {
+        "defaults": {
+          "color": {
+            "mode": "thresholds"
+          },
+          "mappings": [
+            {
+              "options": {
+                "match": "null",
+                "result": {
+                  "text": "N/A"
+                }
+              },
+              "type": "special"
+            }
+          ],
+          "thresholds": {
+            "mode": "absolute",
+            "steps": [
+              {
+                "color": "#9ac48a",
+                "value": null
+              },
+              {
+                "color": "rgba(237, 40, 40, 0.89)",
+                "value": 1
+              },
+              {
+                "color": "rgba(245, 54, 54, 0.9)",
+                "value": 1
+              }
+            ]
+          },
+          "unit": "none"
+        },
+        "overrides": []
       },
       "gridPos": {
         "h": 3,
@@ -1392,43 +1350,29 @@
         "y": 8
       },
       "id": 27,
-      "interval": null,
       "links": [],
-      "mappingType": 1,
-      "mappingTypes": [
-        {
-          "name": "value to text",
-          "value": 1
-        },
-        {
-          "name": "range to text",
-          "value": 2
-        }
-      ],
       "maxDataPoints": 100,
-      "nullPointMode": "connected",
-      "nullText": null,
-      "postfix": "",
-      "postfixFontSize": "50%",
-      "prefix": "",
-      "prefixFontSize": "50%",
-      "rangeMaps": [
-        {
-          "from": "null",
-          "text": "N/A",
-          "to": "null"
-        }
-      ],
-      "sparkline": {
-        "fillColor": "rgba(31, 118, 189, 0.18)",
-        "full": false,
-        "lineColor": "rgb(31, 120, 193)",
-        "show": false
+      "options": {
+        "colorMode": "background",
+        "graphMode": "none",
+        "justifyMode": "auto",
+        "orientation": "horizontal",
+        "reduceOptions": {
+          "calcs": [
+            "lastNotNull"
+          ],
+          "fields": "",
+          "values": false
+        },
+        "textMode": "auto"
       },
-      "tableColumn": "",
+      "pluginVersion": "9.0.5",
       "targets": [
         {
-          "expr": "count(ceph_osd_up{cluster=\"$cluster\"}) - count(ceph_osd_in{cluster=\"$cluster\"})",
+          "datasource": {
+            "uid": "${DataSource}"
+          },
+          "expr": "count(ceph_osd_up{cluster=\"$cluster\",node_name=\"$node\"}) - count(ceph_osd_in{cluster=\"$cluster\",node_name=\"$node\"})",
           "format": "time_series",
           "instant": true,
           "interval": "$interval",
@@ -1438,38 +1382,49 @@
           "step": 300
         }
       ],
-      "thresholds": "1,1",
       "title": "OSDs OUT",
-      "type": "singlestat",
-      "valueFontSize": "70%",
-      "valueMaps": [
-        {
-          "op": "=",
-          "text": "N/A",
-          "value": "null"
-        }
-      ],
-      "valueName": "current"
+      "type": "stat"
     },
     {
-      "cacheTimeout": null,
-      "colorBackground": true,
-      "colorValue": false,
-      "colors": [
-        "rgba(50, 172, 45, 0.97)",
-        "#eab839",
-        "#ea6460"
-      ],
-      "datasource": "${DS_CEPHTHANOS}",
-      "editable": true,
-      "error": false,
-      "format": "none",
-      "gauge": {
-        "maxValue": 100,
-        "minValue": 0,
-        "show": false,
-        "thresholdLabels": false,
-        "thresholdMarkers": true
+      "datasource": {
+        "uid": "${DataSource}"
+      },
+      "fieldConfig": {
+        "defaults": {
+          "color": {
+            "mode": "thresholds"
+          },
+          "mappings": [
+            {
+              "options": {
+                "match": "null",
+                "result": {
+                  "text": "N/A"
+                }
+              },
+              "type": "special"
+            }
+          ],
+          "thresholds": {
+            "mode": "absolute",
+            "steps": [
+              {
+                "color": "rgba(50, 172, 45, 0.97)",
+                "value": null
+              },
+              {
+                "color": "#eab839",
+                "value": 1
+              },
+              {
+                "color": "#ea6460",
+                "value": 1
+              }
+            ]
+          },
+          "unit": "none"
+        },
+        "overrides": []
       },
       "gridPos": {
         "h": 3,
@@ -1478,43 +1433,29 @@
         "y": 8
       },
       "id": 29,
-      "interval": null,
       "links": [],
-      "mappingType": 1,
-      "mappingTypes": [
-        {
-          "name": "value to text",
-          "value": 1
-        },
-        {
-          "name": "range to text",
-          "value": 2
-        }
-      ],
       "maxDataPoints": 100,
-      "nullPointMode": "connected",
-      "nullText": null,
-      "postfix": "",
-      "postfixFontSize": "50%",
-      "prefix": "",
-      "prefixFontSize": "50%",
-      "rangeMaps": [
-        {
-          "from": "null",
-          "text": "N/A",
-          "to": "null"
-        }
-      ],
-      "sparkline": {
-        "fillColor": "rgba(31, 118, 189, 0.18)",
-        "full": false,
-        "lineColor": "rgb(31, 120, 193)",
-        "show": false
+      "options": {
+        "colorMode": "background",
+        "graphMode": "none",
+        "justifyMode": "auto",
+        "orientation": "horizontal",
+        "reduceOptions": {
+          "calcs": [
+            "lastNotNull"
+          ],
+          "fields": "",
+          "values": false
+        },
+        "textMode": "auto"
       },
-      "tableColumn": "",
+      "pluginVersion": "9.0.5",
       "targets": [
         {
-          "expr": "count(ceph_osd_up{cluster=\"$cluster\"} == 0.0) OR vector(0)",
+          "datasource": {
+            "uid": "${DataSource}"
+          },
+          "expr": "count(ceph_osd_up{cluster=\"$cluster\",node_name=\"$node\"} == 0.0) OR vector(0)",
           "format": "time_series",
           "instant": true,
           "interval": "$interval",
@@ -1524,38 +1465,45 @@
           "step": 300
         }
       ],
-      "thresholds": "1,1",
       "title": "OSDs DOWN",
-      "type": "singlestat",
-      "valueFontSize": "70%",
-      "valueMaps": [
-        {
-          "op": "=",
-          "text": "N/A",
-          "value": "null"
-        }
-      ],
-      "valueName": "current"
+      "type": "stat"
     },
     {
-      "cacheTimeout": null,
-      "colorBackground": false,
-      "colorValue": false,
-      "colors": [
-        "rgba(245, 54, 54, 0.9)",
-        "rgba(237, 129, 40, 0.89)",
-        "rgba(50, 172, 45, 0.97)"
-      ],
-      "datasource": "${DS_CEPHTHANOS}",
-      "editable": true,
-      "error": false,
-      "format": "none",
-      "gauge": {
-        "maxValue": 100,
-        "minValue": 0,
-        "show": false,
-        "thresholdLabels": false,
-        "thresholdMarkers": true
+      "datasource": {
+        "uid": "${DataSource}"
+      },
+      "fieldConfig": {
+        "defaults": {
+          "color": {
+            "mode": "thresholds"
+          },
+          "mappings": [
+            {
+              "options": {
+                "match": "null",
+                "result": {
+                  "text": "N/A"
+                }
+              },
+              "type": "special"
+            }
+          ],
+          "thresholds": {
+            "mode": "absolute",
+            "steps": [
+              {
+                "color": "green",
+                "value": null
+              },
+              {
+                "color": "red",
+                "value": 80
+              }
+            ]
+          },
+          "unit": "none"
+        },
+        "overrides": []
       },
       "gridPos": {
         "h": 3,
@@ -1564,43 +1512,29 @@
         "y": 8
       },
       "id": 28,
-      "interval": null,
       "links": [],
-      "mappingType": 1,
-      "mappingTypes": [
-        {
-          "name": "value to text",
-          "value": 1
-        },
-        {
-          "name": "range to text",
-          "value": 2
-        }
-      ],
       "maxDataPoints": 100,
-      "nullPointMode": "connected",
-      "nullText": null,
-      "postfix": "",
-      "postfixFontSize": "50%",
-      "prefix": "",
-      "prefixFontSize": "50%",
-      "rangeMaps": [
-        {
-          "from": "null",
-          "text": "N/A",
-          "to": "null"
-        }
-      ],
-      "sparkline": {
-        "fillColor": "rgba(31, 118, 189, 0.18)",
-        "full": false,
-        "lineColor": "rgb(31, 120, 193)",
-        "show": false
+      "options": {
+        "colorMode": "none",
+        "graphMode": "none",
+        "justifyMode": "auto",
+        "orientation": "horizontal",
+        "reduceOptions": {
+          "calcs": [
+            "lastNotNull"
+          ],
+          "fields": "",
+          "values": false
+        },
+        "textMode": "auto"
       },
-      "tableColumn": "",
+      "pluginVersion": "9.0.5",
       "targets": [
         {
-          "expr": "sum(ceph_osd_up{cluster=\"$cluster\"})",
+          "datasource": {
+            "uid": "${DataSource}"
+          },
+          "expr": "sum(ceph_osd_up{cluster=\"$cluster\",node_name=\"$node\"})",
           "format": "time_series",
           "instant": true,
           "interval": "$interval",
@@ -1610,38 +1544,45 @@
           "step": 300
         }
       ],
-      "thresholds": "",
       "title": "OSDs UP",
-      "type": "singlestat",
-      "valueFontSize": "70%",
-      "valueMaps": [
-        {
-          "op": "=",
-          "text": "N/A",
-          "value": "null"
-        }
-      ],
-      "valueName": "current"
+      "type": "stat"
     },
     {
-      "cacheTimeout": null,
-      "colorBackground": false,
-      "colorValue": false,
-      "colors": [
-        "rgba(245, 54, 54, 0.9)",
-        "rgba(237, 129, 40, 0.89)",
-        "rgba(50, 172, 45, 0.97)"
-      ],
-      "datasource": "${DS_CEPHTHANOS}",
-      "editable": true,
-      "error": false,
-      "format": "none",
-      "gauge": {
-        "maxValue": 100,
-        "minValue": 0,
-        "show": false,
-        "thresholdLabels": false,
-        "thresholdMarkers": true
+      "datasource": {
+        "uid": "${DataSource}"
+      },
+      "fieldConfig": {
+        "defaults": {
+          "color": {
+            "mode": "thresholds"
+          },
+          "mappings": [
+            {
+              "options": {
+                "match": "null",
+                "result": {
+                  "text": "N/A"
+                }
+              },
+              "type": "special"
+            }
+          ],
+          "thresholds": {
+            "mode": "absolute",
+            "steps": [
+              {
+                "color": "green",
+                "value": null
+              },
+              {
+                "color": "red",
+                "value": 80
+              }
+            ]
+          },
+          "unit": "none"
+        },
+        "overrides": []
       },
       "gridPos": {
         "h": 3,
@@ -1650,43 +1591,29 @@
         "y": 8
       },
       "id": 26,
-      "interval": null,
       "links": [],
-      "mappingType": 1,
-      "mappingTypes": [
-        {
-          "name": "value to text",
-          "value": 1
-        },
-        {
-          "name": "range to text",
-          "value": 2
-        }
-      ],
       "maxDataPoints": 100,
-      "nullPointMode": "connected",
-      "nullText": null,
-      "postfix": "",
-      "postfixFontSize": "50%",
-      "prefix": "",
-      "prefixFontSize": "50%",
-      "rangeMaps": [
-        {
-          "from": "null",
-          "text": "N/A",
-          "to": "null"
-        }
-      ],
-      "sparkline": {
-        "fillColor": "rgba(31, 118, 189, 0.18)",
-        "full": false,
-        "lineColor": "rgb(31, 120, 193)",
-        "show": false
+      "options": {
+        "colorMode": "none",
+        "graphMode": "none",
+        "justifyMode": "auto",
+        "orientation": "horizontal",
+        "reduceOptions": {
+          "calcs": [
+            "lastNotNull"
+          ],
+          "fields": "",
+          "values": false
+        },
+        "textMode": "auto"
       },
-      "tableColumn": "",
+      "pluginVersion": "9.0.5",
       "targets": [
         {
-          "expr": "sum(ceph_osd_in{cluster=\"$cluster\"})",
+          "datasource": {
+            "uid": "${DataSource}"
+          },
+          "expr": "sum(ceph_osd_in{cluster=\"$cluster\",node_name=\"$node\"})",
           "format": "time_series",
           "instant": true,
           "interval": "$interval",
@@ -1696,38 +1623,49 @@
           "step": 300
         }
       ],
-      "thresholds": "",
       "title": "OSDs IN",
-      "type": "singlestat",
-      "valueFontSize": "70%",
-      "valueMaps": [
-        {
-          "op": "=",
-          "text": "N/A",
-          "value": "null"
-        }
-      ],
-      "valueName": "current"
+      "type": "stat"
     },
     {
-      "cacheTimeout": null,
-      "colorBackground": false,
-      "colorValue": true,
-      "colors": [
-        "rgba(50, 172, 45, 0.97)",
-        "rgba(237, 129, 40, 0.89)",
-        "rgba(245, 54, 54, 0.9)"
-      ],
-      "datasource": "${DS_CEPHTHANOS}",
-      "editable": true,
-      "error": false,
-      "format": "none",
-      "gauge": {
-        "maxValue": 100,
-        "minValue": 0,
-        "show": false,
-        "thresholdLabels": false,
-        "thresholdMarkers": true
+      "datasource": {
+        "uid": "${DataSource}"
+      },
+      "fieldConfig": {
+        "defaults": {
+          "color": {
+            "mode": "thresholds"
+          },
+          "mappings": [
+            {
+              "options": {
+                "match": "null",
+                "result": {
+                  "text": "N/A"
+                }
+              },
+              "type": "special"
+            }
+          ],
+          "thresholds": {
+            "mode": "absolute",
+            "steps": [
+              {
+                "color": "rgba(50, 172, 45, 0.97)",
+                "value": null
+              },
+              {
+                "color": "rgba(237, 129, 40, 0.89)",
+                "value": 250
+              },
+              {
+                "color": "rgba(245, 54, 54, 0.9)",
+                "value": 300
+              }
+            ]
+          },
+          "unit": "none"
+        },
+        "overrides": []
       },
       "gridPos": {
         "h": 3,
@@ -1736,43 +1674,29 @@
         "y": 8
       },
       "id": 30,
-      "interval": null,
       "links": [],
-      "mappingType": 1,
-      "mappingTypes": [
-        {
-          "name": "value to text",
-          "value": 1
-        },
-        {
-          "name": "range to text",
-          "value": 2
-        }
-      ],
       "maxDataPoints": 100,
-      "nullPointMode": "connected",
-      "nullText": null,
-      "postfix": "",
-      "postfixFontSize": "50%",
-      "prefix": "",
-      "prefixFontSize": "50%",
-      "rangeMaps": [
-        {
-          "from": "null",
-          "text": "N/A",
-          "to": "null"
-        }
-      ],
-      "sparkline": {
-        "fillColor": "rgba(31, 118, 189, 0.18)",
-        "full": true,
-        "lineColor": "rgb(31, 120, 193)",
-        "show": false
+      "options": {
+        "colorMode": "value",
+        "graphMode": "none",
+        "justifyMode": "auto",
+        "orientation": "horizontal",
+        "reduceOptions": {
+          "calcs": [
+            "lastNotNull"
+          ],
+          "fields": "",
+          "values": false
+        },
+        "textMode": "auto"
       },
-      "tableColumn": "",
+      "pluginVersion": "9.0.5",
       "targets": [
         {
-          "expr": "avg(ceph_osd_numpg{cluster=\"$cluster\"})",
+          "datasource": {
+            "uid": "${DataSource}"
+          },
+          "expr": "avg(ceph_osd_numpg{cluster=\"$cluster\",node_name=\"$node\"})",
           "format": "time_series",
           "instant": true,
           "interval": "$interval",
@@ -1782,38 +1706,49 @@
           "step": 300
         }
       ],
-      "thresholds": "250,300",
       "title": "Avg PGs",
-      "type": "singlestat",
-      "valueFontSize": "70%",
-      "valueMaps": [
-        {
-          "op": "=",
-          "text": "N/A",
-          "value": "null"
-        }
-      ],
-      "valueName": "current"
+      "type": "stat"
     },
     {
-      "cacheTimeout": null,
-      "colorBackground": false,
-      "colorValue": true,
-      "colors": [
-        "rgba(50, 172, 45, 0.97)",
-        "rgba(237, 129, 40, 0.89)",
-        "rgba(245, 54, 54, 0.9)"
-      ],
-      "datasource": "${DS_CEPHTHANOS}",
-      "editable": true,
-      "error": false,
-      "format": "ms",
-      "gauge": {
-        "maxValue": 100,
-        "minValue": 0,
-        "show": false,
-        "thresholdLabels": false,
-        "thresholdMarkers": true
+      "datasource": {
+        "uid": "${DataSource}"
+      },
+      "fieldConfig": {
+        "defaults": {
+          "color": {
+            "mode": "thresholds"
+          },
+          "mappings": [
+            {
+              "options": {
+                "match": "null",
+                "result": {
+                  "text": "N/A"
+                }
+              },
+              "type": "special"
+            }
+          ],
+          "thresholds": {
+            "mode": "absolute",
+            "steps": [
+              {
+                "color": "rgba(50, 172, 45, 0.97)",
+                "value": null
+              },
+              {
+                "color": "rgba(237, 129, 40, 0.89)",
+                "value": 10
+              },
+              {
+                "color": "rgba(245, 54, 54, 0.9)",
+                "value": 50
+              }
+            ]
+          },
+          "unit": "ms"
+        },
+        "overrides": []
       },
       "gridPos": {
         "h": 3,
@@ -1822,43 +1757,29 @@
         "y": 8
       },
       "id": 31,
-      "interval": null,
       "links": [],
-      "mappingType": 1,
-      "mappingTypes": [
-        {
-          "name": "value to text",
-          "value": 1
-        },
-        {
-          "name": "range to text",
-          "value": 2
-        }
-      ],
       "maxDataPoints": 100,
-      "nullPointMode": "connected",
-      "nullText": null,
-      "postfix": "",
-      "postfixFontSize": "50%",
-      "prefix": "",
-      "prefixFontSize": "50%",
-      "rangeMaps": [
-        {
-          "from": "null",
-          "text": "N/A",
-          "to": "null"
-        }
-      ],
-      "sparkline": {
-        "fillColor": "rgba(31, 118, 189, 0.18)",
-        "full": true,
-        "lineColor": "rgb(31, 120, 193)",
-        "show": false
+      "options": {
+        "colorMode": "value",
+        "graphMode": "none",
+        "justifyMode": "auto",
+        "orientation": "horizontal",
+        "reduceOptions": {
+          "calcs": [
+            "lastNotNull"
+          ],
+          "fields": "",
+          "values": false
+        },
+        "textMode": "auto"
       },
-      "tableColumn": "",
+      "pluginVersion": "9.0.5",
       "targets": [
         {
-          "expr": "avg(ceph_osd_apply_latency_ms{cluster=\"$cluster\"})",
+          "datasource": {
+            "uid": "${DataSource}"
+          },
+          "expr": "avg(ceph_osd_apply_latency_ms{cluster=\"$cluster\",node_name=\"$node\"})",
           "format": "time_series",
           "instant": true,
           "interval": "$interval",
@@ -1868,38 +1789,49 @@
           "step": 300
         }
       ],
-      "thresholds": "10,50",
       "title": "Avg Apply Latency",
-      "type": "singlestat",
-      "valueFontSize": "70%",
-      "valueMaps": [
-        {
-          "op": "=",
-          "text": "N/A",
-          "value": "null"
-        }
-      ],
-      "valueName": "current"
+      "type": "stat"
     },
     {
-      "cacheTimeout": null,
-      "colorBackground": false,
-      "colorValue": true,
-      "colors": [
-        "rgba(50, 172, 45, 0.97)",
-        "rgba(237, 129, 40, 0.89)",
-        "rgba(245, 54, 54, 0.9)"
-      ],
-      "datasource": "${DS_CEPHTHANOS}",
-      "editable": true,
-      "error": false,
-      "format": "ms",
-      "gauge": {
-        "maxValue": 100,
-        "minValue": 0,
-        "show": false,
-        "thresholdLabels": false,
-        "thresholdMarkers": true
+      "datasource": {
+        "uid": "${DataSource}"
+      },
+      "fieldConfig": {
+        "defaults": {
+          "color": {
+            "mode": "thresholds"
+          },
+          "mappings": [
+            {
+              "options": {
+                "match": "null",
+                "result": {
+                  "text": "N/A"
+                }
+              },
+              "type": "special"
+            }
+          ],
+          "thresholds": {
+            "mode": "absolute",
+            "steps": [
+              {
+                "color": "rgba(50, 172, 45, 0.97)",
+                "value": null
+              },
+              {
+                "color": "rgba(237, 129, 40, 0.89)",
+                "value": 10
+              },
+              {
+                "color": "rgba(245, 54, 54, 0.9)",
+                "value": 50
+              }
+            ]
+          },
+          "unit": "ms"
+        },
+        "overrides": []
       },
       "gridPos": {
         "h": 3,
@@ -1908,43 +1840,29 @@
         "y": 8
       },
       "id": 32,
-      "interval": null,
       "links": [],
-      "mappingType": 1,
-      "mappingTypes": [
-        {
-          "name": "value to text",
-          "value": 1
-        },
-        {
-          "name": "range to text",
-          "value": 2
-        }
-      ],
       "maxDataPoints": 100,
-      "nullPointMode": "connected",
-      "nullText": null,
-      "postfix": "",
-      "postfixFontSize": "50%",
-      "prefix": "",
-      "prefixFontSize": "50%",
-      "rangeMaps": [
-        {
-          "from": "null",
-          "text": "N/A",
-          "to": "null"
-        }
-      ],
-      "sparkline": {
-        "fillColor": "rgba(31, 118, 189, 0.18)",
-        "full": true,
-        "lineColor": "rgb(31, 120, 193)",
-        "show": false
+      "options": {
+        "colorMode": "value",
+        "graphMode": "none",
+        "justifyMode": "auto",
+        "orientation": "horizontal",
+        "reduceOptions": {
+          "calcs": [
+            "lastNotNull"
+          ],
+          "fields": "",
+          "values": false
+        },
+        "textMode": "auto"
       },
-      "tableColumn": "",
+      "pluginVersion": "9.0.5",
       "targets": [
         {
-          "expr": "avg(ceph_osd_commit_latency_ms{cluster=\"$cluster\"})",
+          "datasource": {
+            "uid": "${DataSource}"
+          },
+          "expr": "avg(ceph_osd_commit_latency_ms{cluster=\"$cluster\",node_name=\"$node\"})",
           "format": "time_series",
           "instant": true,
           "interval": "$interval",
@@ -1954,37 +1872,50 @@
           "step": 300
         }
       ],
-      "thresholds": "10,50",
       "title": "Avg Commit Latency",
-      "type": "singlestat",
-      "valueFontSize": "70%",
-      "valueMaps": [
-        {
-          "op": "=",
-          "text": "N/A",
-          "value": "null"
-        }
-      ],
-      "valueName": "current"
+      "type": "stat"
     },
     {
-      "cacheTimeout": null,
-      "colorBackground": false,
-      "colorValue": true,
-      "colors": [
-        "#299c46",
-        "rgba(237, 129, 40, 0.89)",
-        "#d44a3a"
-      ],
-      "datasource": "${DS_CEPHTHANOS}",
-      "decimals": null,
-      "format": "ms",
-      "gauge": {
-        "maxValue": 100,
-        "minValue": 0,
-        "show": false,
-        "thresholdLabels": false,
-        "thresholdMarkers": true
+      "datasource": {
+        "uid": "${DataSource}"
+      },
+      "fieldConfig": {
+        "defaults": {
+          "color": {
+            "mode": "thresholds"
+          },
+          "mappings": [
+            {
+              "options": {
+                "match": "null",
+                "result": {
+                  "color": "#299c46",
+                  "text": "0"
+                }
+              },
+              "type": "special"
+            }
+          ],
+          "thresholds": {
+            "mode": "absolute",
+            "steps": [
+              {
+                "color": "#299c46",
+                "value": null
+              },
+              {
+                "color": "rgba(237, 129, 40, 0.89)",
+                "value": 1
+              },
+              {
+                "color": "#d44a3a",
+                "value": 2
+              }
+            ]
+          },
+          "unit": "ms"
+        },
+        "overrides": []
       },
       "gridPos": {
         "h": 3,
@@ -1993,80 +1924,78 @@
         "y": 8
       },
       "id": 51,
-      "interval": null,
       "links": [],
-      "mappingType": 1,
-      "mappingTypes": [
-        {
-          "name": "value to text",
-          "value": 1
-        },
-        {
-          "name": "range to text",
-          "value": 2
-        }
-      ],
       "maxDataPoints": 100,
-      "nullPointMode": "connected",
-      "nullText": null,
-      "postfix": "",
-      "postfixFontSize": "50%",
-      "prefix": "",
-      "prefixFontSize": "50%",
-      "rangeMaps": [
-        {
-          "from": "null",
-          "text": "N/A",
-          "to": "null"
-        }
-      ],
-      "sparkline": {
-        "fillColor": "rgba(31, 118, 189, 0.18)",
-        "full": false,
-        "lineColor": "rgb(31, 120, 193)",
-        "show": false
+      "options": {
+        "colorMode": "value",
+        "graphMode": "none",
+        "justifyMode": "auto",
+        "orientation": "horizontal",
+        "reduceOptions": {
+          "calcs": [
+            "lastNotNull"
+          ],
+          "fields": "",
+          "values": false
+        },
+        "textMode": "auto"
       },
-      "tableColumn": "",
+      "pluginVersion": "9.0.5",
       "targets": [
         {
-          "expr": "avg(rate(ceph_osd_op_w_latency_sum{cluster=\"$cluster\"}[5m]) / rate(ceph_osd_op_w_latency_count{cluster=\"$cluster\"}[5m]) >= 0)",
+          "datasource": {
+            "uid": "${DataSource}"
+          },
+          "expr": "avg(rate(ceph_osd_op_w_latency_sum{cluster=\"$cluster\",node_name=\"$node\"}[5m]) / rate(ceph_osd_op_w_latency_count{cluster=\"$cluster\",node_name=\"$node\"}[5m]) >= 0)",
           "format": "time_series",
           "instant": false,
           "intervalFactor": 1,
           "refId": "A"
         }
       ],
-      "thresholds": "1,2",
       "title": "Avg Op Write Latency",
-      "type": "singlestat",
-      "valueFontSize": "70%",
-      "valueMaps": [
-        {
-          "op": "=",
-          "text": "0",
-          "value": "null"
-        }
-      ],
-      "valueName": "current"
+      "type": "stat"
     },
     {
-      "cacheTimeout": null,
-      "colorBackground": false,
-      "colorValue": true,
-      "colors": [
-        "#299c46",
-        "rgba(237, 129, 40, 0.89)",
-        "#d44a3a"
-      ],
-      "datasource": "${DS_CEPHTHANOS}",
-      "decimals": null,
-      "format": "ms",
-      "gauge": {
-        "maxValue": 100,
-        "minValue": 0,
-        "show": false,
-        "thresholdLabels": false,
-        "thresholdMarkers": true
+      "datasource": {
+        "uid": "${DataSource}"
+      },
+      "fieldConfig": {
+        "defaults": {
+          "color": {
+            "mode": "thresholds"
+          },
+          "mappings": [
+            {
+              "options": {
+                "match": "null",
+                "result": {
+                  "text": "N/A"
+                }
+              },
+              "type": "special"
+            }
+          ],
+          "thresholds": {
+            "mode": "absolute",
+            "steps": [
+              {
+                "color": "#299c46",
+                "value": null
+              },
+              {
+                "color": "rgba(237, 129, 40, 0.89)",
+                "value": 1
+              },
+              {
+                "color": "#d44a3a",
+                "value": 2
+              }
+            ]
+          },
+          "unit": "ms"
+        },
+        "overrides": []
       },
       "gridPos": {
         "h": 3,
@@ -2075,64 +2004,44 @@
         "y": 8
       },
       "id": 50,
-      "interval": null,
       "links": [],
-      "mappingType": 1,
-      "mappingTypes": [
-        {
-          "name": "value to text",
-          "value": 1
-        },
-        {
-          "name": "range to text",
-          "value": 2
-        }
-      ],
       "maxDataPoints": 100,
-      "nullPointMode": "connected",
-      "nullText": null,
-      "postfix": "",
-      "postfixFontSize": "50%",
-      "prefix": "",
-      "prefixFontSize": "50%",
-      "rangeMaps": [
-        {
-          "from": "null",
-          "text": "N/A",
-          "to": "null"
-        }
-      ],
-      "sparkline": {
-        "fillColor": "rgba(31, 118, 189, 0.18)",
-        "full": false,
-        "lineColor": "rgb(31, 120, 193)",
-        "show": false
+      "options": {
+        "colorMode": "value",
+        "graphMode": "none",
+        "justifyMode": "auto",
+        "orientation": "horizontal",
+        "reduceOptions": {
+          "calcs": [
+            "lastNotNull"
+          ],
+          "fields": "",
+          "values": false
+        },
+        "textMode": "auto"
       },
-      "tableColumn": "",
+      "pluginVersion": "9.0.5",
       "targets": [
         {
-          "expr": "avg(rate(ceph_osd_op_r_latency_sum{cluster=\"$cluster\"}[5m])/rate(ceph_osd_op_r_latency_count{cluster=\"$cluster\"}[5m]) >= 0)",
+          "datasource": {
+            "uid": "${DataSource}"
+          },
+          "expr": "avg(rate(ceph_osd_op_r_latency_sum{cluster=\"$cluster\",node_name=\"$node\"}[5m])/rate(ceph_osd_op_r_latency_count{cluster=\"$cluster\",node_name=\"$node\"}[5m]) >= 0)",
           "format": "time_series",
           "instant": true,
           "intervalFactor": 1,
           "refId": "A"
         }
       ],
-      "thresholds": "1,2",
       "title": "Avg  Op Read Latency",
-      "type": "singlestat",
-      "valueFontSize": "70%",
-      "valueMaps": [
-        {
-          "op": "=",
-          "text": "N/A",
-          "value": "null"
-        }
-      ],
-      "valueName": "current"
+      "type": "stat"
     },
     {
       "collapsed": true,
+      "datasource": {
+        "type": "datasource",
+        "uid": "grafana"
+      },
       "gridPos": {
         "h": 1,
         "w": 24,
@@ -2143,17 +2052,19 @@
       "panels": [
         {
           "columns": [],
-          "datasource": "${DS_CEPHTHANOS}",
+          "datasource": {
+            "type": "prometheus",
+            "uid": "${DataSource}"
+          },
           "fontSize": "100%",
           "gridPos": {
             "h": 6,
             "w": 8,
             "x": 0,
-            "y": 13
+            "y": 12
           },
           "id": 70,
           "links": [],
-          "pageSize": null,
           "scroll": true,
           "showHeader": true,
           "sort": {
@@ -2163,13 +2074,14 @@
           "styles": [
             {
               "alias": "Time",
+              "align": "auto",
               "dateFormat": "YYYY-MM-DD HH:mm:ss",
               "pattern": "Time",
               "type": "date"
             },
             {
               "alias": "",
-              "colorMode": null,
+              "align": "auto",
               "colors": [
                 "rgba(245, 54, 54, 0.9)",
                 "rgba(237, 129, 40, 0.89)",
@@ -2184,7 +2096,10 @@
           ],
           "targets": [
             {
-              "expr": "ALERTS{cluster='$cluster', alertstate='firing'}",
+              "datasource": {
+                "uid": "${DataSource}"
+              },
+              "expr": "ALERTS{cluster=\"$cluster\",node_name=\"$node\", alertstate='firing'}",
               "format": "table",
               "instant": true,
               "intervalFactor": 1,
@@ -2192,23 +2107,24 @@
               "refId": "A"
             }
           ],
-          "title": "Alerts from CephThanos",
+          "title": "Alerts from Ceph",
           "transform": "table",
-          "type": "table"
+          "type": "table-old"
         },
         {
           "columns": [],
-          "datasource": "${DS_CEPHTHANOS}",
+          "datasource": {
+            "uid": "${DataSource}"
+          },
           "fontSize": "100%",
           "gridPos": {
             "h": 6,
             "w": 8,
             "x": 8,
-            "y": 13
+            "y": 12
           },
           "id": 105,
           "links": [],
-          "pageSize": null,
           "scroll": true,
           "showHeader": true,
           "sort": {
@@ -2218,13 +2134,14 @@
           "styles": [
             {
               "alias": "Time",
+              "align": "auto",
               "dateFormat": "YYYY-MM-DD HH:mm:ss",
               "pattern": "Time",
               "type": "date"
             },
             {
               "alias": "",
-              "colorMode": null,
+              "align": "auto",
               "colors": [
                 "rgba(245, 54, 54, 0.9)",
                 "rgba(237, 129, 40, 0.89)",
@@ -2239,7 +2156,10 @@
           ],
           "targets": [
             {
-              "expr": "topk(5,sort_desc(ceph_osd_apply_latency_ms{cluster='$cluster'} + ceph_osd_commit_latency_ms{cluster='$cluster'}))",
+              "datasource": {
+                "uid": "${DataSource}"
+              },
+              "expr": "topk(5,sort_desc(ceph_osd_apply_latency_ms{cluster=\"$cluster\",node_name=\"$node\"} + ceph_osd_commit_latency_ms{cluster=\"$cluster\",node_name=\"$node\"}))",
               "format": "table",
               "instant": true,
               "intervalFactor": 1,
@@ -2249,21 +2169,22 @@
           ],
           "title": "Top Sluggish OSD's",
           "transform": "table",
-          "type": "table"
+          "type": "table-old"
         },
         {
           "columns": [],
-          "datasource": "${DS_CEPHTHANOS}",
+          "datasource": {
+            "uid": "${DataSource}"
+          },
           "fontSize": "100%",
           "gridPos": {
             "h": 6,
             "w": 8,
             "x": 16,
-            "y": 13
+            "y": 12
           },
           "id": 103,
           "links": [],
-          "pageSize": null,
           "scroll": true,
           "showHeader": true,
           "sort": {
@@ -2273,13 +2194,14 @@
           "styles": [
             {
               "alias": "Time",
+              "align": "auto",
               "dateFormat": "YYYY-MM-DD HH:mm:ss",
               "pattern": "Time",
               "type": "date"
             },
             {
               "alias": "",
-              "colorMode": null,
+              "align": "auto",
               "colors": [
                 "rgba(245, 54, 54, 0.9)",
                 "rgba(237, 129, 40, 0.89)",
@@ -2294,7 +2216,10 @@
           ],
           "targets": [
             {
-              "expr": "ceph_osd_up{cluster=\"$cluster\"} == 0",
+              "datasource": {
+                "uid": "${DataSource}"
+              },
+              "expr": "ceph_osd_up{cluster=\"$cluster\",node_name=\"$node\"} == 0",
               "format": "table",
               "instant": true,
               "intervalFactor": 1,
@@ -2304,14 +2229,27 @@
           ],
           "title": "Down OSD's",
           "transform": "table",
-          "type": "table"
+          "type": "table-old"
+        }
+      ],
+      "targets": [
+        {
+          "datasource": {
+            "type": "datasource",
+            "uid": "grafana"
+          },
+          "refId": "A"
         }
       ],
       "title": "Alerts",
       "type": "row"
     },
     {
-      "collapsed": true,
+      "collapsed": false,
+      "datasource": {
+        "type": "datasource",
+        "uid": "grafana"
+      },
       "gridPos": {
         "h": 1,
         "w": 24,
@@ -2319,362 +2257,391 @@
         "y": 12
       },
       "id": 108,
-      "panels": [
+      "panels": [],
+      "targets": [
         {
-          "aliasColors": {},
-          "bars": false,
-          "dashLength": 10,
-          "dashes": false,
-          "datasource": "${DS_CEPHTHANOS}",
-          "fill": 1,
-          "gridPos": {
-            "h": 9,
-            "w": 6,
-            "x": 0,
-            "y": 12
+          "datasource": {
+            "type": "datasource",
+            "uid": "grafana"
           },
-          "id": 110,
-          "legend": {
-            "avg": false,
-            "current": false,
-            "max": false,
-            "min": false,
-            "show": true,
-            "total": false,
-            "values": false
-          },
-          "lines": true,
-          "linewidth": 1,
-          "links": [],
-          "nullPointMode": "null",
-          "percentage": false,
-          "pointradius": 5,
-          "points": false,
-          "renderer": "flot",
-          "seriesOverrides": [],
-          "spaceLength": 10,
-          "stack": false,
-          "steppedLine": false,
-          "targets": [
-            {
-              "expr": "count by (ceph_version)(ceph_osd_metadata{cluster='$cluster'})",
-              "format": "time_series",
-              "intervalFactor": 1,
-              "refId": "A",
-              "target": ""
-            }
-          ],
-          "thresholds": [],
-          "timeFrom": null,
-          "timeShift": null,
-          "title": "Ceph OSD Versions",
-          "tooltip": {
-            "shared": true,
-            "sort": 0,
-            "value_type": "individual"
-          },
-          "type": "graph",
-          "xaxis": {
-            "buckets": null,
-            "mode": "time",
-            "name": null,
-            "show": true,
-            "values": []
-          },
-          "yaxes": [
-            {
-              "decimals": 0,
-              "format": "short",
-              "label": null,
-              "logBase": 1,
-              "max": null,
-              "min": null,
-              "show": true
-            },
-            {
-              "format": "short",
-              "label": null,
-              "logBase": 1,
-              "max": null,
-              "min": null,
-              "show": true
-            }
-          ],
-          "yaxis": {
-            "align": false,
-            "alignLevel": null
-          }
-        },
-        {
-          "aliasColors": {},
-          "bars": false,
-          "dashLength": 10,
-          "dashes": false,
-          "datasource": "${DS_CEPHTHANOS}",
-          "fill": 1,
-          "gridPos": {
-            "h": 9,
-            "w": 6,
-            "x": 6,
-            "y": 12
-          },
-          "id": 111,
-          "legend": {
-            "avg": false,
-            "current": false,
-            "max": false,
-            "min": false,
-            "show": true,
-            "total": false,
-            "values": false
-          },
-          "lines": true,
-          "linewidth": 1,
-          "links": [],
-          "nullPointMode": "null",
-          "percentage": false,
-          "pointradius": 5,
-          "points": false,
-          "renderer": "flot",
-          "seriesOverrides": [],
-          "spaceLength": 10,
-          "stack": false,
-          "steppedLine": false,
-          "targets": [
-            {
-              "expr": "count by (ceph_version)(ceph_mon_metadata{cluster='$cluster'})",
-              "format": "time_series",
-              "intervalFactor": 1,
-              "refId": "A",
-              "target": ""
-            }
-          ],
-          "thresholds": [],
-          "timeFrom": null,
-          "timeShift": null,
-          "title": "Ceph Mon Versions",
-          "tooltip": {
-            "shared": true,
-            "sort": 0,
-            "value_type": "individual"
-          },
-          "type": "graph",
-          "xaxis": {
-            "buckets": null,
-            "mode": "time",
-            "name": null,
-            "show": true,
-            "values": []
-          },
-          "yaxes": [
-            {
-              "decimals": 0,
-              "format": "short",
-              "label": "",
-              "logBase": 1,
-              "max": null,
-              "min": null,
-              "show": true
-            },
-            {
-              "format": "short",
-              "label": null,
-              "logBase": 1,
-              "max": null,
-              "min": null,
-              "show": true
-            }
-          ],
-          "yaxis": {
-            "align": false,
-            "alignLevel": null
-          }
-        },
-        {
-          "aliasColors": {},
-          "bars": false,
-          "dashLength": 10,
-          "dashes": false,
-          "datasource": "${DS_CEPHTHANOS}",
-          "fill": 1,
-          "gridPos": {
-            "h": 9,
-            "w": 6,
-            "x": 12,
-            "y": 12
-          },
-          "id": 112,
-          "legend": {
-            "avg": false,
-            "current": false,
-            "max": false,
-            "min": false,
-            "show": true,
-            "total": false,
-            "values": false
-          },
-          "lines": true,
-          "linewidth": 1,
-          "links": [],
-          "nullPointMode": "null",
-          "percentage": false,
-          "pointradius": 5,
-          "points": false,
-          "renderer": "flot",
-          "seriesOverrides": [],
-          "spaceLength": 10,
-          "stack": false,
-          "steppedLine": false,
-          "targets": [
-            {
-              "expr": "count by (ceph_version)(ceph_mds_metadata{cluster='$cluster'})",
-              "format": "time_series",
-              "intervalFactor": 1,
-              "refId": "A",
-              "target": ""
-            }
-          ],
-          "thresholds": [],
-          "timeFrom": null,
-          "timeShift": null,
-          "title": "Ceph MDS Versions",
-          "tooltip": {
-            "shared": true,
-            "sort": 0,
-            "value_type": "individual"
-          },
-          "type": "graph",
-          "xaxis": {
-            "buckets": null,
-            "mode": "time",
-            "name": null,
-            "show": true,
-            "values": []
-          },
-          "yaxes": [
-            {
-              "decimals": 0,
-              "format": "short",
-              "label": "",
-              "logBase": 1,
-              "max": null,
-              "min": null,
-              "show": true
-            },
-            {
-              "format": "short",
-              "label": null,
-              "logBase": 1,
-              "max": null,
-              "min": null,
-              "show": true
-            }
-          ],
-          "yaxis": {
-            "align": false,
-            "alignLevel": null
-          }
-        },
-        {
-          "aliasColors": {},
-          "bars": false,
-          "dashLength": 10,
-          "dashes": false,
-          "datasource": "${DS_CEPHTHANOS}",
-          "fill": 1,
-          "gridPos": {
-            "h": 9,
-            "w": 6,
-            "x": 18,
-            "y": 12
-          },
-          "id": 113,
-          "legend": {
-            "avg": false,
-            "current": false,
-            "max": false,
-            "min": false,
-            "show": true,
-            "total": false,
-            "values": false
-          },
-          "lines": true,
-          "linewidth": 1,
-          "links": [],
-          "nullPointMode": "null",
-          "percentage": false,
-          "pointradius": 5,
-          "points": false,
-          "renderer": "flot",
-          "seriesOverrides": [],
-          "spaceLength": 10,
-          "stack": false,
-          "steppedLine": false,
-          "targets": [
-            {
-              "expr": "count by (ceph_version)(ceph_rgw_metadata{cluster='$cluster'})",
-              "format": "time_series",
-              "intervalFactor": 1,
-              "refId": "A",
-              "target": ""
-            }
-          ],
-          "thresholds": [],
-          "timeFrom": null,
-          "timeShift": null,
-          "title": "Ceph RGW Versions",
-          "tooltip": {
-            "shared": true,
-            "sort": 0,
-            "value_type": "individual"
-          },
-          "type": "graph",
-          "xaxis": {
-            "buckets": null,
-            "mode": "time",
-            "name": null,
-            "show": true,
-            "values": []
-          },
-          "yaxes": [
-            {
-              "decimals": 0,
-              "format": "short",
-              "label": "",
-              "logBase": 1,
-              "max": null,
-              "min": null,
-              "show": true
-            },
-            {
-              "format": "short",
-              "label": null,
-              "logBase": 1,
-              "max": null,
-              "min": null,
-              "show": true
-            }
-          ],
-          "yaxis": {
-            "align": false,
-            "alignLevel": null
-          }
+          "refId": "A"
         }
       ],
       "title": "Ceph Versions",
       "type": "row"
     },
     {
+      "aliasColors": {},
+      "bars": false,
+      "dashLength": 10,
+      "dashes": false,
+      "datasource": {
+        "uid": "${DataSource}"
+      },
+      "fill": 1,
+      "fillGradient": 0,
+      "gridPos": {
+        "h": 9,
+        "w": 6,
+        "x": 0,
+        "y": 13
+      },
+      "hiddenSeries": false,
+      "id": 110,
+      "legend": {
+        "avg": false,
+        "current": false,
+        "max": false,
+        "min": false,
+        "show": true,
+        "total": false,
+        "values": false
+      },
+      "lines": true,
+      "linewidth": 1,
+      "links": [],
+      "nullPointMode": "null",
+      "options": {
+        "alertThreshold": true
+      },
+      "percentage": false,
+      "pluginVersion": "9.0.5",
+      "pointradius": 5,
+      "points": false,
+      "renderer": "flot",
+      "seriesOverrides": [],
+      "spaceLength": 10,
+      "stack": false,
+      "steppedLine": false,
+      "targets": [
+        {
+          "datasource": {
+            "uid": "${DataSource}"
+          },
+          "expr": "count by (ceph_version)(ceph_osd_metadata{cluster=\"$cluster\",node_name=\"$node\"})",
+          "format": "time_series",
+          "intervalFactor": 1,
+          "refId": "A",
+          "target": ""
+        }
+      ],
+      "thresholds": [],
+      "timeRegions": [],
+      "title": "Ceph OSD Versions",
+      "tooltip": {
+        "shared": true,
+        "sort": 0,
+        "value_type": "individual"
+      },
+      "type": "graph",
+      "xaxis": {
+        "mode": "time",
+        "show": true,
+        "values": []
+      },
+      "yaxes": [
+        {
+          "decimals": 0,
+          "format": "short",
+          "logBase": 1,
+          "show": true
+        },
+        {
+          "format": "short",
+          "logBase": 1,
+          "show": true
+        }
+      ],
+      "yaxis": {
+        "align": false
+      }
+    },
+    {
+      "aliasColors": {},
+      "bars": false,
+      "dashLength": 10,
+      "dashes": false,
+      "datasource": {
+        "uid": "${DataSource}"
+      },
+      "fill": 1,
+      "fillGradient": 0,
+      "gridPos": {
+        "h": 9,
+        "w": 6,
+        "x": 6,
+        "y": 13
+      },
+      "hiddenSeries": false,
+      "id": 111,
+      "legend": {
+        "avg": false,
+        "current": false,
+        "max": false,
+        "min": false,
+        "show": true,
+        "total": false,
+        "values": false
+      },
+      "lines": true,
+      "linewidth": 1,
+      "links": [],
+      "nullPointMode": "null",
+      "options": {
+        "alertThreshold": true
+      },
+      "percentage": false,
+      "pluginVersion": "9.0.5",
+      "pointradius": 5,
+      "points": false,
+      "renderer": "flot",
+      "seriesOverrides": [],
+      "spaceLength": 10,
+      "stack": false,
+      "steppedLine": false,
+      "targets": [
+        {
+          "datasource": {
+            "uid": "${DataSource}"
+          },
+          "expr": "count by (ceph_version)(ceph_mon_metadata{cluster=\"$cluster\",node_name=\"$node\"})",
+          "format": "time_series",
+          "intervalFactor": 1,
+          "refId": "A",
+          "target": ""
+        }
+      ],
+      "thresholds": [],
+      "timeRegions": [],
+      "title": "Ceph Mon Versions",
+      "tooltip": {
+        "shared": true,
+        "sort": 0,
+        "value_type": "individual"
+      },
+      "type": "graph",
+      "xaxis": {
+        "mode": "time",
+        "show": true,
+        "values": []
+      },
+      "yaxes": [
+        {
+          "decimals": 0,
+          "format": "short",
+          "label": "",
+          "logBase": 1,
+          "show": true
+        },
+        {
+          "format": "short",
+          "logBase": 1,
+          "show": true
+        }
+      ],
+      "yaxis": {
+        "align": false
+      }
+    },
+    {
+      "aliasColors": {},
+      "bars": false,
+      "dashLength": 10,
+      "dashes": false,
+      "datasource": {
+        "type": "prometheus",
+        "uid": "${DataSource}"
+      },
+      "fill": 1,
+      "fillGradient": 0,
+      "gridPos": {
+        "h": 9,
+        "w": 6,
+        "x": 12,
+        "y": 13
+      },
+      "hiddenSeries": false,
+      "id": 112,
+      "legend": {
+        "avg": false,
+        "current": false,
+        "max": false,
+        "min": false,
+        "show": true,
+        "total": false,
+        "values": false
+      },
+      "lines": true,
+      "linewidth": 1,
+      "links": [],
+      "nullPointMode": "null",
+      "options": {
+        "alertThreshold": true
+      },
+      "percentage": false,
+      "pluginVersion": "9.0.5",
+      "pointradius": 5,
+      "points": false,
+      "renderer": "flot",
+      "seriesOverrides": [],
+      "spaceLength": 10,
+      "stack": false,
+      "steppedLine": false,
+      "targets": [
+        {
+          "datasource": {
+            "uid": "${DataSource}"
+          },
+          "expr": "count by (ceph_version)(ceph_mds_metadata{cluster=\"$cluster\",node_name=\"$node\"})",
+          "format": "time_series",
+          "intervalFactor": 1,
+          "refId": "A",
+          "target": ""
+        }
+      ],
+      "thresholds": [],
+      "timeRegions": [],
+      "title": "Ceph MDS Versions",
+      "tooltip": {
+        "shared": true,
+        "sort": 0,
+        "value_type": "individual"
+      },
+      "type": "graph",
+      "xaxis": {
+        "mode": "time",
+        "show": true,
+        "values": []
+      },
+      "yaxes": [
+        {
+          "decimals": 0,
+          "format": "short",
+          "label": "",
+          "logBase": 1,
+          "show": true
+        },
+        {
+          "format": "short",
+          "logBase": 1,
+          "show": true
+        }
+      ],
+      "yaxis": {
+        "align": false
+      }
+    },
+    {
+      "aliasColors": {},
+      "bars": false,
+      "dashLength": 10,
+      "dashes": false,
+      "datasource": {
+        "type": "prometheus",
+        "uid": "${DataSource}"
+      },
+      "fill": 1,
+      "fillGradient": 0,
+      "gridPos": {
+        "h": 9,
+        "w": 6,
+        "x": 18,
+        "y": 13
+      },
+      "hiddenSeries": false,
+      "id": 113,
+      "legend": {
+        "avg": false,
+        "current": false,
+        "max": false,
+        "min": false,
+        "show": true,
+        "total": false,
+        "values": false
+      },
+      "lines": true,
+      "linewidth": 1,
+      "links": [],
+      "nullPointMode": "null",
+      "options": {
+        "alertThreshold": true
+      },
+      "percentage": false,
+      "pluginVersion": "9.0.5",
+      "pointradius": 5,
+      "points": false,
+      "renderer": "flot",
+      "seriesOverrides": [],
+      "spaceLength": 10,
+      "stack": false,
+      "steppedLine": false,
+      "targets": [
+        {
+          "datasource": {
+            "uid": "${DataSource}"
+          },
+          "expr": "count by (ceph_version)(ceph_rgw_metadata{cluster=\"$cluster\",node_name=\"$node\"})",
+          "format": "time_series",
+          "intervalFactor": 1,
+          "refId": "A",
+          "target": ""
+        }
+      ],
+      "thresholds": [],
+      "timeRegions": [],
+      "title": "Ceph RGW Versions",
+      "tooltip": {
+        "shared": true,
+        "sort": 0,
+        "value_type": "individual"
+      },
+      "type": "graph",
+      "xaxis": {
+        "mode": "time",
+        "show": true,
+        "values": []
+      },
+      "yaxes": [
+        {
+          "decimals": 0,
+          "format": "short",
+          "label": "",
+          "logBase": 1,
+          "show": true
+        },
+        {
+          "format": "short",
+          "logBase": 1,
+          "show": true
+        }
+      ],
+      "yaxis": {
+        "align": false
+      }
+    },
+    {
       "collapsed": false,
+      "datasource": {
+        "type": "datasource",
+        "uid": "grafana"
+      },
       "gridPos": {
         "h": 1,
         "w": 24,
         "x": 0,
-        "y": 13
+        "y": 22
       },
       "id": 39,
       "panels": [],
-      "repeat": null,
+      "targets": [
+        {
+          "datasource": {
+            "type": "datasource",
+            "uid": "grafana"
+          },
+          "refId": "A"
+        }
+      ],
       "title": "CLUSTER",
       "type": "row"
     },
@@ -2690,18 +2657,22 @@
       "bars": false,
       "dashLength": 10,
       "dashes": false,
-      "datasource": "${DS_CEPHTHANOS}",
+      "datasource": {
+        "uid": "${DataSource}"
+      },
       "editable": true,
       "error": false,
       "fill": 4,
+      "fillGradient": 0,
       "grid": {},
       "gridPos": {
         "h": 8,
         "w": 8,
         "x": 0,
-        "y": 14
+        "y": 23
       },
       "height": "300",
+      "hiddenSeries": false,
       "id": 1,
       "interval": "$interval",
       "legend": {
@@ -2718,9 +2689,12 @@
       "lines": true,
       "linewidth": 0,
       "links": [],
-      "minSpan": null,
       "nullPointMode": "connected",
+      "options": {
+        "alertThreshold": true
+      },
       "percentage": false,
+      "pluginVersion": "9.0.5",
       "pointradius": 5,
       "points": false,
       "renderer": "flot",
@@ -2737,7 +2711,10 @@
       "steppedLine": false,
       "targets": [
         {
-          "expr": "ceph_cluster_total_bytes{cluster=\"$cluster\"}",
+          "datasource": {
+            "uid": "${DataSource}"
+          },
+          "expr": "ceph_cluster_total_bytes{cluster=\"$cluster\",node_name=\"$node\"}",
           "format": "time_series",
           "interval": "$interval",
           "intervalFactor": 1,
@@ -2746,7 +2723,10 @@
           "step": 300
         },
         {
-          "expr": "ceph_cluster_total_bytes{cluster=\"$cluster\"}-ceph_cluster_total_used_bytes{cluster=\"$cluster\"}",
+          "datasource": {
+            "uid": "${DataSource}"
+          },
+          "expr": "ceph_cluster_total_bytes{cluster=\"$cluster\",node_name=\"$node\"}-ceph_cluster_total_used_bytes{cluster=\"$cluster\",node_name=\"$node\"}",
           "format": "time_series",
           "interval": "$interval",
           "intervalFactor": 1,
@@ -2755,7 +2735,10 @@
           "step": 300
         },
         {
-          "expr": "ceph_cluster_total_used_bytes{cluster=\"$cluster\"}",
+          "datasource": {
+            "uid": "${DataSource}"
+          },
+          "expr": "ceph_cluster_total_used_bytes{cluster=\"$cluster\",node_name=\"$node\"}",
           "format": "time_series",
           "interval": "$interval",
           "intervalFactor": 1,
@@ -2765,9 +2748,7 @@
         }
       ],
       "thresholds": [],
-      "timeFrom": null,
       "timeRegions": [],
-      "timeShift": null,
       "title": "Capacity",
       "tooltip": {
         "msResolution": false,
@@ -2777,33 +2758,24 @@
       },
       "type": "graph",
       "xaxis": {
-        "buckets": null,
         "mode": "time",
-        "name": null,
         "show": true,
         "values": []
       },
       "yaxes": [
         {
           "format": "bytes",
-          "label": null,
           "logBase": 1,
-          "max": null,
-          "min": null,
           "show": true
         },
         {
           "format": "short",
-          "label": null,
           "logBase": 1,
-          "max": null,
-          "min": null,
           "show": true
         }
       ],
       "yaxis": {
-        "align": false,
-        "alignLevel": null
+        "align": false
       }
     },
     {
@@ -2817,19 +2789,23 @@
       "bars": false,
       "dashLength": 10,
       "dashes": false,
-      "datasource": "${DS_CEPHTHANOS}",
+      "datasource": {
+        "uid": "${DataSource}"
+      },
       "decimals": 0,
       "editable": true,
       "error": false,
       "fill": 1,
+      "fillGradient": 0,
       "grid": {},
       "gridPos": {
         "h": 8,
         "w": 8,
         "x": 8,
-        "y": 14
+        "y": 23
       },
       "height": "300",
+      "hiddenSeries": false,
       "id": 3,
       "interval": "$interval",
       "legend": {
@@ -2845,9 +2821,12 @@
       "lines": true,
       "linewidth": 1,
       "links": [],
-      "minSpan": null,
       "nullPointMode": "connected",
+      "options": {
+        "alertThreshold": true
+      },
       "percentage": false,
+      "pluginVersion": "9.0.5",
       "pointradius": 5,
       "points": false,
       "renderer": "flot",
@@ -2857,7 +2836,10 @@
       "steppedLine": false,
       "targets": [
         {
-          "expr": "sum(irate(ceph_osd_op_w{cluster=\"$cluster\"}[5m]))",
+          "datasource": {
+            "uid": "${DataSource}"
+          },
+          "expr": "sum(irate(ceph_osd_op_w{cluster=\"$cluster\",node_name=\"$node\"}[5m]))",
           "format": "time_series",
           "interval": "$interval",
           "intervalFactor": 1,
@@ -2866,7 +2848,10 @@
           "step": 300
         },
         {
-          "expr": "sum(irate(ceph_osd_op_r{cluster=\"$cluster\"}[5m]))",
+          "datasource": {
+            "uid": "${DataSource}"
+          },
+          "expr": "sum(irate(ceph_osd_op_r{cluster=\"$cluster\",node_name=\"$node\"}[5m]))",
           "format": "time_series",
           "interval": "$interval",
           "intervalFactor": 1,
@@ -2876,9 +2861,7 @@
         }
       ],
       "thresholds": [],
-      "timeFrom": null,
       "timeRegions": [],
-      "timeShift": null,
       "title": "IOPS",
       "tooltip": {
         "msResolution": true,
@@ -2888,9 +2871,7 @@
       },
       "type": "graph",
       "xaxis": {
-        "buckets": null,
         "mode": "time",
-        "name": null,
         "show": true,
         "values": []
       },
@@ -2899,22 +2880,18 @@
           "format": "none",
           "label": "",
           "logBase": 1,
-          "max": null,
           "min": 0,
           "show": true
         },
         {
           "format": "short",
-          "label": null,
           "logBase": 1,
-          "max": null,
           "min": 0,
           "show": true
         }
       ],
       "yaxis": {
-        "align": false,
-        "alignLevel": null
+        "align": false
       }
     },
     {
@@ -2922,18 +2899,22 @@
       "bars": false,
       "dashLength": 10,
       "dashes": false,
-      "datasource": "${DS_CEPHTHANOS}",
+      "datasource": {
+        "uid": "${DataSource}"
+      },
       "editable": true,
       "error": false,
       "fill": 1,
+      "fillGradient": 0,
       "grid": {},
       "gridPos": {
         "h": 8,
         "w": 8,
         "x": 16,
-        "y": 14
+        "y": 23
       },
       "height": "300",
+      "hiddenSeries": false,
       "id": 7,
       "interval": "$interval",
       "legend": {
@@ -2950,7 +2931,11 @@
       "linewidth": 1,
       "links": [],
       "nullPointMode": "connected",
+      "options": {
+        "alertThreshold": true
+      },
       "percentage": false,
+      "pluginVersion": "9.0.5",
       "pointradius": 5,
       "points": false,
       "renderer": "flot",
@@ -2960,7 +2945,10 @@
       "steppedLine": false,
       "targets": [
         {
-          "expr": "sum(irate(ceph_osd_op_w_in_bytes{cluster=\"$cluster\"}[5m]))",
+          "datasource": {
+            "uid": "${DataSource}"
+          },
+          "expr": "sum(irate(ceph_osd_op_w_in_bytes{cluster=\"$cluster\",node_name=\"$node\"}[5m]))",
           "format": "time_series",
           "interval": "$interval",
           "intervalFactor": 1,
@@ -2969,7 +2957,10 @@
           "step": 300
         },
         {
-          "expr": "sum(irate(ceph_osd_op_r_out_bytes{cluster=\"$cluster\"}[5m]))",
+          "datasource": {
+            "uid": "${DataSource}"
+          },
+          "expr": "sum(irate(ceph_osd_op_r_out_bytes{cluster=\"$cluster\",node_name=\"$node\"}[5m]))",
           "format": "time_series",
           "interval": "$interval",
           "intervalFactor": 1,
@@ -2979,9 +2970,7 @@
         }
       ],
       "thresholds": [],
-      "timeFrom": null,
       "timeRegions": [],
-      "timeShift": null,
       "title": "Throughput",
       "tooltip": {
         "msResolution": false,
@@ -2991,33 +2980,26 @@
       },
       "type": "graph",
       "xaxis": {
-        "buckets": null,
         "mode": "time",
-        "name": null,
         "show": true,
         "values": []
       },
       "yaxes": [
         {
           "format": "decbytes",
-          "label": null,
           "logBase": 1,
-          "max": null,
           "min": 0,
           "show": true
         },
         {
           "format": "short",
-          "label": null,
           "logBase": 1,
-          "max": null,
           "min": 0,
           "show": true
         }
       ],
       "yaxis": {
-        "align": false,
-        "alignLevel": null
+        "align": false
       }
     },
     {
@@ -3025,14 +3007,19 @@
       "bars": false,
       "dashLength": 10,
       "dashes": false,
-      "datasource": "${DS_CEPHTHANOS}",
+      "datasource": {
+        "type": "prometheus",
+        "uid": "${DataSource}"
+      },
       "fill": 1,
+      "fillGradient": 0,
       "gridPos": {
         "h": 8,
         "w": 8,
         "x": 0,
-        "y": 22
+        "y": 31
       },
+      "hiddenSeries": false,
       "id": 77,
       "legend": {
         "avg": false,
@@ -3047,7 +3034,11 @@
       "linewidth": 1,
       "links": [],
       "nullPointMode": "null",
+      "options": {
+        "alertThreshold": true
+      },
       "percentage": false,
+      "pluginVersion": "9.0.5",
       "pointradius": 5,
       "points": false,
       "renderer": "flot",
@@ -3057,7 +3048,10 @@
       "steppedLine": false,
       "targets": [
         {
-          "expr": "(ceph_pool_bytes_used{cluster='$cluster'}) *on (pool_id) group_left(name)(ceph_pool_metadata{cluster='$cluster'})",
+          "datasource": {
+            "uid": "${DataSource}"
+          },
+          "expr": "(ceph_pool_stored{cluster=\"$cluster\",node_name=\"$node\"}) *on (pool_id) group_left(name)(ceph_pool_metadata{cluster=\"$cluster\",node_name=\"$node\"})",
           "format": "time_series",
           "intervalFactor": 1,
           "legendFormat": "{{name}}",
@@ -3065,9 +3059,7 @@
         }
       ],
       "thresholds": [],
-      "timeFrom": null,
       "timeRegions": [],
-      "timeShift": null,
       "title": "Pool Used Bytes",
       "tooltip": {
         "shared": true,
@@ -3076,34 +3068,24 @@
       },
       "type": "graph",
       "xaxis": {
-        "buckets": null,
         "mode": "time",
-        "name": null,
         "show": true,
         "values": []
       },
       "yaxes": [
         {
-          "decimals": null,
           "format": "bytes",
-          "label": null,
           "logBase": 1,
-          "max": null,
-          "min": null,
           "show": true
         },
         {
           "format": "short",
-          "label": null,
           "logBase": 1,
-          "max": null,
-          "min": null,
           "show": true
         }
       ],
       "yaxis": {
-        "align": false,
-        "alignLevel": null
+        "align": false
       }
     },
     {
@@ -3111,14 +3093,19 @@
       "bars": false,
       "dashLength": 10,
       "dashes": false,
-      "datasource": "${DS_CEPHTHANOS}",
+      "datasource": {
+        "type": "prometheus",
+        "uid": "${DataSource}"
+      },
       "fill": 1,
+      "fillGradient": 0,
       "gridPos": {
         "h": 8,
         "w": 8,
         "x": 8,
-        "y": 22
+        "y": 31
       },
+      "hiddenSeries": false,
       "id": 78,
       "legend": {
         "avg": false,
@@ -3133,7 +3120,11 @@
       "linewidth": 1,
       "links": [],
       "nullPointMode": "null",
+      "options": {
+        "alertThreshold": true
+      },
       "percentage": false,
+      "pluginVersion": "9.0.5",
       "pointradius": 5,
       "points": false,
       "renderer": "flot",
@@ -3143,7 +3134,10 @@
       "steppedLine": false,
       "targets": [
         {
-          "expr": "(ceph_pool_raw_bytes_used{cluster='$cluster'}) *on (pool_id) group_left(name)(ceph_pool_metadata{cluster='$cluster'})",
+          "datasource": {
+            "uid": "${DataSource}"
+          },
+          "expr": "(ceph_pool_raw_bytes_used{cluster=\"$cluster\",node_name=\"$node\"}) *on (pool_id) group_left(name)(ceph_pool_metadata{cluster=\"$cluster\",node_name=\"$node\"})",
           "format": "time_series",
           "intervalFactor": 1,
           "legendFormat": "{{name}}",
@@ -3151,9 +3145,7 @@
         }
       ],
       "thresholds": [],
-      "timeFrom": null,
       "timeRegions": [],
-      "timeShift": null,
       "title": "Pool RAW Used Bytes",
       "tooltip": {
         "shared": true,
@@ -3162,33 +3154,24 @@
       },
       "type": "graph",
       "xaxis": {
-        "buckets": null,
         "mode": "time",
-        "name": null,
         "show": true,
         "values": []
       },
       "yaxes": [
         {
           "format": "bytes",
-          "label": null,
           "logBase": 1,
-          "max": null,
-          "min": null,
           "show": true
         },
         {
           "format": "short",
-          "label": null,
           "logBase": 1,
-          "max": null,
-          "min": null,
           "show": true
         }
       ],
       "yaxis": {
-        "align": false,
-        "alignLevel": null
+        "align": false
       }
     },
     {
@@ -3196,14 +3179,18 @@
       "bars": false,
       "dashLength": 10,
       "dashes": false,
-      "datasource": "${DS_CEPHTHANOS}",
+      "datasource": {
+        "uid": "${DataSource}"
+      },
       "fill": 1,
+      "fillGradient": 0,
       "gridPos": {
         "h": 8,
         "w": 8,
         "x": 16,
-        "y": 22
+        "y": 31
       },
+      "hiddenSeries": false,
       "id": 79,
       "legend": {
         "avg": false,
@@ -3218,7 +3205,11 @@
       "linewidth": 1,
       "links": [],
       "nullPointMode": "null",
+      "options": {
+        "alertThreshold": true
+      },
       "percentage": false,
+      "pluginVersion": "9.0.5",
       "pointradius": 5,
       "points": false,
       "renderer": "flot",
@@ -3228,7 +3219,10 @@
       "steppedLine": false,
       "targets": [
         {
-          "expr": "(ceph_pool_objects{cluster='$cluster'}) *on (pool_id) group_left(name)(ceph_pool_metadata{cluster='$cluster'})",
+          "datasource": {
+            "uid": "${DataSource}"
+          },
+          "expr": "(ceph_pool_objects{cluster=\"$cluster\",node_name=\"$node\"}) *on (pool_id) group_left(name)(ceph_pool_metadata{cluster=\"$cluster\",node_name=\"$node\"})",
           "format": "time_series",
           "intervalFactor": 1,
           "legendFormat": "{{name}}",
@@ -3236,9 +3230,7 @@
         }
       ],
       "thresholds": [],
-      "timeFrom": null,
       "timeRegions": [],
-      "timeShift": null,
       "title": "Objects Per Pool",
       "tooltip": {
         "shared": true,
@@ -3247,33 +3239,24 @@
       },
       "type": "graph",
       "xaxis": {
-        "buckets": null,
         "mode": "time",
-        "name": null,
         "show": true,
         "values": []
       },
       "yaxes": [
         {
           "format": "short",
-          "label": null,
           "logBase": 1,
-          "max": null,
-          "min": null,
           "show": true
         },
         {
           "format": "short",
-          "label": null,
           "logBase": 1,
-          "max": null,
-          "min": null,
           "show": true
         }
       ],
       "yaxis": {
-        "align": false,
-        "alignLevel": null
+        "align": false
       }
     },
     {
@@ -3281,14 +3264,18 @@
       "bars": false,
       "dashLength": 10,
       "dashes": false,
-      "datasource": "${DS_CEPHTHANOS}",
+      "datasource": {
+        "uid": "${DataSource}"
+      },
       "fill": 1,
+      "fillGradient": 0,
       "gridPos": {
         "h": 7,
         "w": 8,
         "x": 0,
-        "y": 30
+        "y": 39
       },
+      "hiddenSeries": false,
       "id": 80,
       "legend": {
         "avg": false,
@@ -3303,7 +3290,11 @@
       "linewidth": 1,
       "links": [],
       "nullPointMode": "null",
+      "options": {
+        "alertThreshold": true
+      },
       "percentage": false,
+      "pluginVersion": "9.0.5",
       "pointradius": 5,
       "points": false,
       "renderer": "flot",
@@ -3313,7 +3304,10 @@
       "steppedLine": false,
       "targets": [
         {
-          "expr": "(ceph_pool_quota_bytes{cluster='$cluster'}) *on (pool_id) group_left(name)(ceph_pool_metadata{cluster='$cluster'})",
+          "datasource": {
+            "uid": "${DataSource}"
+          },
+          "expr": "(ceph_pool_quota_bytes{cluster=\"$cluster\",node_name=\"$node\"}) *on (pool_id) group_left(name)(ceph_pool_metadata{cluster=\"$cluster\",node_name=\"$node\"})",
           "format": "time_series",
           "intervalFactor": 1,
           "legendFormat": "{{name}}",
@@ -3321,9 +3315,7 @@
         }
       ],
       "thresholds": [],
-      "timeFrom": null,
       "timeRegions": [],
-      "timeShift": null,
       "title": "Pool Quota Bytes",
       "tooltip": {
         "shared": true,
@@ -3332,33 +3324,24 @@
       },
       "type": "graph",
       "xaxis": {
-        "buckets": null,
         "mode": "time",
-        "name": null,
         "show": true,
         "values": []
       },
       "yaxes": [
         {
           "format": "bytes",
-          "label": null,
           "logBase": 1,
-          "max": null,
-          "min": null,
           "show": true
         },
         {
           "format": "short",
-          "label": null,
           "logBase": 1,
-          "max": null,
-          "min": null,
           "show": true
         }
       ],
       "yaxis": {
-        "align": false,
-        "alignLevel": null
+        "align": false
       }
     },
     {
@@ -3366,14 +3349,19 @@
       "bars": false,
       "dashLength": 10,
       "dashes": false,
-      "datasource": "${DS_CEPHTHANOS}",
+      "datasource": {
+        "type": "prometheus",
+        "uid": "${DataSource}"
+      },
       "fill": 1,
+      "fillGradient": 0,
       "gridPos": {
         "h": 7,
         "w": 8,
         "x": 8,
-        "y": 30
+        "y": 39
       },
+      "hiddenSeries": false,
       "id": 81,
       "legend": {
         "alignAsTable": false,
@@ -3390,7 +3378,11 @@
       "linewidth": 1,
       "links": [],
       "nullPointMode": "null",
+      "options": {
+        "alertThreshold": true
+      },
       "percentage": false,
+      "pluginVersion": "9.0.5",
       "pointradius": 5,
       "points": false,
       "renderer": "flot",
@@ -3400,7 +3392,10 @@
       "steppedLine": false,
       "targets": [
         {
-          "expr": "(ceph_pool_quota_objects{cluster='$cluster'}) *on (pool_id) group_left(name)(ceph_pool_metadata{cluster='$cluster'})",
+          "datasource": {
+            "uid": "${DataSource}"
+          },
+          "expr": "(ceph_pool_quota_objects{cluster=\"$cluster\",node_name=\"$node\"}) *on (pool_id) group_left(name)(ceph_pool_metadata{cluster=\"$cluster\",node_name=\"$node\"})",
           "format": "time_series",
           "intervalFactor": 1,
           "legendFormat": "{{name}}",
@@ -3408,9 +3403,7 @@
         }
       ],
       "thresholds": [],
-      "timeFrom": null,
       "timeRegions": [],
-      "timeShift": null,
       "title": "Pool Objects Quota",
       "tooltip": {
         "shared": true,
@@ -3419,33 +3412,24 @@
       },
       "type": "graph",
       "xaxis": {
-        "buckets": null,
         "mode": "time",
-        "name": null,
         "show": true,
         "values": []
       },
       "yaxes": [
         {
           "format": "short",
-          "label": null,
           "logBase": 1,
-          "max": null,
-          "min": null,
           "show": true
         },
         {
           "format": "short",
-          "label": null,
           "logBase": 1,
-          "max": null,
-          "min": null,
           "show": true
         }
       ],
       "yaxis": {
-        "align": false,
-        "alignLevel": null
+        "align": false
       }
     },
     {
@@ -3453,14 +3437,18 @@
       "bars": false,
       "dashLength": 10,
       "dashes": false,
-      "datasource": "${DS_CEPHTHANOS}",
+      "datasource": {
+        "uid": "${DataSource}"
+      },
       "fill": 1,
+      "fillGradient": 0,
       "gridPos": {
         "h": 7,
         "w": 8,
         "x": 16,
-        "y": 30
+        "y": 39
       },
+      "hiddenSeries": false,
       "id": 106,
       "legend": {
         "alignAsTable": false,
@@ -3477,7 +3465,11 @@
       "linewidth": 1,
       "links": [],
       "nullPointMode": "null",
+      "options": {
+        "alertThreshold": true
+      },
       "percentage": false,
+      "pluginVersion": "9.0.5",
       "pointradius": 5,
       "points": false,
       "renderer": "flot",
@@ -3487,14 +3479,20 @@
       "steppedLine": false,
       "targets": [
         {
-          "expr": "count(ceph_bluestore_commit_lat_count{cluster='$cluster'})",
+          "datasource": {
+            "uid": "${DataSource}"
+          },
+          "expr": "count(ceph_bluestore_commit_lat_count{cluster=\"$cluster\",node_name=\"$node\"})",
           "format": "time_series",
           "intervalFactor": 1,
           "legendFormat": "BlueStore",
           "refId": "A"
         },
         {
-          "expr": "count(ceph_filestore_journal_latency_count{cluster='$cluster'})",
+          "datasource": {
+            "uid": "${DataSource}"
+          },
+          "expr": "count(ceph_filestore_journal_latency_count{cluster=\"$cluster\",node_name=\"$node\"})",
           "format": "time_series",
           "intervalFactor": 1,
           "legendFormat": "FileStore",
@@ -3502,9 +3500,7 @@
         }
       ],
       "thresholds": [],
-      "timeFrom": null,
       "timeRegions": [],
-      "timeShift": null,
       "title": "OSD Type Count",
       "tooltip": {
         "shared": true,
@@ -3513,46 +3509,49 @@
       },
       "type": "graph",
       "xaxis": {
-        "buckets": null,
         "mode": "time",
-        "name": null,
         "show": true,
         "values": []
       },
       "yaxes": [
         {
           "format": "short",
-          "label": null,
           "logBase": 1,
-          "max": null,
-          "min": null,
           "show": true
         },
         {
           "format": "short",
-          "label": null,
           "logBase": 1,
-          "max": null,
-          "min": null,
           "show": true
         }
       ],
       "yaxis": {
-        "align": false,
-        "alignLevel": null
+        "align": false
       }
     },
     {
       "collapsed": false,
+      "datasource": {
+        "type": "datasource",
+        "uid": "grafana"
+      },
       "gridPos": {
         "h": 1,
         "w": 24,
         "x": 0,
-        "y": 37
+        "y": 46
       },
       "id": 41,
       "panels": [],
-      "repeat": null,
+      "targets": [
+        {
+          "datasource": {
+            "type": "datasource",
+            "uid": "grafana"
+          },
+          "refId": "A"
+        }
+      ],
       "title": "OBJECTS",
       "type": "row"
     },
@@ -3561,17 +3560,22 @@
       "bars": false,
       "dashLength": 10,
       "dashes": false,
-      "datasource": "${DS_CEPHTHANOS}",
+      "datasource": {
+        "type": "prometheus",
+        "uid": "${DataSource}"
+      },
       "editable": true,
       "error": false,
       "fill": 1,
+      "fillGradient": 0,
       "grid": {},
       "gridPos": {
         "h": 12,
         "w": 6,
         "x": 0,
-        "y": 38
+        "y": 47
       },
+      "hiddenSeries": false,
       "id": 18,
       "legend": {
         "alignAsTable": true,
@@ -3588,12 +3592,17 @@
       "linewidth": 2,
       "links": [],
       "nullPointMode": "connected",
+      "options": {
+        "alertThreshold": true
+      },
       "percentage": false,
+      "pluginVersion": "9.0.5",
       "pointradius": 5,
       "points": false,
       "renderer": "flot",
       "seriesOverrides": [
         {
+          "$$hashKey": "object:2057",
           "alias": "/^Total.*$/",
           "stack": false
         }
@@ -3603,19 +3612,22 @@
       "steppedLine": false,
       "targets": [
         {
-          "expr": "ceph_cluster_total_objects{cluster=\"$cluster\"}",
+          "datasource": {
+            "uid": "${DataSource}"
+          },
+          "editorMode": "code",
+          "expr": "sum(ceph_pool_objects{cluster=\"$cluster\",node_name=\"$node\"} * on(pool_id) group_left(instance,name) ceph_pool_metadata{cluster=\"$cluster\",node_name=\"$node\"})",
           "format": "time_series",
           "interval": "$interval",
           "intervalFactor": 1,
           "legendFormat": "Total",
+          "range": true,
           "refId": "A",
           "step": 300
         }
       ],
       "thresholds": [],
-      "timeFrom": null,
       "timeRegions": [],
-      "timeShift": null,
       "title": "Objects in the Cluster",
       "tooltip": {
         "msResolution": false,
@@ -3625,33 +3637,24 @@
       },
       "type": "graph",
       "xaxis": {
-        "buckets": null,
         "mode": "time",
-        "name": null,
         "show": true,
         "values": []
       },
       "yaxes": [
         {
           "format": "short",
-          "label": null,
           "logBase": 1,
-          "max": null,
-          "min": null,
           "show": true
         },
         {
           "format": "short",
-          "label": null,
           "logBase": 1,
-          "max": null,
-          "min": null,
           "show": true
         }
       ],
       "yaxis": {
-        "align": false,
-        "alignLevel": null
+        "align": false
       }
     },
     {
@@ -3659,17 +3662,22 @@
       "bars": false,
       "dashLength": 10,
       "dashes": false,
-      "datasource": "${DS_CEPHTHANOS}",
+      "datasource": {
+        "type": "prometheus",
+        "uid": "${DataSource}"
+      },
       "editable": true,
       "error": false,
       "fill": 1,
+      "fillGradient": 0,
       "grid": {},
       "gridPos": {
         "h": 12,
         "w": 8,
         "x": 6,
-        "y": 38
+        "y": 47
       },
+      "hiddenSeries": false,
       "id": 19,
       "legend": {
         "alignAsTable": true,
@@ -3686,12 +3694,17 @@
       "linewidth": 2,
       "links": [],
       "nullPointMode": "connected",
+      "options": {
+        "alertThreshold": true
+      },
       "percentage": false,
+      "pluginVersion": "9.0.5",
       "pointradius": 5,
       "points": false,
       "renderer": "flot",
       "seriesOverrides": [
         {
+          "$$hashKey": "object:4589",
           "alias": "/^Total.*$/",
           "stack": false
         }
@@ -3701,7 +3714,10 @@
       "steppedLine": false,
       "targets": [
         {
-          "expr": "ceph_pg_active{cluster=\"$cluster\"}",
+          "datasource": {
+            "uid": "${DataSource}"
+          },
+          "expr": "sum(ceph_pg_active{cluster=\"$cluster\",node_name=\"$node\"})",
           "format": "time_series",
           "interval": "$interval",
           "intervalFactor": 1,
@@ -3709,7 +3725,10 @@
           "refId": "M"
         },
         {
-          "expr": "ceph_pg_clean{cluster=\"$cluster\"}",
+          "datasource": {
+            "uid": "${DataSource}"
+          },
+          "expr": "sum(ceph_pg_clean{cluster=\"$cluster\",node_name=\"$node\"})",
           "format": "time_series",
           "interval": "$interval",
           "intervalFactor": 1,
@@ -3717,7 +3736,10 @@
           "refId": "U"
         },
         {
-          "expr": "ceph_pg_peering{cluster=\"$cluster\"}",
+          "datasource": {
+            "uid": "${DataSource}"
+          },
+          "expr": "sum(ceph_pg_peering{cluster=\"$cluster\",node_name=\"$node\"})",
           "format": "time_series",
           "interval": "$interval",
           "intervalFactor": 1,
@@ -3725,7 +3747,10 @@
           "refId": "I"
         },
         {
-          "expr": "ceph_pg_degraded{cluster=\"$cluster\"}",
+          "datasource": {
+            "uid": "${DataSource}"
+          },
+          "expr": "sum(ceph_pg_degraded{cluster=\"$cluster\",node_name=\"$node\"})",
           "format": "time_series",
           "interval": "$interval",
           "intervalFactor": 1,
@@ -3734,7 +3759,10 @@
           "step": 300
         },
         {
-          "expr": "ceph_pg_stale{cluster=\"$cluster\"}",
+          "datasource": {
+            "uid": "${DataSource}"
+          },
+          "expr": "sum(ceph_pg_stale{cluster=\"$cluster\",node_name=\"$node\"})",
           "format": "time_series",
           "interval": "$interval",
           "intervalFactor": 1,
@@ -3743,7 +3771,10 @@
           "step": 300
         },
         {
-          "expr": "ceph_unclean_pgs{cluster=\"$cluster\"}",
+          "datasource": {
+            "uid": "${DataSource}"
+          },
+          "expr": "ceph_unclean_pgs{cluster=\"$cluster\",node_name=\"$node\"}",
           "format": "time_series",
           "interval": "$interval",
           "intervalFactor": 1,
@@ -3752,7 +3783,10 @@
           "step": 300
         },
         {
-          "expr": "ceph_pg_undersized{cluster=\"$cluster\"}",
+          "datasource": {
+            "uid": "${DataSource}"
+          },
+          "expr": "sum(ceph_pg_undersized{cluster=\"$cluster\",node_name=\"$node\"})",
           "format": "time_series",
           "interval": "$interval",
           "intervalFactor": 1,
@@ -3761,7 +3795,10 @@
           "step": 300
         },
         {
-          "expr": "ceph_pg_incomplete{cluster=\"$cluster\"}",
+          "datasource": {
+            "uid": "${DataSource}"
+          },
+          "expr": "sum(ceph_pg_incomplete{cluster=\"$cluster\",node_name=\"$node\"})",
           "format": "time_series",
           "interval": "$interval",
           "intervalFactor": 1,
@@ -3769,7 +3806,10 @@
           "refId": "G"
         },
         {
-          "expr": "ceph_pg_forced_backfill{cluster=\"$cluster\"}",
+          "datasource": {
+            "uid": "${DataSource}"
+          },
+          "expr": "sum(ceph_pg_forced_backfill{cluster=\"$cluster\",node_name=\"$node\"})",
           "format": "time_series",
           "interval": "$interval",
           "intervalFactor": 1,
@@ -3777,7 +3817,10 @@
           "refId": "H"
         },
         {
-          "expr": "ceph_pg_inconsistent{cluster=\"$cluster\"}",
+          "datasource": {
+            "uid": "${DataSource}"
+          },
+          "expr": "sum(ceph_pg_inconsistent{cluster=\"$cluster\",node_name=\"$node\"})",
           "format": "time_series",
           "interval": "$interval",
           "intervalFactor": 1,
@@ -3785,7 +3828,10 @@
           "refId": "F"
         },
         {
-          "expr": "ceph_pg_forced_recovery{cluster=\"$cluster\"}",
+          "datasource": {
+            "uid": "${DataSource}"
+          },
+          "expr": "sum(ceph_pg_forced_recovery{cluster=\"$cluster\",node_name=\"$node\"})",
           "format": "time_series",
           "interval": "$interval",
           "intervalFactor": 1,
@@ -3793,7 +3839,10 @@
           "refId": "J"
         },
         {
-          "expr": "ceph_pg_creating{cluster=\"$cluster\"}",
+          "datasource": {
+            "uid": "${DataSource}"
+          },
+          "expr": "sum(ceph_pg_creating{cluster=\"$cluster\",node_name=\"$node\"})",
           "format": "time_series",
           "interval": "$interval",
           "intervalFactor": 1,
@@ -3801,7 +3850,10 @@
           "refId": "K"
         },
         {
-          "expr": "ceph_pg_wait_backfill{cluster=\"$cluster\"}",
+          "datasource": {
+            "uid": "${DataSource}"
+          },
+          "expr": "sum(ceph_pg_wait_backfill{cluster=\"$cluster\",node_name=\"$node\"})",
           "format": "time_series",
           "interval": "$interval",
           "intervalFactor": 1,
@@ -3809,7 +3861,10 @@
           "refId": "L"
         },
         {
-          "expr": "ceph_pg_deep{cluster=\"$cluster\"}",
+          "datasource": {
+            "uid": "${DataSource}"
+          },
+          "expr": "sum(ceph_pg_deep{cluster=\"$cluster\",node_name=\"$node\"})",
           "format": "time_series",
           "interval": "$interval",
           "intervalFactor": 1,
@@ -3817,7 +3872,10 @@
           "refId": "N"
         },
         {
-          "expr": "ceph_pg_scrubbing{cluster=\"$cluster\"}",
+          "datasource": {
+            "uid": "${DataSource}"
+          },
+          "expr": "sum(ceph_pg_scrubbing{cluster=\"$cluster\",node_name=\"$node\"})",
           "format": "time_series",
           "interval": "$interval",
           "intervalFactor": 1,
@@ -3825,7 +3883,10 @@
           "refId": "O"
         },
         {
-          "expr": "ceph_pg_recovering{cluster=\"$cluster\"}",
+          "datasource": {
+            "uid": "${DataSource}"
+          },
+          "expr": "sum(ceph_pg_recovering{cluster=\"$cluster\",node_name=\"$node\"})",
           "format": "time_series",
           "interval": "$interval",
           "intervalFactor": 1,
@@ -3833,7 +3894,10 @@
           "refId": "P"
         },
         {
-          "expr": "ceph_pg_repair{cluster=\"$cluster\"}",
+          "datasource": {
+            "uid": "${DataSource}"
+          },
+          "expr": "sum(ceph_pg_repair{cluster=\"$cluster\",node_name=\"$node\"})",
           "format": "time_series",
           "interval": "$interval",
           "intervalFactor": 1,
@@ -3841,7 +3905,10 @@
           "refId": "Q"
         },
         {
-          "expr": "ceph_pg_down{cluster=\"$cluster\"}",
+          "datasource": {
+            "uid": "${DataSource}"
+          },
+          "expr": "sum(ceph_pg_down{cluster=\"$cluster\",node_name=\"$node\"})",
           "format": "time_series",
           "interval": "$interval",
           "intervalFactor": 1,
@@ -3849,7 +3916,10 @@
           "refId": "R"
         },
         {
-          "expr": "ceph_pg_peered{cluster=\"$cluster\"}",
+          "datasource": {
+            "uid": "${DataSource}"
+          },
+          "expr": "sum(ceph_pg_peered{cluster=\"$cluster\",node_name=\"$node\"})",
           "format": "time_series",
           "interval": "$interval",
           "intervalFactor": 1,
@@ -3857,7 +3927,10 @@
           "refId": "S"
         },
         {
-          "expr": "ceph_pg_backfill{cluster=\"$cluster\"}",
+          "datasource": {
+            "uid": "${DataSource}"
+          },
+          "expr": "sum(ceph_pg_backfill{cluster=\"$cluster\",node_name=\"$node\"})",
           "format": "time_series",
           "interval": "$interval",
           "intervalFactor": 1,
@@ -3865,7 +3938,10 @@
           "refId": "T"
         },
         {
-          "expr": "ceph_pg_remapped{cluster=\"$cluster\"}",
+          "datasource": {
+            "uid": "${DataSource}"
+          },
+          "expr": "sum(ceph_pg_remapped{cluster=\"$cluster\",node_name=\"$node\"})",
           "format": "time_series",
           "interval": "$interval",
           "intervalFactor": 1,
@@ -3873,7 +3949,10 @@
           "refId": "V"
         },
         {
-          "expr": "ceph_pg_backfill_toofull{cluster=\"$cluster\"}",
+          "datasource": {
+            "uid": "${DataSource}"
+          },
+          "expr": "sum(ceph_pg_backfill_toofull{cluster=\"$cluster\",node_name=\"$node\"})",
           "format": "time_series",
           "interval": "$interval",
           "intervalFactor": 1,
@@ -3882,9 +3961,7 @@
         }
       ],
       "thresholds": [],
-      "timeFrom": null,
       "timeRegions": [],
-      "timeShift": null,
       "title": "PGs State",
       "tooltip": {
         "msResolution": false,
@@ -3894,33 +3971,25 @@
       },
       "type": "graph",
       "xaxis": {
-        "buckets": null,
         "mode": "time",
-        "name": null,
         "show": true,
         "values": []
       },
       "yaxes": [
         {
           "format": "short",
-          "label": null,
           "logBase": 2,
-          "max": null,
           "min": 0,
           "show": true
         },
         {
           "format": "short",
-          "label": null,
           "logBase": 1,
-          "max": null,
-          "min": null,
           "show": true
         }
       ],
       "yaxis": {
-        "align": false,
-        "alignLevel": null
+        "align": false
       }
     },
     {
@@ -3928,17 +3997,22 @@
       "bars": false,
       "dashLength": 10,
       "dashes": false,
-      "datasource": "${DS_CEPHTHANOS}",
+      "datasource": {
+        "type": "prometheus",
+        "uid": "${DataSource}"
+      },
       "editable": true,
       "error": false,
       "fill": 1,
+      "fillGradient": 0,
       "grid": {},
       "gridPos": {
         "h": 6,
         "w": 10,
         "x": 14,
-        "y": 38
+        "y": 47
       },
+      "hiddenSeries": false,
       "id": 20,
       "legend": {
         "alignAsTable": true,
@@ -3955,12 +4029,17 @@
       "linewidth": 2,
       "links": [],
       "nullPointMode": "connected",
+      "options": {
+        "alertThreshold": true
+      },
       "percentage": false,
+      "pluginVersion": "9.0.5",
       "pointradius": 5,
       "points": false,
       "renderer": "flot",
       "seriesOverrides": [
         {
+          "$$hashKey": "object:4630",
           "alias": "/^Total.*$/",
           "stack": false
         }
@@ -3970,7 +4049,10 @@
       "steppedLine": false,
       "targets": [
         {
-          "expr": "ceph_pg_degraded{cluster=\"$cluster\"}",
+          "datasource": {
+            "uid": "${DataSource}"
+          },
+          "expr": "sum(ceph_pg_degraded{cluster=\"$cluster\",node_name=\"$node\"})",
           "format": "time_series",
           "interval": "$interval",
           "intervalFactor": 1,
@@ -3979,7 +4061,10 @@
           "step": 300
         },
         {
-          "expr": "ceph_pg_stale{cluster=\"$cluster\"}",
+          "datasource": {
+            "uid": "${DataSource}"
+          },
+          "expr": "sum(ceph_pg_stale{cluster=\"$cluster\",node_name=\"$node\"})",
           "format": "time_series",
           "interval": "$interval",
           "intervalFactor": 1,
@@ -3988,7 +4073,10 @@
           "step": 300
         },
         {
-          "expr": "ceph_pg_undersized{cluster=\"$cluster\"}",
+          "datasource": {
+            "uid": "${DataSource}"
+          },
+          "expr": "sum(ceph_pg_undersized{cluster=\"$cluster\",node_name=\"$node\"})",
           "format": "time_series",
           "interval": "$interval",
           "intervalFactor": 1,
@@ -3998,9 +4086,7 @@
         }
       ],
       "thresholds": [],
-      "timeFrom": null,
       "timeRegions": [],
-      "timeShift": null,
       "title": "Stuck PGs",
       "tooltip": {
         "msResolution": false,
@@ -4010,33 +4096,25 @@
       },
       "type": "graph",
       "xaxis": {
-        "buckets": null,
         "mode": "time",
-        "name": null,
         "show": true,
         "values": []
       },
       "yaxes": [
         {
           "format": "short",
-          "label": null,
           "logBase": 1,
-          "max": null,
           "min": 0,
           "show": true
         },
         {
           "format": "short",
-          "label": null,
           "logBase": 1,
-          "max": null,
-          "min": null,
           "show": true
         }
       ],
       "yaxis": {
-        "align": false,
-        "alignLevel": null
+        "align": false
       }
     },
     {
@@ -4044,17 +4122,22 @@
       "bars": false,
       "dashLength": 10,
       "dashes": false,
-      "datasource": "${DS_CEPHTHANOS}",
+      "datasource": {
+        "type": "prometheus",
+        "uid": "${DataSource}"
+      },
       "editable": true,
       "error": false,
       "fill": 1,
+      "fillGradient": 0,
       "grid": {},
       "gridPos": {
         "h": 6,
         "w": 10,
         "x": 14,
-        "y": 44
+        "y": 53
       },
+      "hiddenSeries": false,
       "id": 15,
       "legend": {
         "avg": false,
@@ -4069,7 +4152,11 @@
       "linewidth": 2,
       "links": [],
       "nullPointMode": "connected",
+      "options": {
+        "alertThreshold": true
+      },
       "percentage": false,
+      "pluginVersion": "9.0.5",
       "pointradius": 5,
       "points": false,
       "renderer": "flot",
@@ -4079,7 +4166,10 @@
       "steppedLine": false,
       "targets": [
         {
-          "expr": "sum(irate(ceph_osd_recovery_ops{cluster=\"$cluster\"}[$interval]))",
+          "datasource": {
+            "uid": "${DataSource}"
+          },
+          "expr": "sum(irate(ceph_osd_recovery_ops{cluster=\"$cluster\",node_name=\"$node\"}[$interval]))",
           "format": "time_series",
           "interval": "$interval",
           "intervalFactor": 1,
@@ -4089,9 +4179,7 @@
         }
       ],
       "thresholds": [],
-      "timeFrom": null,
       "timeRegions": [],
-      "timeShift": null,
       "title": "Recovery Operations",
       "tooltip": {
         "msResolution": false,
@@ -4101,54 +4189,55 @@
       },
       "type": "graph",
       "xaxis": {
-        "buckets": null,
         "mode": "time",
-        "name": null,
         "show": true,
         "values": []
       },
       "yaxes": [
         {
           "format": "short",
-          "label": null,
           "logBase": 1,
-          "max": null,
           "min": 0,
           "show": true
         },
         {
           "format": "short",
-          "label": null,
           "logBase": 1,
-          "max": null,
-          "min": null,
           "show": true
         }
       ],
       "yaxis": {
-        "align": false,
-        "alignLevel": null
+        "align": false
       }
     },
     {
       "collapsed": false,
+      "datasource": {
+        "type": "datasource",
+        "uid": "grafana"
+      },
       "gridPos": {
         "h": 1,
         "w": 24,
         "x": 0,
-        "y": 50
+        "y": 59
       },
       "id": 40,
       "panels": [],
-      "repeat": null,
+      "targets": [
+        {
+          "datasource": {
+            "type": "datasource",
+            "uid": "grafana"
+          },
+          "refId": "A"
+        }
+      ],
       "title": "LATENCY",
       "type": "row"
     },
     {
-      "cards": {
-        "cardPadding": null,
-        "cardRound": null
-      },
+      "cards": {},
       "color": {
         "cardColor": "#b4ff00",
         "colorScale": "sqrt",
@@ -4157,23 +4246,30 @@
         "mode": "opacity"
       },
       "dataFormat": "timeseries",
-      "datasource": "${DS_CEPHTHANOS}",
+      "datasource": {
+        "uid": "${DataSource}"
+      },
       "gridPos": {
         "h": 8,
         "w": 12,
         "x": 0,
-        "y": 51
+        "y": 60
       },
       "heatmap": {},
+      "hideZeroBuckets": false,
       "highlightCards": true,
       "id": 83,
       "legend": {
         "show": true
       },
       "links": [],
+      "reverseYBuckets": false,
       "targets": [
         {
-          "expr": "ceph_osd_apply_latency_ms{cluster='$cluster'}",
+          "datasource": {
+            "uid": "${DataSource}"
+          },
+          "expr": "ceph_osd_apply_latency_ms{cluster=\"$cluster\",node_name=\"$node\"}",
           "format": "time_series",
           "instant": false,
           "interval": "$interval",
@@ -4190,26 +4286,19 @@
       "xAxis": {
         "show": true
       },
-      "xBucketNumber": null,
       "xBucketSize": "",
       "yAxis": {
-        "decimals": null,
         "format": "ms",
         "logBase": 2,
-        "max": null,
         "min": "0",
         "show": true,
         "splitFactor": 1
       },
       "yBucketBound": "auto",
-      "yBucketNumber": null,
       "yBucketSize": 10
     },
     {
-      "cards": {
-        "cardPadding": null,
-        "cardRound": null
-      },
+      "cards": {},
       "color": {
         "cardColor": "#65c5db",
         "colorScale": "sqrt",
@@ -4218,23 +4307,30 @@
         "mode": "opacity"
       },
       "dataFormat": "timeseries",
-      "datasource": "${DS_CEPHTHANOS}",
+      "datasource": {
+        "uid": "${DataSource}"
+      },
       "gridPos": {
         "h": 8,
         "w": 12,
         "x": 12,
-        "y": 51
+        "y": 60
       },
       "heatmap": {},
+      "hideZeroBuckets": false,
       "highlightCards": true,
       "id": 84,
       "legend": {
         "show": true
       },
       "links": [],
+      "reverseYBuckets": false,
       "targets": [
         {
-          "expr": "ceph_osd_commit_latency_ms{cluster='$cluster'}",
+          "datasource": {
+            "uid": "${DataSource}"
+          },
+          "expr": "ceph_osd_commit_latency_ms{cluster=\"$cluster\",node_name=\"$node\"}",
           "format": "time_series",
           "instant": false,
           "interval": "$interval",
@@ -4251,26 +4347,17 @@
       "xAxis": {
         "show": true
       },
-      "xBucketNumber": null,
       "xBucketSize": "",
       "yAxis": {
-        "decimals": null,
         "format": "ms",
         "logBase": 2,
-        "max": null,
         "min": "0",
-        "show": true,
-        "splitFactor": null
+        "show": true
       },
-      "yBucketBound": "auto",
-      "yBucketNumber": null,
-      "yBucketSize": null
+      "yBucketBound": "auto"
     },
     {
-      "cards": {
-        "cardPadding": null,
-        "cardRound": null
-      },
+      "cards": {},
       "color": {
         "cardColor": "#806eb7",
         "colorScale": "sqrt",
@@ -4279,23 +4366,30 @@
         "mode": "opacity"
       },
       "dataFormat": "timeseries",
-      "datasource": "${DS_CEPHTHANOS}",
+      "datasource": {
+        "uid": "${DataSource}"
+      },
       "gridPos": {
         "h": 8,
         "w": 12,
         "x": 0,
-        "y": 59
+        "y": 68
       },
       "heatmap": {},
+      "hideZeroBuckets": false,
       "highlightCards": true,
       "id": 85,
       "legend": {
         "show": true
       },
       "links": [],
+      "reverseYBuckets": false,
       "targets": [
         {
-          "expr": "rate(ceph_osd_op_r_latency_sum{cluster=\"$cluster\"}[5m]) / rate(ceph_osd_op_r_latency_count{cluster=\"$cluster\"}[5m]) >= 0",
+          "datasource": {
+            "uid": "${DataSource}"
+          },
+          "expr": "rate(ceph_osd_op_r_latency_sum{cluster=\"$cluster\",node_name=\"$node\"}[5m]) / rate(ceph_osd_op_r_latency_count{cluster=\"$cluster\",node_name=\"$node\"}[5m]) >= 0",
           "format": "time_series",
           "instant": false,
           "interval": "$interval",
@@ -4312,26 +4406,18 @@
       "xAxis": {
         "show": true
       },
-      "xBucketNumber": null,
       "xBucketSize": "",
       "yAxis": {
         "decimals": 2,
         "format": "ms",
         "logBase": 2,
-        "max": null,
         "min": "0",
-        "show": true,
-        "splitFactor": null
+        "show": true
       },
-      "yBucketBound": "auto",
-      "yBucketNumber": null,
-      "yBucketSize": null
+      "yBucketBound": "auto"
     },
     {
-      "cards": {
-        "cardPadding": null,
-        "cardRound": null
-      },
+      "cards": {},
       "color": {
         "cardColor": "#f9934e",
         "colorScale": "sqrt",
@@ -4340,23 +4426,30 @@
         "mode": "opacity"
       },
       "dataFormat": "timeseries",
-      "datasource": "${DS_CEPHTHANOS}",
+      "datasource": {
+        "uid": "${DataSource}"
+      },
       "gridPos": {
         "h": 8,
         "w": 12,
         "x": 12,
-        "y": 59
+        "y": 68
       },
       "heatmap": {},
+      "hideZeroBuckets": false,
       "highlightCards": true,
       "id": 86,
       "legend": {
         "show": true
       },
       "links": [],
+      "reverseYBuckets": false,
       "targets": [
         {
-          "expr": "rate(ceph_osd_op_w_latency_sum{cluster=\"$cluster\"}[5m]) / rate(ceph_osd_op_w_latency_count{cluster=\"$cluster\"}[5m]) >= 0",
+          "datasource": {
+            "uid": "${DataSource}"
+          },
+          "expr": "rate(ceph_osd_op_w_latency_sum{cluster=\"$cluster\",node_name=\"$node\"}[5m]) / rate(ceph_osd_op_w_latency_count{cluster=\"$cluster\",node_name=\"$node\"}[5m]) >= 0",
           "format": "time_series",
           "instant": false,
           "interval": "$interval",
@@ -4373,34 +4466,33 @@
       "xAxis": {
         "show": true
       },
-      "xBucketNumber": null,
       "xBucketSize": "",
       "yAxis": {
         "decimals": 2,
         "format": "ms",
         "logBase": 2,
-        "max": null,
         "min": "0",
-        "show": true,
-        "splitFactor": null
+        "show": true
       },
-      "yBucketBound": "auto",
-      "yBucketNumber": null,
-      "yBucketSize": null
+      "yBucketBound": "auto"
     },
     {
       "aliasColors": {},
       "bars": false,
       "dashLength": 10,
       "dashes": false,
-      "datasource": "${DS_CEPHTHANOS}",
+      "datasource": {
+        "uid": "${DataSource}"
+      },
       "fill": 1,
+      "fillGradient": 0,
       "gridPos": {
         "h": 7,
         "w": 12,
         "x": 0,
-        "y": 67
+        "y": 76
       },
+      "hiddenSeries": false,
       "id": 44,
       "legend": {
         "alignAsTable": true,
@@ -4417,7 +4509,11 @@
       "linewidth": 1,
       "links": [],
       "nullPointMode": "null",
+      "options": {
+        "alertThreshold": true
+      },
       "percentage": false,
+      "pluginVersion": "9.0.5",
       "pointradius": 5,
       "points": false,
       "renderer": "flot",
@@ -4427,14 +4523,20 @@
       "steppedLine": false,
       "targets": [
         {
-          "expr": "avg(rate(ceph_osd_op_r_latency_sum{cluster=\"$cluster\"}[5m]) / rate(ceph_osd_op_r_latency_count{cluster=\"$cluster\"}[5m]) >= 0)",
+          "datasource": {
+            "uid": "${DataSource}"
+          },
+          "expr": "avg(rate(ceph_osd_op_r_latency_sum{cluster=\"$cluster\",node_name=\"$node\"}[5m]) / rate(ceph_osd_op_r_latency_count{cluster=\"$cluster\",node_name=\"$node\"}[5m]) >= 0)",
           "format": "time_series",
           "intervalFactor": 1,
           "legendFormat": "read",
           "refId": "A"
         },
         {
-          "expr": "avg(rate(ceph_osd_op_w_latency_sum{cluster=\"$cluster\"}[5m]) / rate(ceph_osd_op_w_latency_count{cluster=\"$cluster\"}[5m]) >= 0)",
+          "datasource": {
+            "uid": "${DataSource}"
+          },
+          "expr": "avg(rate(ceph_osd_op_w_latency_sum{cluster=\"$cluster\",node_name=\"$node\"}[5m]) / rate(ceph_osd_op_w_latency_count{cluster=\"$cluster\",node_name=\"$node\"}[5m]) >= 0)",
           "format": "time_series",
           "intervalFactor": 1,
           "legendFormat": "write",
@@ -4442,9 +4544,7 @@
         }
       ],
       "thresholds": [],
-      "timeFrom": null,
       "timeRegions": [],
-      "timeShift": null,
       "title": "Avg OSD  Op  Latency",
       "tooltip": {
         "shared": true,
@@ -4453,33 +4553,24 @@
       },
       "type": "graph",
       "xaxis": {
-        "buckets": null,
         "mode": "time",
-        "name": null,
         "show": true,
         "values": []
       },
       "yaxes": [
         {
           "format": "ms",
-          "label": null,
           "logBase": 1,
-          "max": null,
-          "min": null,
           "show": true
         },
         {
           "format": "short",
-          "label": null,
           "logBase": 1,
-          "max": null,
-          "min": null,
           "show": true
         }
       ],
       "yaxis": {
-        "align": false,
-        "alignLevel": null
+        "align": false
       }
     },
     {
@@ -4487,15 +4578,18 @@
       "bars": false,
       "dashLength": 10,
       "dashes": false,
-      "datasource": "${DS_CEPHTHANOS}",
-      "decimals": null,
+      "datasource": {
+        "uid": "${DataSource}"
+      },
       "fill": 1,
+      "fillGradient": 0,
       "gridPos": {
         "h": 7,
         "w": 12,
         "x": 12,
-        "y": 67
+        "y": 76
       },
+      "hiddenSeries": false,
       "id": 35,
       "legend": {
         "alignAsTable": true,
@@ -4513,7 +4607,11 @@
       "linewidth": 1,
       "links": [],
       "nullPointMode": "null",
+      "options": {
+        "alertThreshold": true
+      },
       "percentage": false,
+      "pluginVersion": "9.0.5",
       "pointradius": 1,
       "points": false,
       "renderer": "flot",
@@ -4523,7 +4621,10 @@
       "steppedLine": false,
       "targets": [
         {
-          "expr": "avg(ceph_osd_apply_latency_ms{cluster=\"$cluster\"})",
+          "datasource": {
+            "uid": "${DataSource}"
+          },
+          "expr": "avg(ceph_osd_apply_latency_ms{cluster=\"$cluster\",node_name=\"$node\"})",
           "format": "time_series",
           "interval": "$interval",
           "intervalFactor": 1,
@@ -4533,7 +4634,10 @@
           "step": 4
         },
         {
-          "expr": "avg(ceph_osd_commit_latency_ms{cluster=\"$cluster\"})",
+          "datasource": {
+            "uid": "${DataSource}"
+          },
+          "expr": "avg(ceph_osd_commit_latency_ms{cluster=\"$cluster\",node_name=\"$node\"})",
           "format": "time_series",
           "interval": "$interval",
           "intervalFactor": 1,
@@ -4544,9 +4648,7 @@
         }
       ],
       "thresholds": [],
-      "timeFrom": null,
       "timeRegions": [],
-      "timeShift": null,
       "title": "AVG OSD Apply + Commit Latency",
       "tooltip": {
         "shared": true,
@@ -4555,488 +4657,29 @@
       },
       "type": "graph",
       "xaxis": {
-        "buckets": null,
         "mode": "time",
-        "name": null,
         "show": true,
         "values": []
       },
       "yaxes": [
         {
-          "decimals": null,
           "format": "ms",
-          "label": null,
           "logBase": 1,
-          "max": null,
-          "min": null,
           "show": true
         },
         {
           "format": "short",
-          "label": null,
           "logBase": 1,
-          "max": null,
-          "min": null,
           "show": true
         }
       ],
       "yaxis": {
-        "align": false,
-        "alignLevel": null
+        "align": false
       }
-    },
-    {
-      "collapsed": true,
-      "gridPos": {
-        "h": 1,
-        "w": 24,
-        "x": 0,
-        "y": 74
-      },
-      "id": 61,
-      "panels": [
-        {
-          "aliasColors": {},
-          "bars": false,
-          "dashLength": 10,
-          "dashes": false,
-          "datasource": "${DS_CEPHTHANOS}",
-          "fill": 1,
-          "gridPos": {
-            "h": 9,
-            "w": 12,
-            "x": 0,
-            "y": 74
-          },
-          "id": 63,
-          "legend": {
-            "alignAsTable": true,
-            "avg": true,
-            "current": false,
-            "max": true,
-            "min": true,
-            "rightSide": false,
-            "show": true,
-            "total": false,
-            "values": true
-          },
-          "lines": true,
-          "linewidth": 1,
-          "links": [],
-          "nullPointMode": "null",
-          "percentage": false,
-          "pointradius": 5,
-          "points": false,
-          "renderer": "flot",
-          "seriesOverrides": [],
-          "spaceLength": 10,
-          "stack": false,
-          "steppedLine": false,
-          "targets": [
-            {
-              "expr": "node_memory_Active_anon_bytes{cluster=\"$cluster\"}",
-              "format": "time_series",
-              "intervalFactor": 1,
-              "legendFormat": "{{instance}}",
-              "refId": "A"
-            },
-            {
-              "expr": "sum(node_memory_Active_anon_bytes{cluster='$cluster'})",
-              "format": "time_series",
-              "intervalFactor": 1,
-              "legendFormat": "Cluster Memory Usage",
-              "refId": "B"
-            }
-          ],
-          "thresholds": [],
-          "timeFrom": null,
-          "timeShift": null,
-          "title": "Node Memory Usage",
-          "tooltip": {
-            "shared": true,
-            "sort": 0,
-            "value_type": "individual"
-          },
-          "type": "graph",
-          "xaxis": {
-            "buckets": null,
-            "mode": "time",
-            "name": null,
-            "show": true,
-            "values": []
-          },
-          "yaxes": [
-            {
-              "format": "bytes",
-              "label": null,
-              "logBase": 2,
-              "max": null,
-              "min": null,
-              "show": true
-            },
-            {
-              "format": "short",
-              "label": null,
-              "logBase": 1,
-              "max": null,
-              "min": null,
-              "show": true
-            }
-          ],
-          "yaxis": {
-            "align": false,
-            "alignLevel": null
-          }
-        },
-        {
-          "aliasColors": {},
-          "bars": false,
-          "dashLength": 10,
-          "dashes": false,
-          "datasource": "${DS_CEPHTHANOS}",
-          "fill": 1,
-          "gridPos": {
-            "h": 9,
-            "w": 12,
-            "x": 12,
-            "y": 74
-          },
-          "id": 64,
-          "legend": {
-            "alignAsTable": true,
-            "avg": false,
-            "current": true,
-            "max": true,
-            "min": false,
-            "rightSide": true,
-            "show": true,
-            "total": false,
-            "values": true
-          },
-          "lines": true,
-          "linewidth": 1,
-          "links": [],
-          "nullPointMode": "null",
-          "percentage": false,
-          "pointradius": 5,
-          "points": false,
-          "renderer": "flot",
-          "seriesOverrides": [],
-          "spaceLength": 10,
-          "stack": false,
-          "steppedLine": false,
-          "targets": [
-            {
-              "expr": "avg by(instance)(irate(node_cpu_seconds_total{job='node',cluster='$cluster', mode!=\"idle\"}[$interval])) * 100",
-              "format": "time_series",
-              "intervalFactor": 1,
-              "legendFormat": "{{instance}}",
-              "refId": "B"
-            }
-          ],
-          "thresholds": [],
-          "timeFrom": null,
-          "timeShift": null,
-          "title": "Node CPU Usage",
-          "tooltip": {
-            "shared": true,
-            "sort": 0,
-            "value_type": "individual"
-          },
-          "type": "graph",
-          "xaxis": {
-            "buckets": null,
-            "mode": "time",
-            "name": null,
-            "show": true,
-            "values": []
-          },
-          "yaxes": [
-            {
-              "format": "percent",
-              "label": null,
-              "logBase": 2,
-              "max": null,
-              "min": null,
-              "show": true
-            },
-            {
-              "format": "short",
-              "label": null,
-              "logBase": 1,
-              "max": null,
-              "min": null,
-              "show": true
-            }
-          ],
-          "yaxis": {
-            "align": false,
-            "alignLevel": null
-          }
-        },
-        {
-          "aliasColors": {},
-          "bars": false,
-          "dashLength": 10,
-          "dashes": false,
-          "datasource": "${DS_CEPHTHANOS}",
-          "fill": 1,
-          "gridPos": {
-            "h": 9,
-            "w": 12,
-            "x": 0,
-            "y": 83
-          },
-          "id": 65,
-          "legend": {
-            "alignAsTable": true,
-            "avg": true,
-            "current": true,
-            "max": true,
-            "min": false,
-            "rightSide": true,
-            "show": true,
-            "total": false,
-            "values": true
-          },
-          "lines": true,
-          "linewidth": 1,
-          "links": [],
-          "nullPointMode": "null",
-          "percentage": false,
-          "pointradius": 5,
-          "points": false,
-          "renderer": "flot",
-          "seriesOverrides": [],
-          "spaceLength": 10,
-          "stack": false,
-          "steppedLine": false,
-          "targets": [
-            {
-              "expr": "sum by (instance)(irate(node_disk_read_bytes_total{cluster='$cluster'}[$interval]))",
-              "format": "time_series",
-              "intervalFactor": 1,
-              "legendFormat": "{{instance}}",
-              "refId": "A"
-            }
-          ],
-          "thresholds": [],
-          "timeFrom": null,
-          "timeShift": null,
-          "title": "Node Out",
-          "tooltip": {
-            "shared": true,
-            "sort": 0,
-            "value_type": "individual"
-          },
-          "type": "graph",
-          "xaxis": {
-            "buckets": null,
-            "mode": "time",
-            "name": null,
-            "show": true,
-            "values": []
-          },
-          "yaxes": [
-            {
-              "format": "decbytes",
-              "label": null,
-              "logBase": 1,
-              "max": null,
-              "min": null,
-              "show": true
-            },
-            {
-              "format": "short",
-              "label": null,
-              "logBase": 1,
-              "max": null,
-              "min": null,
-              "show": true
-            }
-          ],
-          "yaxis": {
-            "align": false,
-            "alignLevel": null
-          }
-        },
-        {
-          "aliasColors": {},
-          "bars": false,
-          "dashLength": 10,
-          "dashes": false,
-          "datasource": "${DS_CEPHTHANOS}",
-          "fill": 1,
-          "gridPos": {
-            "h": 9,
-            "w": 12,
-            "x": 12,
-            "y": 83
-          },
-          "id": 66,
-          "legend": {
-            "alignAsTable": true,
-            "avg": true,
-            "current": true,
-            "max": true,
-            "min": false,
-            "rightSide": true,
-            "show": true,
-            "total": false,
-            "values": true
-          },
-          "lines": true,
-          "linewidth": 1,
-          "links": [],
-          "nullPointMode": "null",
-          "percentage": false,
-          "pointradius": 5,
-          "points": false,
-          "renderer": "flot",
-          "seriesOverrides": [],
-          "spaceLength": 10,
-          "stack": false,
-          "steppedLine": false,
-          "targets": [
-            {
-              "expr": "sum by (instance)(irate(node_disk_written_bytes_total{cluster='$cluster'}[$interval]))",
-              "format": "time_series",
-              "intervalFactor": 1,
-              "legendFormat": "{{instance}}",
-              "refId": "A"
-            }
-          ],
-          "thresholds": [],
-          "timeFrom": null,
-          "timeShift": null,
-          "title": "Node In",
-          "tooltip": {
-            "shared": true,
-            "sort": 0,
-            "value_type": "individual"
-          },
-          "type": "graph",
-          "xaxis": {
-            "buckets": null,
-            "mode": "time",
-            "name": null,
-            "show": true,
-            "values": []
-          },
-          "yaxes": [
-            {
-              "format": "decbytes",
-              "label": null,
-              "logBase": 1,
-              "max": null,
-              "min": null,
-              "show": true
-            },
-            {
-              "format": "short",
-              "label": null,
-              "logBase": 1,
-              "max": null,
-              "min": null,
-              "show": true
-            }
-          ],
-          "yaxis": {
-            "align": false,
-            "alignLevel": null
-          }
-        },
-        {
-          "aliasColors": {},
-          "bars": false,
-          "dashLength": 10,
-          "dashes": false,
-          "datasource": "${DS_CEPHTHANOS}",
-          "fill": 1,
-          "gridPos": {
-            "h": 9,
-            "w": 12,
-            "x": 0,
-            "y": 92
-          },
-          "id": 68,
-          "legend": {
-            "avg": false,
-            "current": false,
-            "max": false,
-            "min": false,
-            "show": true,
-            "total": false,
-            "values": false
-          },
-          "lines": true,
-          "linewidth": 1,
-          "links": [],
-          "nullPointMode": "null",
-          "percentage": false,
-          "pointradius": 5,
-          "points": false,
-          "renderer": "flot",
-          "seriesOverrides": [],
-          "spaceLength": 10,
-          "stack": false,
-          "steppedLine": false,
-          "targets": [
-            {
-              "expr": "(node_filesystem_free_bytes{cluster=\"$cluster\", mountpoint='/', device != 'rootfs'})*100 / (node_filesystem_size_bytes{cluster=\"$cluster\", mountpoint='/', device != 'rootfs'})",
-              "format": "time_series",
-              "intervalFactor": 1,
-              "legendFormat": "{{instance}}",
-              "refId": "A"
-            }
-          ],
-          "thresholds": [],
-          "timeFrom": null,
-          "timeShift": null,
-          "title": "Free Space in root filesystem",
-          "tooltip": {
-            "shared": true,
-            "sort": 0,
-            "value_type": "individual"
-          },
-          "type": "graph",
-          "xaxis": {
-            "buckets": null,
-            "mode": "time",
-            "name": null,
-            "show": true,
-            "values": []
-          },
-          "yaxes": [
-            {
-              "format": "percent",
-              "label": null,
-              "logBase": 1,
-              "max": null,
-              "min": null,
-              "show": true
-            },
-            {
-              "format": "short",
-              "label": null,
-              "logBase": 1,
-              "max": null,
-              "min": null,
-              "show": true
-            }
-          ],
-          "yaxis": {
-            "align": false,
-            "alignLevel": null
-          }
-        }
-      ],
-      "title": "Node Statistics (NodeExporter)",
-      "type": "row"
     }
   ],
   "refresh": "1m",
-  "schemaVersion": 16,
+  "schemaVersion": 36,
   "style": "dark",
   "tags": [
     "ceph",
@@ -5045,14 +4688,90 @@
   "templating": {
     "list": [
       {
+        "current": {
+          "selected": false,
+          "text": "VictoriaMetrics",
+          "value": "VictoriaMetrics"
+        },
+        "hide": 0,
+        "includeAll": false,
+        "label": "Data Source",
+        "multi": false,
+        "name": "DataSource",
+        "options": [],
+        "query": "prometheus",
+        "refresh": 1,
+        "regex": "",
+        "skipUrlSync": false,
+        "type": "datasource"
+      },
+      {
+        "current": {
+          "selected": false,
+          "text": "mep",
+          "value": "mep"
+        },
+        "datasource": {
+          "type": "prometheus",
+          "uid": "${DataSource}"
+        },
+        "definition": "",
+        "hide": 0,
+        "includeAll": false,
+        "multi": false,
+        "name": "cluster",
+        "options": [],
+        "query": {
+          "query": "label_values(ceph_health_status, cluster)",
+          "refId": "VictoriaMetrics-cluster-Variable-Query"
+        },
+        "refresh": 2,
+        "regex": "",
+        "skipUrlSync": false,
+        "sort": 1,
+        "tagValuesQuery": "",
+        "tagsQuery": "",
+        "type": "query",
+        "useTags": false
+      },
+      {
+        "current": {
+          "selected": false,
+          "text": "FQNOfMEP",
+          "value": "FQNOfMEP"
+        },
+        "datasource": {
+          "type": "prometheus",
+          "uid": "${DataSource}"
+        },
+        "definition": "",
+        "hide": 0,
+        "includeAll": false,
+        "multi": false,
+        "name": "node",
+        "options": [],
+        "query": {
+          "query": "label_values(ceph_health_status{cluster=\"$cluster\"}, node_name)",
+          "refId": "VictoriaMetrics-cluster_node-Variable-Query"
+        },
+        "refresh": 2,
+        "regex": "",
+        "skipUrlSync": false,
+        "sort": 1,
+        "tagValuesQuery": "",
+        "tagsQuery": "",
+        "type": "query",
+        "useTags": false
+      },
+      {
         "auto": true,
         "auto_count": 10,
         "auto_min": "1m",
         "current": {
+          "selected": false,
           "text": "auto",
           "value": "$__auto_interval_interval"
         },
-        "datasource": null,
         "hide": 0,
         "includeAll": false,
         "label": "Interval",
@@ -5134,28 +4853,6 @@
         "refresh": 2,
         "skipUrlSync": false,
         "type": "interval"
-      },
-      {
-        "allValue": "cephpolbo|cepherin|cephkelly",
-        "current": {},
-        "datasource": "${DS_CEPHTHANOS}",
-        "definition": "",
-        "hide": 0,
-        "includeAll": false,
-        "label": "cluster",
-        "multi": false,
-        "name": "cluster",
-        "options": [],
-        "query": "label_values(cluster)",
-        "refresh": 1,
-        "regex": "",
-        "skipUrlSync": false,
-        "sort": 0,
-        "tagValuesQuery": "",
-        "tags": [],
-        "tagsQuery": "",
-        "type": "query",
-        "useTags": false
       }
     ]
   },
@@ -5191,5 +4888,6 @@
   "timezone": "browser",
   "title": "Ceph - Cluster",
   "uid": "r6lloPJmz",
-  "version": 8
+  "version": 1,
+  "weekStart": ""
 }
