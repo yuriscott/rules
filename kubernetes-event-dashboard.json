@@ -22,7 +22,7 @@
     ]
   },
   "description": "Kubernetes Event Dashboard",
-  "editable": true,
+  "editable": false,
   "fiscalYearStartMonth": 0,
   "graphTooltip": 0,
   "links": [],
@@ -212,7 +212,7 @@
         "x": 6,
         "y": 1
       },
-      "id": 41,
+      "id": 16,
       "interval": "1m",
       "options": {
         "colorMode": "value",
@@ -226,7 +226,9 @@
           "fields": "",
           "values": false
         },
-        "text": {},
+        "text": {
+          "valueSize": 0
+        },
         "textMode": "auto"
       },
       "pluginVersion": "9.0.5",
@@ -237,13 +239,13 @@
             "uid": "${datasource}"
           },
           "editorMode": "code",
-          "expr": "sum(count_over_time({sourcing=\"kubernetes-event\"} | json | __error__=`` | metadata_namespace=~`$namespace` | reason=\"FailedMount\" [$__interval]))",
+          "expr": "sum(count_over_time({sourcing=\"kubernetes-event\"} | json | __error__=`` | metadata_namespace=~`$namespace` | reason=\"FailedScheduling\" [$__interval]))",
           "queryType": "range",
           "range": true,
           "refId": "A"
         }
       ],
-      "title": "Volume Mount Failed",
+      "title": "Scheduling Failed",
       "type": "stat"
     },
     {
@@ -280,7 +282,7 @@
         "x": 9,
         "y": 1
       },
-      "id": 16,
+      "id": 18,
       "interval": "1m",
       "options": {
         "colorMode": "value",
@@ -294,9 +296,7 @@
           "fields": "",
           "values": false
         },
-        "text": {
-          "valueSize": 0
-        },
+        "text": {},
         "textMode": "auto"
       },
       "pluginVersion": "9.0.5",
@@ -307,13 +307,13 @@
             "uid": "${datasource}"
           },
           "editorMode": "code",
-          "expr": "sum(count_over_time({sourcing=\"kubernetes-event\"} | json | __error__=`` | metadata_namespace=~`$namespace` | reason=\"FailedScheduling\" [$__interval]))",
+          "expr": "sum(count_over_time({sourcing=\"kubernetes-event\"} |= \"Marking for deletion Pod\" | json | __error__=`` | metadata_namespace=~`$namespace` | reason=\"TaintManagerEviction\" [$__interval]))",
           "queryType": "range",
           "range": true,
           "refId": "A"
         }
       ],
-      "title": "Scheduling Failed",
+      "title": "Pod Evicted",
       "type": "stat"
     },
     {
@@ -413,8 +413,138 @@
       "gridPos": {
         "h": 5,
         "w": 3,
-        "x": 15,
-        "y": 1
+        "x": 0,
+        "y": 6
+      },
+      "id": 42,
+      "interval": "1m",
+      "options": {
+        "colorMode": "value",
+        "graphMode": "area",
+        "justifyMode": "auto",
+        "orientation": "auto",
+        "reduceOptions": {
+          "calcs": [
+            "last"
+          ],
+          "fields": "",
+          "values": false
+        },
+        "textMode": "auto"
+      },
+      "pluginVersion": "9.0.5",
+      "targets": [
+        {
+          "datasource": {
+            "type": "loki",
+            "uid": "${datasource}"
+          },
+          "editorMode": "code",
+          "expr": "sum(count_over_time({sourcing=\"kubernetes-event\"} | json | __error__=`` |reason=\"Rebooted\" [$__interval]))",
+          "queryType": "range",
+          "range": true,
+          "refId": "A"
+        }
+      ],
+      "title": "System Rebooted",
+      "type": "stat"
+    },
+    {
+      "datasource": {
+        "type": "loki",
+        "uid": "${datasource}"
+      },
+      "fieldConfig": {
+        "defaults": {
+          "mappings": [],
+          "noValue": "0",
+          "thresholds": {
+            "mode": "absolute",
+            "steps": [
+              {
+                "color": "yellow",
+                "value": null
+              },
+              {
+                "color": "yellow",
+                "value": 0
+              }
+            ]
+          },
+          "unit": "short"
+        },
+        "overrides": []
+      },
+      "gridPos": {
+        "h": 5,
+        "w": 3,
+        "x": 3,
+        "y": 6
+      },
+      "id": 40,
+      "interval": "1m",
+      "options": {
+        "colorMode": "value",
+        "graphMode": "area",
+        "justifyMode": "auto",
+        "orientation": "auto",
+        "reduceOptions": {
+          "calcs": [
+            "last"
+          ],
+          "fields": "",
+          "values": false
+        },
+        "textMode": "auto"
+      },
+      "pluginVersion": "9.0.5",
+      "targets": [
+        {
+          "datasource": {
+            "type": "loki",
+            "uid": "${datasource}"
+          },
+          "editorMode": "code",
+          "expr": "sum(count_over_time({sourcing=\"kubernetes-event\"} | json | __error__=`` | metadata_namespace=~`$namespace` | reason=\"SuccessfulDelete\" [$__interval]))",
+          "queryType": "range",
+          "range": true,
+          "refId": "A"
+        }
+      ],
+      "title": "Resource Purged Successes",
+      "type": "stat"
+    },
+    {
+      "datasource": {
+        "type": "loki",
+        "uid": "${datasource}"
+      },
+      "fieldConfig": {
+        "defaults": {
+          "mappings": [],
+          "noValue": "0",
+          "thresholds": {
+            "mode": "absolute",
+            "steps": [
+              {
+                "color": "yellow",
+                "value": null
+              },
+              {
+                "color": "yellow",
+                "value": 0
+              }
+            ]
+          },
+          "unit": "short"
+        },
+        "overrides": []
+      },
+      "gridPos": {
+        "h": 5,
+        "w": 3,
+        "x": 6,
+        "y": 6
       },
       "id": 12,
       "interval": "1m",
@@ -480,10 +610,10 @@
       "gridPos": {
         "h": 5,
         "w": 3,
-        "x": 18,
-        "y": 1
+        "x": 9,
+        "y": 6
       },
-      "id": 18,
+      "id": 43,
       "interval": "1m",
       "options": {
         "colorMode": "value",
@@ -524,6 +654,9 @@
       },
       "fieldConfig": {
         "defaults": {
+          "color": {
+            "mode": "thresholds"
+          },
           "mappings": [],
           "noValue": "0",
           "thresholds": {
@@ -538,18 +671,17 @@
                 "value": 0
               }
             ]
-          },
-          "unit": "short"
+          }
         },
         "overrides": []
       },
       "gridPos": {
         "h": 5,
         "w": 3,
-        "x": 21,
-        "y": 1
+        "x": 12,
+        "y": 6
       },
-      "id": 40,
+      "id": 41,
       "interval": "1m",
       "options": {
         "colorMode": "value",
@@ -563,6 +695,7 @@
           "fields": "",
           "values": false
         },
+        "text": {},
         "textMode": "auto"
       },
       "pluginVersion": "9.0.5",
@@ -573,13 +706,13 @@
             "uid": "${datasource}"
           },
           "editorMode": "code",
-          "expr": "sum(count_over_time({sourcing=\"kubernetes-event\"} | json | __error__=`` | metadata_namespace=~`$namespace` | reason=\"SystemOOM\" [$__interval]))",
+          "expr": "sum(count_over_time({sourcing=\"kubernetes-event\"} | json | __error__=`` | metadata_namespace=~`$namespace` | reason=\"FailedMount\" [$__interval]))",
           "queryType": "range",
           "range": true,
           "refId": "A"
         }
       ],
-      "title": "System OOM",
+      "title": "Volume Mount Failed",
       "type": "stat"
     },
     {
@@ -638,10 +771,10 @@
         "overrides": []
       },
       "gridPos": {
-        "h": 8,
+        "h": 10,
         "w": 12,
         "x": 0,
-        "y": 6
+        "y": 11
       },
       "id": 2,
       "interval": "1m",
@@ -746,10 +879,10 @@
         ]
       },
       "gridPos": {
-        "h": 8,
+        "h": 10,
         "w": 12,
         "x": 12,
-        "y": 6
+        "y": 11
       },
       "id": 4,
       "interval": "1m",
@@ -790,7 +923,7 @@
         "h": 1,
         "w": 24,
         "x": 0,
-        "y": 14
+        "y": 21
       },
       "id": 30,
       "panels": [],
@@ -907,7 +1040,7 @@
         "h": 14,
         "w": 6,
         "x": 0,
-        "y": 15
+        "y": 22
       },
       "id": 26,
       "interval": "1m",
@@ -975,7 +1108,7 @@
         "h": 14,
         "w": 6,
         "x": 6,
-        "y": 15
+        "y": 22
       },
       "id": 28,
       "interval": "1m",
@@ -1041,7 +1174,7 @@
         "h": 14,
         "w": 6,
         "x": 12,
-        "y": 15
+        "y": 22
       },
       "id": 20,
       "interval": "1m",
@@ -1107,7 +1240,7 @@
         "h": 14,
         "w": 6,
         "x": 18,
-        "y": 15
+        "y": 22
       },
       "id": 22,
       "interval": "1m",
@@ -1154,7 +1287,7 @@
         "h": 1,
         "w": 24,
         "x": 0,
-        "y": 29
+        "y": 36
       },
       "id": 34,
       "panels": [],
@@ -1309,7 +1442,7 @@
         "h": 13,
         "w": 24,
         "x": 0,
-        "y": 30
+        "y": 37
       },
       "id": 36,
       "links": [],
@@ -1422,7 +1555,7 @@
         "h": 1,
         "w": 24,
         "x": 0,
-        "y": 43
+        "y": 50
       },
       "id": 38,
       "panels": [],
@@ -1438,7 +1571,7 @@
         "h": 13,
         "w": 24,
         "x": 0,
-        "y": 44
+        "y": 51
       },
       "id": 8,
       "options": {
@@ -1560,6 +1693,6 @@
   "timezone": "",
   "title": "Kubernetes Event Dashboard",
   "uid": "kubernetes-event-dashboard",
-  "version": 1,
+  "version": 0,
   "weekStart": ""
 }
