@@ -391,6 +391,117 @@
       },
       "fieldConfig": {
         "defaults": {
+          "color": {
+            "mode": "palette-classic"
+          },
+          "custom": {
+            "axisLabel": "",
+            "axisPlacement": "auto",
+            "barAlignment": 0,
+            "drawStyle": "line",
+            "fillOpacity": 29,
+            "gradientMode": "hue",
+            "hideFrom": {
+              "legend": false,
+              "tooltip": false,
+              "viz": false
+            },
+            "lineInterpolation": "smooth",
+            "lineWidth": 1,
+            "pointSize": 5,
+            "scaleDistribution": {
+              "type": "linear"
+            },
+            "showPoints": "auto",
+            "spanNulls": true,
+            "stacking": {
+              "group": "A",
+              "mode": "none"
+            },
+            "thresholdsStyle": {
+              "mode": "off"
+            }
+          },
+          "mappings": [],
+          "thresholds": {
+            "mode": "absolute",
+            "steps": [
+              {
+                "color": "red",
+                "value": null
+              },
+              {
+                "color": "red",
+                "value": 1
+              }
+            ]
+          },
+          "unit": "short"
+        },
+        "overrides": [
+          {
+            "matcher": {
+              "id": "byName",
+              "options": "Warning"
+            },
+            "properties": [
+              {
+                "id": "color",
+                "value": {
+                  "fixedColor": "red",
+                  "mode": "fixed"
+                }
+              }
+            ]
+          }
+        ]
+      },
+      "gridPos": {
+        "h": 10,
+        "w": 9,
+        "x": 15,
+        "y": 1
+      },
+      "id": 4,
+      "interval": "1m",
+      "options": {
+        "legend": {
+          "calcs": [
+            "sum"
+          ],
+          "displayMode": "list",
+          "placement": "bottom",
+          "showLegend": true
+        },
+        "tooltip": {
+          "mode": "single",
+          "sort": "none"
+        }
+      },
+      "targets": [
+        {
+          "datasource": {
+            "type": "loki",
+            "uid": "${datasource}"
+          },
+          "editorMode": "code",
+          "expr": "sum(count_over_time({sourcing=\"kubernetes-event\",sourcing=\"kubernetes-event\"} | json | __error__=`` | metadata_namespace=~`$namespace` | type=\"Warning\" [$__interval]))",
+          "legendFormat": "Warning",
+          "queryType": "range",
+          "range": true,
+          "refId": "A"
+        }
+      ],
+      "title": "Warnings",
+      "type": "timeseries"
+    },
+    {
+      "datasource": {
+        "type": "loki",
+        "uid": "${datasource}"
+      },
+      "fieldConfig": {
+        "defaults": {
           "mappings": [],
           "noValue": "0",
           "thresholds": {
@@ -809,70 +920,95 @@
     {
       "datasource": {
         "type": "loki",
-        "uid": "${datasource}"
+        "uid": "P8E80F9AEF21F6940"
       },
       "fieldConfig": {
         "defaults": {
           "color": {
-            "mode": "palette-classic"
+            "mode": "thresholds"
           },
           "custom": {
-            "axisLabel": "",
-            "axisPlacement": "auto",
-            "barAlignment": 0,
-            "drawStyle": "line",
-            "fillOpacity": 29,
-            "gradientMode": "hue",
-            "hideFrom": {
-              "legend": false,
-              "tooltip": false,
-              "viz": false
-            },
-            "lineInterpolation": "smooth",
-            "lineWidth": 1,
-            "pointSize": 5,
-            "scaleDistribution": {
-              "type": "linear"
-            },
-            "showPoints": "auto",
-            "spanNulls": true,
-            "stacking": {
-              "group": "A",
-              "mode": "none"
-            },
-            "thresholdsStyle": {
-              "mode": "off"
-            }
+            "align": "auto",
+            "displayMode": "auto",
+            "inspect": false
           },
           "mappings": [],
           "thresholds": {
             "mode": "absolute",
             "steps": [
               {
-                "color": "red",
+                "color": "green",
                 "value": null
               },
               {
                 "color": "red",
-                "value": 1
+                "value": 80
               }
             ]
-          },
-          "unit": "short"
+          }
         },
         "overrides": [
           {
             "matcher": {
               "id": "byName",
-              "options": "Warning"
+              "options": "Field"
             },
             "properties": [
               {
+                "id": "custom.align",
+                "value": "center"
+              },
+              {
+                "id": "displayName",
+                "value": "Reason"
+              },
+              {
                 "id": "color",
                 "value": {
-                  "fixedColor": "red",
+                  "fixedColor": "green",
                   "mode": "fixed"
                 }
+              },
+              {
+                "id": "custom.displayMode",
+                "value": "color-background"
+              }
+            ]
+          },
+          {
+            "matcher": {
+              "id": "byName",
+              "options": "Total"
+            },
+            "properties": [
+              {
+                "id": "custom.width"
+              },
+              {
+                "id": "custom.displayMode",
+                "value": "lcd-gauge"
+              },
+              {
+                "id": "color",
+                "value": {
+                  "mode": "continuous-GrYlRd"
+                }
+              },
+              {
+                "id": "custom.align",
+                "value": "center"
+              }
+            ]
+          },
+          {
+            "matcher": {
+              "id": "byName",
+              "options": "Reason"
+            },
+            "properties": [
+              {
+                "id": "custom.width",
+                "value": 249
               }
             ]
           }
@@ -884,38 +1020,51 @@
         "x": 12,
         "y": 11
       },
-      "id": 4,
-      "interval": "1m",
+      "id": 45,
       "options": {
-        "legend": {
-          "calcs": [
+        "footer": {
+          "enablePagination": true,
+          "fields": "",
+          "reducer": [
             "sum"
           ],
-          "displayMode": "list",
-          "placement": "bottom",
-          "showLegend": true
+          "show": false
         },
-        "tooltip": {
-          "mode": "single",
-          "sort": "none"
-        }
+        "showHeader": true,
+        "sortBy": [
+          {
+            "desc": true,
+            "displayName": "Total"
+          }
+        ]
       },
+      "pluginVersion": "9.0.5",
       "targets": [
         {
           "datasource": {
             "type": "loki",
-            "uid": "${datasource}"
+            "uid": "P8E80F9AEF21F6940"
           },
           "editorMode": "code",
-          "expr": "sum(count_over_time({sourcing=\"kubernetes-event\",sourcing=\"kubernetes-event\"} | json | __error__=`` | metadata_namespace=~`$namespace` | type=\"Warning\" [$__interval]))",
-          "legendFormat": "Warning",
+          "expr": "topk(10, sum by(reason) (count_over_time({sourcing=\"kubernetes-event\"} | json | __error__=`` [$__interval])))",
+          "legendFormat": "{{reason}}",
           "queryType": "range",
-          "range": true,
           "refId": "A"
         }
       ],
-      "title": "Warnings",
-      "type": "timeseries"
+      "title": "Kubernetes Top 10 Event",
+      "transformations": [
+        {
+          "id": "reduce",
+          "options": {
+            "reducers": [
+              "sum"
+            ]
+          }
+        }
+      ],
+      "transparent": true,
+      "type": "table"
     },
     {
       "collapsed": false,
