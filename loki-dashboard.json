@@ -25,16 +25,15 @@
   "description": "Loki metrics via 2.0",
   "editable": true,
   "fiscalYearStartMonth": 0,
-  "gnetId": null,
   "graphTooltip": 0,
-  "id": 29,
+  "id": 12,
   "links": [],
   "liveNow": false,
   "panels": [
     {
       "datasource": {
         "type": "prometheus",
-        "uid": "P4169E866C3094E38"
+        "uid": "${datasource}"
       },
       "description": "",
       "gridPos": {
@@ -54,7 +53,7 @@
         {
           "datasource": {
             "type": "prometheus",
-            "uid": "P4169E866C3094E38"
+            "uid": "${datasource}"
           },
           "expr": "loki_build_info",
           "format": "table",
@@ -70,7 +69,7 @@
     {
       "datasource": {
         "type": "prometheus",
-        "uid": "P4169E866C3094E38"
+        "uid": "${datasource}"
       },
       "fieldConfig": {
         "defaults": {
@@ -117,7 +116,7 @@
         {
           "datasource": {
             "type": "prometheus",
-            "uid": "P4169E866C3094E38"
+            "uid": "${datasource}"
           },
           "expr": "loki_build_info",
           "format": "table",
@@ -133,7 +132,7 @@
     {
       "datasource": {
         "type": "prometheus",
-        "uid": "P4169E866C3094E38"
+        "uid": "${datasource}"
       },
       "fieldConfig": {
         "defaults": {
@@ -180,7 +179,7 @@
         {
           "datasource": {
             "type": "prometheus",
-            "uid": "P4169E866C3094E38"
+            "uid": "${datasource}"
           },
           "expr": "sum(loki_log_messages_total)",
           "instant": false,
@@ -195,7 +194,7 @@
     {
       "datasource": {
         "type": "prometheus",
-        "uid": "P4169E866C3094E38"
+        "uid": "${datasource}"
       },
       "fieldConfig": {
         "defaults": {
@@ -242,7 +241,7 @@
         {
           "datasource": {
             "type": "prometheus",
-            "uid": "P4169E866C3094E38"
+            "uid": "${datasource}"
           },
           "expr": "sum(loki_store_series_total)",
           "instant": false,
@@ -257,7 +256,7 @@
     {
       "datasource": {
         "type": "prometheus",
-        "uid": "P4169E866C3094E38"
+        "uid": "${datasource}"
       },
       "fieldConfig": {
         "defaults": {
@@ -304,7 +303,7 @@
         {
           "datasource": {
             "type": "prometheus",
-            "uid": "P4169E866C3094E38"
+            "uid": "${datasource}"
           },
           "expr": "sum(loki_ingester_chunk_stored_bytes_total)",
           "instant": true,
@@ -319,7 +318,7 @@
     {
       "datasource": {
         "type": "prometheus",
-        "uid": "P4169E866C3094E38"
+        "uid": "${datasource}"
       },
       "fieldConfig": {
         "defaults": {
@@ -366,7 +365,7 @@
         {
           "datasource": {
             "type": "prometheus",
-            "uid": "P4169E866C3094E38"
+            "uid": "${datasource}"
           },
           "expr": "sum(loki_panic_total)",
           "instant": false,
@@ -381,7 +380,7 @@
     {
       "datasource": {
         "type": "prometheus",
-        "uid": "P4169E866C3094E38"
+        "uid": "${datasource}"
       },
       "fieldConfig": {
         "defaults": {
@@ -428,7 +427,7 @@
         {
           "datasource": {
             "type": "prometheus",
-            "uid": "P4169E866C3094E38"
+            "uid": "${datasource}"
           },
           "expr": "sum(up{namespace=\"ns-mec-logging\",job=\"loki-headless\"})",
           "instant": false,
@@ -443,7 +442,7 @@
     {
       "datasource": {
         "type": "prometheus",
-        "uid": "P4169E866C3094E38"
+        "uid": "${datasource}"
       },
       "description": "",
       "fieldConfig": {
@@ -491,7 +490,7 @@
         {
           "datasource": {
             "type": "prometheus",
-            "uid": "P4169E866C3094E38"
+            "uid": "${datasource}"
           },
           "expr": "sum(up{namespace=\"ns-mec-logging\",job=\"loki-promtail-metrics\"})",
           "instant": false,
@@ -506,7 +505,7 @@
     {
       "datasource": {
         "type": "prometheus",
-        "uid": "P4169E866C3094E38"
+        "uid": "${datasource}"
       },
       "description": "",
       "fieldConfig": {
@@ -561,7 +560,7 @@
         {
           "datasource": {
             "type": "prometheus",
-            "uid": "P4169E866C3094E38"
+            "uid": "${datasource}"
           },
           "editorMode": "code",
           "expr": "sum(go_gc_duration_seconds{namespace=\"$namespace\"})",
@@ -573,7 +572,7 @@
         {
           "datasource": {
             "type": "prometheus",
-            "uid": "P4169E866C3094E38"
+            "uid": "${datasource}"
           },
           "editorMode": "code",
           "expr": "sum(go_goroutines{namespace=\"$namespace\"})",
@@ -612,7 +611,8 @@
             "lineWidth": 1,
             "pointSize": 5,
             "scaleDistribution": {
-              "type": "linear"
+              "log": 10,
+              "type": "log"
             },
             "showPoints": "auto",
             "spanNulls": false,
@@ -725,7 +725,8 @@
             "lineWidth": 1,
             "pointSize": 5,
             "scaleDistribution": {
-              "type": "linear"
+              "log": 10,
+              "type": "log"
             },
             "showPoints": "auto",
             "spanNulls": false,
@@ -835,7 +836,8 @@
             "lineWidth": 1,
             "pointSize": 5,
             "scaleDistribution": {
-              "type": "linear"
+              "log": 2,
+              "type": "log"
             },
             "showPoints": "auto",
             "spanNulls": false,
@@ -860,7 +862,8 @@
                 "value": 80
               }
             ]
-          }
+          },
+          "unit": "bytes"
         },
         "overrides": []
       },
@@ -888,7 +891,10 @@
             "type": "prometheus",
             "uid": "${datasource}"
           },
+          "editorMode": "code",
           "expr": "sum by(pod) (go_memstats_heap_inuse_bytes{namespace=\"$namespace\"})",
+          "legendFormat": "{{pod}}",
+          "range": true,
           "refId": "A"
         }
       ],
@@ -915,7 +921,7 @@
       "dashes": false,
       "datasource": {
         "type": "prometheus",
-        "uid": "P4169E866C3094E38"
+        "uid": "${datasource}"
       },
       "fieldConfig": {
         "defaults": {
@@ -962,7 +968,7 @@
         {
           "datasource": {
             "type": "prometheus",
-            "uid": "P4169E866C3094E38"
+            "uid": "${datasource}"
           },
           "expr": "sum(irate(loki_log_messages_total[$__rate_interval])) by (level)",
           "interval": "",
@@ -1009,7 +1015,7 @@
       "dashes": false,
       "datasource": {
         "type": "prometheus",
-        "uid": "P4169E866C3094E38"
+        "uid": "${datasource}"
       },
       "fieldConfig": {
         "defaults": {
@@ -1060,7 +1066,7 @@
         {
           "datasource": {
             "type": "prometheus",
-            "uid": "P4169E866C3094E38"
+            "uid": "${datasource}"
           },
           "expr": "histogram_quantile(0.95, sum(rate(loki_request_duration_seconds[$__rate_interval])) by (le,operation))",
           "interval": "",
@@ -1107,7 +1113,7 @@
       "dashes": false,
       "datasource": {
         "type": "prometheus",
-        "uid": "P4169E866C3094E38"
+        "uid": "${datasource}"
       },
       "fieldConfig": {
         "defaults": {
@@ -1158,7 +1164,7 @@
         {
           "datasource": {
             "type": "prometheus",
-            "uid": "P4169E866C3094E38"
+            "uid": "${datasource}"
           },
           "expr": "histogram_quantile(0.95, sum(rate(loki_logql_querystats_bytes_processed_per_seconds_bucket[$__rate_interval])) by (le,type))",
           "interval": "",
@@ -1205,7 +1211,7 @@
       "dashes": false,
       "datasource": {
         "type": "prometheus",
-        "uid": "P4169E866C3094E38"
+        "uid": "${datasource}"
       },
       "fieldConfig": {
         "defaults": {
@@ -1256,7 +1262,7 @@
         {
           "datasource": {
             "type": "prometheus",
-            "uid": "P4169E866C3094E38"
+            "uid": "${datasource}"
           },
           "expr": "histogram_quantile(0.95, sum(rate(loki_logql_querystats_latency_seconds_bucket[$__rate_interval])) by (le,type))",
           "interval": "",
@@ -1299,7 +1305,7 @@
     {
       "datasource": {
         "type": "prometheus",
-        "uid": "P4169E866C3094E38"
+        "uid": "${datasource}"
       },
       "fieldConfig": {
         "defaults": {
@@ -1379,7 +1385,7 @@
         {
           "datasource": {
             "type": "prometheus",
-            "uid": "P4169E866C3094E38"
+            "uid": "${datasource}"
           },
           "expr": "histogram_quantile(0.95, sum(rate(loki_request_duration_seconds_bucket[$__rate_interval])) by (le,route))",
           "interval": "",
@@ -1394,7 +1400,7 @@
       "collapsed": false,
       "datasource": {
         "type": "prometheus",
-        "uid": "P4169E866C3094E38"
+        "uid": "${datasource}"
       },
       "gridPos": {
         "h": 1,
@@ -1408,7 +1414,7 @@
         {
           "datasource": {
             "type": "prometheus",
-            "uid": "P4169E866C3094E38"
+            "uid": "${datasource}"
           },
           "refId": "A"
         }
@@ -1419,7 +1425,7 @@
     {
       "datasource": {
         "type": "prometheus",
-        "uid": "P4169E866C3094E38"
+        "uid": "${datasource}"
       },
       "fieldConfig": {
         "defaults": {
@@ -1499,7 +1505,7 @@
         {
           "datasource": {
             "type": "prometheus",
-            "uid": "P4169E866C3094E38"
+            "uid": "${datasource}"
           },
           "editorMode": "code",
           "expr": "histogram_quantile(0.95, sum(rate(loki_cache_request_duration_seconds_bucket[$__rate_interval])) by (le,name,method))",
@@ -1514,7 +1520,7 @@
     {
       "datasource": {
         "type": "prometheus",
-        "uid": "P4169E866C3094E38"
+        "uid": "${datasource}"
       },
       "fieldConfig": {
         "defaults": {
@@ -1594,7 +1600,7 @@
         {
           "datasource": {
             "type": "prometheus",
-            "uid": "P4169E866C3094E38"
+            "uid": "${datasource}"
           },
           "expr": "histogram_quantile(0.95, sum(rate(loki_cache_value_size_bytes_bucket[$__rate_interval])) by (le,name,method))",
           "interval": "",
@@ -1612,7 +1618,7 @@
       "dashes": false,
       "datasource": {
         "type": "prometheus",
-        "uid": "P4169E866C3094E38"
+        "uid": "${datasource}"
       },
       "fill": 1,
       "fillGradient": 0,
@@ -1652,7 +1658,7 @@
         {
           "datasource": {
             "type": "prometheus",
-            "uid": "P4169E866C3094E38"
+            "uid": "${datasource}"
           },
           "expr": "rate(loki_cache_hits[$__rate_interval])",
           "interval": "",
@@ -1699,7 +1705,7 @@
       "dashes": false,
       "datasource": {
         "type": "prometheus",
-        "uid": "P4169E866C3094E38"
+        "uid": "${datasource}"
       },
       "fill": 1,
       "fillGradient": 0,
@@ -1739,7 +1745,7 @@
         {
           "datasource": {
             "type": "prometheus",
-            "uid": "P4169E866C3094E38"
+            "uid": "${datasource}"
           },
           "expr": "irate(loki_cache_fetched_keys[$__rate_interval])",
           "interval": "",
@@ -3111,7 +3117,7 @@
       "collapsed": false,
       "datasource": {
         "type": "prometheus",
-        "uid": "P4169E866C3094E38"
+        "uid": "${datasource}"
       },
       "gridPos": {
         "h": 1,
@@ -3125,7 +3131,7 @@
         {
           "datasource": {
             "type": "prometheus",
-            "uid": "P4169E866C3094E38"
+            "uid": "${datasource}"
           },
           "refId": "A"
         }
@@ -3140,7 +3146,7 @@
       "dashes": false,
       "datasource": {
         "type": "prometheus",
-        "uid": "P4169E866C3094E38"
+        "uid": "${datasource}"
       },
       "fill": 1,
       "fillGradient": 0,
@@ -3180,7 +3186,7 @@
         {
           "datasource": {
             "type": "prometheus",
-            "uid": "P4169E866C3094E38"
+            "uid": "${datasource}"
           },
           "expr": "sum by (tenant) (rate(loki_distributor_lines_received_total[5m]))",
           "interval": "",
@@ -3227,7 +3233,7 @@
       "dashes": false,
       "datasource": {
         "type": "prometheus",
-        "uid": "P4169E866C3094E38"
+        "uid": "${datasource}"
       },
       "description": "The total number of series pending in the flush queue.",
       "fill": 1,
@@ -3268,7 +3274,7 @@
         {
           "datasource": {
             "type": "prometheus",
-            "uid": "P4169E866C3094E38"
+            "uid": "${datasource}"
           },
           "editorMode": "code",
           "expr": "cortex_ingester_flush_queue_length",
@@ -3318,7 +3324,7 @@
       "dashes": false,
       "datasource": {
         "type": "prometheus",
-        "uid": "P4169E866C3094E38"
+        "uid": "${datasource}"
       },
       "fill": 1,
       "fillGradient": 0,
@@ -3358,7 +3364,7 @@
         {
           "datasource": {
             "type": "prometheus",
-            "uid": "P4169E866C3094E38"
+            "uid": "${datasource}"
           },
           "expr": "sum(rate(loki_distributor_bytes_received_total[5m])) by (tenant)",
           "interval": "",
@@ -3405,7 +3411,7 @@
       "dashes": false,
       "datasource": {
         "type": "prometheus",
-        "uid": "P4169E866C3094E38"
+        "uid": "${datasource}"
       },
       "fill": 1,
       "fillGradient": 0,
@@ -3445,7 +3451,7 @@
         {
           "datasource": {
             "type": "prometheus",
-            "uid": "P4169E866C3094E38"
+            "uid": "${datasource}"
           },
           "expr": "rate(loki_distributor_ingester_appends_total[5m])",
           "interval": "",
@@ -3455,7 +3461,7 @@
         {
           "datasource": {
             "type": "prometheus",
-            "uid": "P4169E866C3094E38"
+            "uid": "${datasource}"
           },
           "expr": "loki_distributor_ingester_append_failures_total",
           "interval": "",
@@ -3502,7 +3508,7 @@
       "dashes": false,
       "datasource": {
         "type": "prometheus",
-        "uid": "P4169E866C3094E38"
+        "uid": "${datasource}"
       },
       "fieldConfig": {
         "defaults": {
@@ -3550,7 +3556,7 @@
         {
           "datasource": {
             "type": "prometheus",
-            "uid": "P4169E866C3094E38"
+            "uid": "${datasource}"
           },
           "expr": "sum by (status) (rate(loki_store_series_total[5m]))",
           "instant": false,
@@ -3595,7 +3601,7 @@
       "collapsed": false,
       "datasource": {
         "type": "prometheus",
-        "uid": "P4169E866C3094E38"
+        "uid": "${datasource}"
       },
       "gridPos": {
         "h": 1,
@@ -3609,7 +3615,7 @@
         {
           "datasource": {
             "type": "prometheus",
-            "uid": "P4169E866C3094E38"
+            "uid": "${datasource}"
           },
           "refId": "A"
         }
@@ -3722,7 +3728,7 @@
       "dashes": false,
       "datasource": {
         "type": "prometheus",
-        "uid": "P4169E866C3094E38"
+        "uid": "${datasource}"
       },
       "fieldConfig": {
         "defaults": {
@@ -3773,7 +3779,7 @@
         {
           "datasource": {
             "type": "prometheus",
-            "uid": "P4169E866C3094E38"
+            "uid": "${datasource}"
           },
           "expr": "histogram_quantile(0.95, sum(rate(loki_ingester_chunk_size_bytes_bucket[5m])) by (le))",
           "interval": "",
@@ -3820,7 +3826,7 @@
       "dashes": false,
       "datasource": {
         "type": "prometheus",
-        "uid": "P4169E866C3094E38"
+        "uid": "${datasource}"
       },
       "fieldConfig": {
         "defaults": {
@@ -3871,7 +3877,7 @@
         {
           "datasource": {
             "type": "prometheus",
-            "uid": "P4169E866C3094E38"
+            "uid": "${datasource}"
           },
           "expr": "histogram_quantile(0.95, sum(rate(loki_ingester_chunk_entries_bucket[5m])) by (le))",
           "interval": "",
@@ -3918,7 +3924,7 @@
       "dashes": false,
       "datasource": {
         "type": "prometheus",
-        "uid": "P4169E866C3094E38"
+        "uid": "${datasource}"
       },
       "fieldConfig": {
         "defaults": {
@@ -3969,7 +3975,7 @@
         {
           "datasource": {
             "type": "prometheus",
-            "uid": "P4169E866C3094E38"
+            "uid": "${datasource}"
           },
           "expr": "histogram_quantile(0.95, sum(rate(loki_ingester_chunk_compression_ratio_bucket[5m])) by (le))",
           "interval": "",
@@ -4016,7 +4022,7 @@
       "dashes": false,
       "datasource": {
         "type": "prometheus",
-        "uid": "P4169E866C3094E38"
+        "uid": "${datasource}"
       },
       "fieldConfig": {
         "defaults": {
@@ -4067,7 +4073,7 @@
         {
           "datasource": {
             "type": "prometheus",
-            "uid": "P4169E866C3094E38"
+            "uid": "${datasource}"
           },
           "expr": "histogram_quantile(0.95, sum(rate(loki_ingester_chunk_encode_time_seconds_bucket[5m])) by (le))",
           "interval": "",
@@ -4114,7 +4120,7 @@
       "dashes": false,
       "datasource": {
         "type": "prometheus",
-        "uid": "P4169E866C3094E38"
+        "uid": "${datasource}"
       },
       "fill": 1,
       "fillGradient": 0,
@@ -4154,7 +4160,7 @@
         {
           "datasource": {
             "type": "prometheus",
-            "uid": "P4169E866C3094E38"
+            "uid": "${datasource}"
           },
           "expr": "sum by (tenan) (loki_ingester_memory_streams)",
           "interval": "",
@@ -4201,7 +4207,7 @@
       "dashes": false,
       "datasource": {
         "type": "prometheus",
-        "uid": "P4169E866C3094E38"
+        "uid": "${datasource}"
       },
       "fill": 1,
       "fillGradient": 0,
@@ -4243,7 +4249,7 @@
         {
           "datasource": {
             "type": "prometheus",
-            "uid": "P4169E866C3094E38"
+            "uid": "${datasource}"
           },
           "expr": "rate(loki_ingester_chunks_created_total[5m])",
           "interval": "",
@@ -4253,7 +4259,7 @@
         {
           "datasource": {
             "type": "prometheus",
-            "uid": "P4169E866C3094E38"
+            "uid": "${datasource}"
           },
           "expr": "sum by (reason) (rate(loki_ingester_chunks_flushed_total[5m]))",
           "interval": "",
@@ -4263,7 +4269,7 @@
         {
           "datasource": {
             "type": "prometheus",
-            "uid": "P4169E866C3094E38"
+            "uid": "${datasource}"
           },
           "expr": "sum by (fake) (rate(loki_ingester_chunks_stored_total[5m]))",
           "interval": "",
@@ -4273,7 +4279,7 @@
         {
           "datasource": {
             "type": "prometheus",
-            "uid": "P4169E866C3094E38"
+            "uid": "${datasource}"
           },
           "expr": "",
           "interval": "",
@@ -4320,7 +4326,7 @@
       "dashes": false,
       "datasource": {
         "type": "prometheus",
-        "uid": "P4169E866C3094E38"
+        "uid": "${datasource}"
       },
       "fill": 1,
       "fillGradient": 0,
@@ -4360,7 +4366,7 @@
         {
           "datasource": {
             "type": "prometheus",
-            "uid": "P4169E866C3094E38"
+            "uid": "${datasource}"
           },
           "expr": "loki_ingester_memory_chunks",
           "interval": "",
@@ -4407,7 +4413,7 @@
       "dashes": false,
       "datasource": {
         "type": "prometheus",
-        "uid": "P4169E866C3094E38"
+        "uid": "${datasource}"
       },
       "fill": 1,
       "fillGradient": 0,
@@ -4449,7 +4455,7 @@
         {
           "datasource": {
             "type": "prometheus",
-            "uid": "P4169E866C3094E38"
+            "uid": "${datasource}"
           },
           "expr": "rate(loki_ingester_streams_created_total[5m])",
           "interval": "",
@@ -4459,7 +4465,7 @@
         {
           "datasource": {
             "type": "prometheus",
-            "uid": "P4169E866C3094E38"
+            "uid": "${datasource}"
           },
           "expr": "rate(loki_ingester_streams_removed_total[5m])",
           "interval": "",
@@ -4506,7 +4512,7 @@
       "dashes": false,
       "datasource": {
         "type": "prometheus",
-        "uid": "P4169E866C3094E38"
+        "uid": "${datasource}"
       },
       "fill": 1,
       "fillGradient": 0,
@@ -4548,7 +4554,7 @@
         {
           "datasource": {
             "type": "prometheus",
-            "uid": "P4169E866C3094E38"
+            "uid": "${datasource}"
           },
           "editorMode": "code",
           "expr": "rate(loki_distributor_lines_received_total[$__rate_interval])",
