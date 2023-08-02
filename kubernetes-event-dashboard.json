@@ -25,7 +25,7 @@
   "editable": true,
   "fiscalYearStartMonth": 0,
   "graphTooltip": 0,
-  "id": 36,
+  "id": 10,
   "links": [],
   "liveNow": false,
   "panels": [
@@ -1118,6 +1118,13 @@
       },
       "id": 2,
       "interval": "1m",
+      "links": [
+        {
+          "targetBlank": true,
+          "title": "Event Query",
+          "url": "/explore?orgId=1&left={\"datasource\":\"Loki\",\"queries\":[{\"refId\":\"A\",\"editorMode\":\"builder\",\"expr\":\"{sourcing=\\\"kubernetes-event\\\"} | json | __error__=`` | metadata_namespace=~`$namespace`\",\"queryType\":\"range\"}],\"range\":{\"from\":\"now-1h\",\"to\":\"now\"}}\n"
+        }
+      ],
       "options": {
         "legend": {
           "calcs": [],
@@ -2138,8 +2145,8 @@
     ]
   },
   "timezone": "",
-  "title": "Kubernetes Event Dashboard Copy",
-  "uid": "1T1_r9q4k",
-  "version": 1,
+  "title": "Kubernetes Event Dashboard",
+  "uid": "kubernetes-event-dashboard",
+  "version": 0,
   "weekStart": ""
 }
