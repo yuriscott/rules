@@ -22,9 +22,10 @@
     ]
   },
   "description": "Kubernetes Event Dashboard",
-  "editable": false,
+  "editable": true,
   "fiscalYearStartMonth": 0,
   "graphTooltip": 0,
+  "id": 36,
   "links": [],
   "liveNow": false,
   "panels": [
@@ -77,6 +78,13 @@
       },
       "id": 6,
       "interval": "1m",
+      "links": [
+        {
+          "targetBlank": true,
+          "title": "Event Query",
+          "url": "/explore?orgId=1&left={\"datasource\":\"Loki\",\"queries\":[{\"refId\":\"A\",\"editorMode\":\"builder\",\"expr\":\"{sourcing=\\\"kubernetes-event\\\"} |= \\\"Error: ImagePullBackOff\\\" | json | __error__=`` | metadata_namespace=~`$namespace` | reason=\\\"Failed\\\" \",\"queryType\":\"range\"}],\"range\":{\"from\":\"now-1h\",\"to\":\"now\"}}"
+        }
+      ],
       "options": {
         "colorMode": "value",
         "graphMode": "area",
@@ -99,8 +107,8 @@
             "type": "loki",
             "uid": "${datasource}"
           },
-          "editorMode": "code",
-          "expr": "sum(count_over_time({sourcing=\"kubernetes-event\"} |= \"Error: ImagePullBackOff\" | json | __error__=`` | metadata_namespace=~`$namespace` | reason=\"Failed\"  | line_format \"{{ .message }}\" [$__interval]))",
+          "editorMode": "builder",
+          "expr": "sum(count_over_time({sourcing=\"kubernetes-event\"} |= `Error: ImagePullBackOff` | json | __error__=`` | metadata_namespace=~`$namespace` | reason=`Failed` | line_format `{{ .message }}` [$__interval]))",
           "legendFormat": "",
           "queryType": "range",
           "range": true,
@@ -146,6 +154,13 @@
       },
       "id": 14,
       "interval": "1m",
+      "links": [
+        {
+          "targetBlank": true,
+          "title": "Event Query",
+          "url": "/explore?orgId=1&left={\"datasource\":\"Loki\",\"queries\":[{\"refId\":\"A\",\"editorMode\":\"builder\",\"expr\":\"{sourcing=\\\"kubernetes-event\\\"} |=\\\"failed liveness probe\\\" | json | __error__=`` | metadata_namespace=~`$namespace` | reason=\\\"Killing\\\"\",\"queryType\":\"range\"}],\"range\":{\"from\":\"now-1h\",\"to\":\"now\"}}"
+        }
+      ],
       "options": {
         "colorMode": "value",
         "graphMode": "area",
@@ -168,8 +183,8 @@
             "type": "loki",
             "uid": "${datasource}"
           },
-          "editorMode": "code",
-          "expr": "sum(count_over_time({sourcing=\"kubernetes-event\"} |= \"failed liveness probe\" | json | __error__=`` | metadata_namespace=~`$namespace` | reason=\"Killing\" [$__interval]))",
+          "editorMode": "builder",
+          "expr": "sum(count_over_time({sourcing=\"kubernetes-event\"} |= `failed liveness probe` | json | __error__=`` | metadata_namespace=~`$namespace` | reason=`Killing` [$__interval]))",
           "queryType": "range",
           "range": true,
           "refId": "A"
@@ -212,8 +227,90 @@
         "x": 6,
         "y": 1
       },
+      "id": 46,
+      "interval": "1m",
+      "links": [
+        {
+          "targetBlank": true,
+          "title": "Event Query",
+          "url": "/explore?orgId=1&left={\"datasource\":\"Loki\",\"queries\":[{\"refId\":\"A\",\"editorMode\":\"builder\",\"expr\":\"{sourcing=\\\"kubernetes-event\\\"} |= `Readiness probe failed` | json | __error__=`` | metadata_namespace=~`$namespace` | reason=`Unhealthy`\",\"queryType\":\"range\"}],\"range\":{\"from\":\"now-1h\",\"to\":\"now\"}}"
+        }
+      ],
+      "options": {
+        "colorMode": "value",
+        "graphMode": "area",
+        "justifyMode": "auto",
+        "orientation": "auto",
+        "reduceOptions": {
+          "calcs": [
+            "last"
+          ],
+          "fields": "",
+          "values": false
+        },
+        "text": {},
+        "textMode": "auto"
+      },
+      "pluginVersion": "9.0.5",
+      "targets": [
+        {
+          "datasource": {
+            "type": "loki",
+            "uid": "${datasource}"
+          },
+          "editorMode": "builder",
+          "expr": "sum(count_over_time({sourcing=\"kubernetes-event\"} |= `Readiness probe failed` | json | __error__=`` | metadata_namespace=~`$namespace` | reason=`Unhealthy` [$__interval]))",
+          "queryType": "range",
+          "range": true,
+          "refId": "A"
+        }
+      ],
+      "title": "Readness Probe Failed",
+      "type": "stat"
+    },
+    {
+      "datasource": {
+        "type": "loki",
+        "uid": "${datasource}"
+      },
+      "fieldConfig": {
+        "defaults": {
+          "color": {
+            "mode": "thresholds"
+          },
+          "mappings": [],
+          "noValue": "0",
+          "thresholds": {
+            "mode": "absolute",
+            "steps": [
+              {
+                "color": "yellow",
+                "value": null
+              },
+              {
+                "color": "yellow",
+                "value": 0
+              }
+            ]
+          }
+        },
+        "overrides": []
+      },
+      "gridPos": {
+        "h": 5,
+        "w": 3,
+        "x": 9,
+        "y": 1
+      },
       "id": 16,
       "interval": "1m",
+      "links": [
+        {
+          "targetBlank": true,
+          "title": "Event Query",
+          "url": "/explore?orgId=1&left={\"datasource\":\"Loki\",\"queries\":[{\"refId\":\"A\",\"editorMode\":\"builder\",\"expr\":\"{sourcing=\\\"kubernetes-event\\\"} | json | __error__=`` | metadata_namespace=~`$namespace` | reason=\\\"FailedScheduling\\\"\",\"queryType\":\"range\"}],\"range\":{\"from\":\"now-1h\",\"to\":\"now\"}}"
+        }
+      ],
       "options": {
         "colorMode": "value",
         "graphMode": "area",
@@ -238,8 +335,8 @@
             "type": "loki",
             "uid": "${datasource}"
           },
-          "editorMode": "code",
-          "expr": "sum(count_over_time({sourcing=\"kubernetes-event\"} | json | __error__=`` | metadata_namespace=~`$namespace` | reason=\"FailedScheduling\" [$__interval]))",
+          "editorMode": "builder",
+          "expr": "sum(count_over_time({sourcing=\"kubernetes-event\"} | json | __error__=`` | metadata_namespace=~`$namespace` | reason=`FailedScheduling` [$__interval]))",
           "queryType": "range",
           "range": true,
           "refId": "A"
@@ -279,11 +376,17 @@
       "gridPos": {
         "h": 5,
         "w": 3,
-        "x": 9,
+        "x": 12,
         "y": 1
       },
       "id": 18,
       "interval": "1m",
+      "links": [
+        {
+          "title": "Event Query",
+          "url": "/explore?orgId=1&left={\"datasource\":\"Loki\",\"queries\":[{\"refId\":\"A\",\"editorMode\":\"builder\",\"expr\":\"{sourcing=\\\"kubernetes-event\\\"}|= \\\"Marking for deletion Pod\\\" | json | __error__=`` | metadata_namespace=~`$namespace` | reason=\\\"TaintManagerEviction\\\"\",\"queryType\":\"range\"}],\"range\":{\"from\":\"now-1h\",\"to\":\"now\"}}"
+        }
+      ],
       "options": {
         "colorMode": "value",
         "graphMode": "area",
@@ -347,11 +450,18 @@
       "gridPos": {
         "h": 5,
         "w": 3,
-        "x": 12,
+        "x": 15,
         "y": 1
       },
       "id": 10,
       "interval": "1m",
+      "links": [
+        {
+          "targetBlank": true,
+          "title": "Event Query",
+          "url": "/explore?orgId=1&left={\"datasource\":\"Loki\",\"queries\":[{\"refId\":\"A\",\"editorMode\":\"builder\",\"expr\":\"{sourcing=\\\"kubernetes-event\\\"} | json | __error__=`` | metadata_namespace=~`$namespace` | reason=\\\"OOMKilling\\\"\",\"queryType\":\"range\"}],\"range\":{\"from\":\"now-1h\",\"to\":\"now\"}}"
+        }
+      ],
       "options": {
         "colorMode": "value",
         "graphMode": "area",
@@ -374,8 +484,8 @@
             "type": "loki",
             "uid": "${datasource}"
           },
-          "editorMode": "code",
-          "expr": "sum(count_over_time({sourcing=\"kubernetes-event\"} | json | __error__=`` | metadata_namespace=~`$namespace` | reason=\"OOMKilling\" [$__interval]))",
+          "editorMode": "builder",
+          "expr": "sum(count_over_time({sourcing=\"kubernetes-event\"} | json | __error__=`` | metadata_namespace=~`$namespace` | reason=`OOMKilling` [$__interval]))",
           "queryType": "range",
           "range": true,
           "refId": "A"
@@ -458,12 +568,19 @@
       },
       "gridPos": {
         "h": 10,
-        "w": 9,
-        "x": 15,
+        "w": 6,
+        "x": 18,
         "y": 1
       },
       "id": 4,
       "interval": "1m",
+      "links": [
+        {
+          "targetBlank": true,
+          "title": "Event Query",
+          "url": "/explore?orgId=1&left={\"datasource\":\"Loki\",\"queries\":[{\"refId\":\"A\",\"editorMode\":\"builder\",\"expr\":\"{sourcing=\\\"kubernetes-event\\\"} | json | __error__=`` | metadata_namespace=~`$namespace` | type=\\\"Warning\\\"\",\"queryType\":\"range\"}],\"range\":{\"from\":\"now-1h\",\"to\":\"now\"}}"
+        }
+      ],
       "options": {
         "legend": {
           "calcs": [
@@ -484,8 +601,8 @@
             "type": "loki",
             "uid": "${datasource}"
           },
-          "editorMode": "code",
-          "expr": "sum(count_over_time({sourcing=\"kubernetes-event\",sourcing=\"kubernetes-event\"} | json | __error__=`` | metadata_namespace=~`$namespace` | type=\"Warning\" [$__interval]))",
+          "editorMode": "builder",
+          "expr": "sum(count_over_time({sourcing=\"kubernetes-event\"} | json | __error__=`` | metadata_namespace=~`$namespace` | type=`Warning` [$__interval]))",
           "legendFormat": "Warning",
           "queryType": "range",
           "range": true,
@@ -529,6 +646,13 @@
       },
       "id": 42,
       "interval": "1m",
+      "links": [
+        {
+          "targetBlank": true,
+          "title": "Event Query",
+          "url": "/explore?orgId=1&left={\"datasource\":\"Loki\",\"queries\":[{\"refId\":\"A\",\"editorMode\":\"builder\",\"expr\":\"{sourcing=\\\"kubernetes-event\\\"} | json | __error__=`` |reason=\\\"Rebooted\\\"\",\"queryType\":\"range\"}],\"range\":{\"from\":\"now-1h\",\"to\":\"now\"}}"
+        }
+      ],
       "options": {
         "colorMode": "value",
         "graphMode": "area",
@@ -550,8 +674,8 @@
             "type": "loki",
             "uid": "${datasource}"
           },
-          "editorMode": "code",
-          "expr": "sum(count_over_time({sourcing=\"kubernetes-event\"} | json | __error__=`` |reason=\"Rebooted\" [$__interval]))",
+          "editorMode": "builder",
+          "expr": "sum(count_over_time({sourcing=\"kubernetes-event\"} | json | __error__=`` | reason=`Rebooted` [$__interval]))",
           "queryType": "range",
           "range": true,
           "refId": "A"
@@ -565,6 +689,7 @@
         "type": "loki",
         "uid": "${datasource}"
       },
+      "description": "",
       "fieldConfig": {
         "defaults": {
           "mappings": [],
@@ -594,6 +719,13 @@
       },
       "id": 40,
       "interval": "1m",
+      "links": [
+        {
+          "targetBlank": true,
+          "title": "Event Query",
+          "url": "/explore?orgId=1&left={\"datasource\":\"Loki\",\"queries\":[{\"refId\":\"A\",\"editorMode\":\"builder\",\"expr\":\"{sourcing=\\\"kubernetes-event\\\"} | json | __error__=`` | metadata_namespace=~`$namespace` | reason=\\\"SuccessfulDelete\\\"\",\"queryType\":\"range\"}],\"range\":{\"from\":\"now-1h\",\"to\":\"now\"}}"
+        }
+      ],
       "options": {
         "colorMode": "value",
         "graphMode": "area",
@@ -615,8 +747,8 @@
             "type": "loki",
             "uid": "${datasource}"
           },
-          "editorMode": "code",
-          "expr": "sum(count_over_time({sourcing=\"kubernetes-event\"} | json | __error__=`` | metadata_namespace=~`$namespace` | reason=\"SuccessfulDelete\" [$__interval]))",
+          "editorMode": "builder",
+          "expr": "sum(count_over_time({sourcing=\"kubernetes-event\"} | json | __error__=`` | metadata_namespace=~`$namespace` | reason=`SuccessfulDelete` [$__interval]))",
           "queryType": "range",
           "range": true,
           "refId": "A"
@@ -659,6 +791,13 @@
       },
       "id": 12,
       "interval": "1m",
+      "links": [
+        {
+          "targetBlank": true,
+          "title": "Event Query",
+          "url": "/explore?orgId=1&left={\"datasource\":\"Loki\",\"queries\":[{\"refId\":\"A\",\"editorMode\":\"builder\",\"expr\":\"{sourcing=\\\"kubernetes-event\\\"} | json | __error__=`` | metadata_namespace=~`$namespace` | reason=\\\"BackOff\\\"\",\"queryType\":\"range\"}],\"range\":{\"from\":\"now-1h\",\"to\":\"now\"}}"
+        }
+      ],
       "options": {
         "colorMode": "value",
         "graphMode": "area",
@@ -680,8 +819,8 @@
             "type": "loki",
             "uid": "${datasource}"
           },
-          "editorMode": "code",
-          "expr": "sum(count_over_time({sourcing=\"kubernetes-event\"} | json | __error__=`` | metadata_namespace=~`$namespace` | reason=\"BackOff\" [$__interval]))",
+          "editorMode": "builder",
+          "expr": "sum(count_over_time({sourcing=\"kubernetes-event\"} | json | __error__=`` | metadata_namespace=~`$namespace` | reason=`BackOff` [$__interval]))",
           "queryType": "range",
           "range": true,
           "refId": "A"
@@ -726,6 +865,13 @@
       },
       "id": 43,
       "interval": "1m",
+      "links": [
+        {
+          "targetBlank": true,
+          "title": "Event Query",
+          "url": "/explore?orgId=1&left={\"datasource\":\"Loki\",\"queries\":[{\"refId\":\"A\",\"editorMode\":\"builder\",\"expr\":\"{sourcing=\"kubernetes-event\"} |= \\\"Marking for deletion Pod\\\" | json | __error__=`` | metadata_namespace=~`$namespace` | reason=\\\"TaintManagerEviction\\\"\",\"queryType\":\"range\"}],\"range\":{\"from\":\"now-1h\",\"to\":\"now\"}}"
+        }
+      ],
       "options": {
         "colorMode": "value",
         "graphMode": "area",
@@ -748,8 +894,8 @@
             "type": "loki",
             "uid": "${datasource}"
           },
-          "editorMode": "code",
-          "expr": "sum(count_over_time({sourcing=\"kubernetes-event\"} |= \"Marking for deletion Pod\" | json | __error__=`` | metadata_namespace=~`$namespace` | reason=\"TaintManagerEviction\" [$__interval]))",
+          "editorMode": "builder",
+          "expr": "sum(count_over_time({sourcing=\"kubernetes-event\"} |= `Marking for deletion Pod` | json | __error__=`` | metadata_namespace=~`$namespace` | reason=`TaintManagerEviction` [$__range]))",
           "queryType": "range",
           "range": true,
           "refId": "A"
@@ -794,6 +940,13 @@
       },
       "id": 41,
       "interval": "1m",
+      "links": [
+        {
+          "targetBlank": true,
+          "title": "Event Query",
+          "url": "/explore?orgId=1&left={\"datasource\":\"Loki\",\"queries\":[{\"refId\":\"A\",\"editorMode\":\"builder\",\"expr\":\"{sourcing=\\\"kubernetes-event\\\"} | json | __error__=`` | metadata_namespace=~`$namespace` | reason=\\\"FailedMount\\\"\",\"queryType\":\"range\"}],\"range\":{\"from\":\"now-1h\",\"to\":\"now\"}}"
+        }
+      ],
       "options": {
         "colorMode": "value",
         "graphMode": "area",
@@ -816,14 +969,90 @@
             "type": "loki",
             "uid": "${datasource}"
           },
-          "editorMode": "code",
-          "expr": "sum(count_over_time({sourcing=\"kubernetes-event\"} | json | __error__=`` | metadata_namespace=~`$namespace` | reason=\"FailedMount\" [$__interval]))",
+          "editorMode": "builder",
+          "expr": "sum(count_over_time({sourcing=\"kubernetes-event\"} | json | __error__=`` | metadata_namespace=~`$namespace` | reason=`FailedMount` [$__interval]))",
           "queryType": "range",
           "range": true,
           "refId": "A"
         }
       ],
       "title": "Volume Mount Failed",
+      "type": "stat"
+    },
+    {
+      "datasource": {
+        "type": "loki",
+        "uid": "${datasource}"
+      },
+      "description": "",
+      "fieldConfig": {
+        "defaults": {
+          "color": {
+            "mode": "thresholds"
+          },
+          "mappings": [],
+          "noValue": "0",
+          "thresholds": {
+            "mode": "absolute",
+            "steps": [
+              {
+                "color": "yellow",
+                "value": null
+              },
+              {
+                "color": "yellow",
+                "value": 0
+              }
+            ]
+          }
+        },
+        "overrides": []
+      },
+      "gridPos": {
+        "h": 5,
+        "w": 3,
+        "x": 15,
+        "y": 6
+      },
+      "id": 47,
+      "interval": "1m",
+      "links": [
+        {
+          "targetBlank": true,
+          "title": "Event Query",
+          "url": "/explore?orgId=1&left={\"datasource\":\"Loki\",\"queries\":[{\"refId\":\"A\",\"editorMode\":\"builder\",\"expr\":\"{sourcing=\\\"kubernetes-event\\\"} | json | __error__=`` | metadata_namespace=~`$namespace` | reason=\\\"FailedMount\\\"\",\"queryType\":\"range\"}],\"range\":{\"from\":\"now-1h\",\"to\":\"now\"}}"
+        }
+      ],
+      "options": {
+        "colorMode": "value",
+        "graphMode": "area",
+        "justifyMode": "auto",
+        "orientation": "auto",
+        "reduceOptions": {
+          "calcs": [
+            "last"
+          ],
+          "fields": "",
+          "values": false
+        },
+        "text": {},
+        "textMode": "auto"
+      },
+      "pluginVersion": "9.0.5",
+      "targets": [
+        {
+          "datasource": {
+            "type": "loki",
+            "uid": "${datasource}"
+          },
+          "editorMode": "builder",
+          "expr": "sum(count_over_time({sourcing=\"kubernetes-event\"} | json | __error__=`` | metadata_namespace=~`$namespace` | reason=`AllocationFailed` [$__interval]))",
+          "queryType": "range",
+          "range": true,
+          "refId": "A"
+        }
+      ],
+      "title": "Allocation Failed",
       "type": "stat"
     },
     {
@@ -1008,7 +1237,17 @@
             "properties": [
               {
                 "id": "custom.width",
-                "value": 249
+                "value": 250
+              },
+              {
+                "id": "links",
+                "value": [
+                  {
+                    "targetBlank": true,
+                    "title": "Drill Down",
+                    "url": "/explore?orgId=1&left={\"datasource\":\"Loki\",\"queries\":[{\"refId\":\"A\",\"editorMode\":\"builder\",\"expr\":\"{sourcing=\\\"kubernetes-event\\\"} | json | __error__=``| metadata_namespace=~`$namespace`| reason=`${__value.text}﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿`\",\"queryType\":\"range\"}],\"range\":{\"from\":\"now-1h\",\"to\":\"now\"}}"
+                  }
+                ]
               }
             ]
           }
@@ -1045,8 +1284,8 @@
             "type": "loki",
             "uid": "P8E80F9AEF21F6940"
           },
-          "editorMode": "code",
-          "expr": "topk(10, sum by(reason) (count_over_time({sourcing=\"kubernetes-event\"} | json | __error__=`` [$__interval])))",
+          "editorMode": "builder",
+          "expr": "topk(10, sum by(reason) (count_over_time({sourcing=\"kubernetes-event\"} | json | __error__=`` | metadata_namespace=~`$namespace` [$__interval])))",
           "legendFormat": "{{reason}}",
           "queryType": "range",
           "refId": "A"
@@ -1101,45 +1340,6 @@
         },
         "overrides": [
           {
-            "matcher": {
-              "id": "byName",
-              "options": "Field"
-            },
-            "properties": [
-              {
-                "id": "color",
-                "value": {
-                  "mode": "thresholds"
-                }
-              },
-              {
-                "id": "displayName",
-                "value": "Reason"
-              },
-              {
-                "id": "color",
-                "value": {
-                  "fixedColor": "#eab839",
-                  "mode": "fixed"
-                }
-              }
-            ]
-          },
-          {
-            "matcher": {
-              "id": "byName",
-              "options": "Total"
-            },
-            "properties": [
-              {
-                "id": "color",
-                "value": {
-                  "mode": "continuous-BlYlRd"
-                }
-              }
-            ]
-          },
-          {
             "__systemRef": "hideSeriesFrom",
             "matcher": {
               "id": "byNames",
@@ -1182,6 +1382,24 @@
                 }
               }
             ]
+          },
+          {
+            "matcher": {
+              "id": "byFrameRefID",
+              "options": "A"
+            },
+            "properties": [
+              {
+                "id": "links",
+                "value": [
+                  {
+                    "targetBlank": true,
+                    "title": "Event",
+                    "url": "/explore?orgId=1&left={\"datasource\":\"Loki\",\"queries\":[{\"refId\":\"A\",\"editorMode\":\"builder\",\"expr\":\"{sourcing=\\\"kubernetes-event\\\"} | json | __error__=`` | metadata_namespace=~`$namespace` | reason=\\\"${__field.labels.reason}\\\"\",\"queryType\":\"range\"}],\"range\":{\"from\":\"now-1h\",\"to\":\"now\"}}"
+                  }
+                ]
+              }
+            ]
           }
         ]
       },
@@ -1219,8 +1437,8 @@
             "type": "loki",
             "uid": "${datasource}"
           },
-          "editorMode": "code",
-          "expr": "sum by (reason) (count_over_time({sourcing=\"kubernetes-event\"} | json | __error__=`` | metadata_namespace=~`$namespace` [$__interval]))",
+          "editorMode": "builder",
+          "expr": "sum by(reason) (count_over_time({sourcing=\"kubernetes-event\"} | json | __error__=`` | metadata_namespace=~`$namespace` [$__range]))",
           "instant": false,
           "legendFormat": "{{reason}}",
           "queryType": "range",
@@ -1251,7 +1469,26 @@
           },
           "mappings": []
         },
-        "overrides": []
+        "overrides": [
+          {
+            "matcher": {
+              "id": "byFrameRefID",
+              "options": "A"
+            },
+            "properties": [
+              {
+                "id": "links",
+                "value": [
+                  {
+                    "targetBlank": true,
+                    "title": "",
+                    "url": "/explore?orgId=1&left={\"datasource\":\"Loki\",\"queries\":[{\"refId\":\"A\",\"editorMode\":\"builder\",\"expr\":\"{sourcing=\\\"kubernetes-event\\\"} | json | __error__=`` | metadata_namespace=\\\"${__field.labels.metadata_namespace}\\\"\",\"queryType\":\"range\"}],\"range\":{\"from\":\"now-1h\",\"to\":\"now\"}}\n"
+                  }
+                ]
+              }
+            ]
+          }
+        ]
       },
       "gridPos": {
         "h": 14,
@@ -1287,8 +1524,8 @@
             "type": "loki",
             "uid": "${datasource}"
           },
-          "editorMode": "code",
-          "expr": "sum by (metadata_namespace) (count_over_time({sourcing=\"kubernetes-event\"} | json | __error__=`` | metadata_namespace=~`$namespace` [$__interval]))",
+          "editorMode": "builder",
+          "expr": "sum by(metadata_namespace) (count_over_time({sourcing=\"kubernetes-event\"} | json | __error__=`` | metadata_namespace=~`$namespace` [$__range]))",
           "legendFormat": "{{metadata_namespace}}",
           "queryType": "range",
           "range": true,
@@ -1317,7 +1554,26 @@
           },
           "mappings": []
         },
-        "overrides": []
+        "overrides": [
+          {
+            "matcher": {
+              "id": "byFrameRefID",
+              "options": "distribution"
+            },
+            "properties": [
+              {
+                "id": "links",
+                "value": [
+                  {
+                    "targetBlank": true,
+                    "title": "Event",
+                    "url": "/explore?orgId=1&left={\"datasource\":\"Loki\",\"queries\":[{\"refId\":\"A\",\"editorMode\":\"builder\",\"expr\":\"{sourcing=\\\"kubernetes-event\\\"} | json | __error__=`` | metadata_namespace=~`$namespace` | source_component=`${__field.labels.source_component}﻿﻿﻿﻿﻿`\",\"queryType\":\"range\"}],\"range\":{\"from\":\"now-1h\",\"to\":\"now\"}}"
+                  }
+                ]
+              }
+            ]
+          }
+        ]
       },
       "gridPos": {
         "h": 14,
@@ -1352,12 +1608,12 @@
             "type": "loki",
             "uid": "${datasource}"
           },
-          "editorMode": "code",
-          "expr": "sum by (source_component) (count_over_time({sourcing=\"kubernetes-event\"} | json | __error__=`` | metadata_namespace=~`$namespace` [$__interval]))",
+          "editorMode": "builder",
+          "expr": "sum by(source_component) (count_over_time({sourcing=\"kubernetes-event\"} | json | __error__=`` | metadata_namespace=~`$namespace` [$__range]))",
           "legendFormat": "{{source_component}}",
           "queryType": "range",
           "range": true,
-          "refId": "A"
+          "refId": "distribution"
         }
       ],
       "title": "Events by Source",
@@ -1383,7 +1639,26 @@
           "links": [],
           "mappings": []
         },
-        "overrides": []
+        "overrides": [
+          {
+            "matcher": {
+              "id": "byFrameRefID",
+              "options": "distribution"
+            },
+            "properties": [
+              {
+                "id": "links",
+                "value": [
+                  {
+                    "targetBlank": true,
+                    "title": "Event",
+                    "url": "/explore?orgId=1&left={\"datasource\":\"Loki\",\"queries\":[{\"refId\":\"A\",\"editorMode\":\"builder\",\"expr\":\"{sourcing=\\\"kubernetes-event\\\"} | json | __error__=`` | metadata_namespace=~`$namespace`|involvedObject_kind=`${__field.labels.involvedObject_kind}﻿﻿﻿`\",\"queryType\":\"range\"}],\"range\":{\"from\":\"now-1h\",\"to\":\"now\"}}"
+                  }
+                ]
+              }
+            ]
+          }
+        ]
       },
       "gridPos": {
         "h": 14,
@@ -1419,12 +1694,12 @@
             "type": "loki",
             "uid": "${datasource}"
           },
-          "editorMode": "code",
-          "expr": "sum by (involvedObject_kind) (count_over_time({sourcing=\"kubernetes-event\"} | json | __error__=`` | metadata_namespace=~`$namespace` [$__interval]))",
+          "editorMode": "builder",
+          "expr": "sum by(involvedObject_kind) (count_over_time({sourcing=\"kubernetes-event\"} | json | __error__=`` | metadata_namespace=~`$namespace` [$__range]))",
           "legendFormat": "{{involvedObject_kind}}",
           "queryType": "range",
           "range": true,
-          "refId": "A"
+          "refId": "distribution"
         }
       ],
       "title": "Events by Kind",
@@ -1823,7 +2098,7 @@
     ]
   },
   "time": {
-    "from": "now-1h",
+    "from": "now-6h",
     "to": "now"
   },
   "timepicker": {
@@ -1840,8 +2115,8 @@
     ]
   },
   "timezone": "",
-  "title": "Kubernetes Event Dashboard",
-  "uid": "kubernetes-event-dashboard",
+  "title": "Kubernetes Event Dashboard Copy",
+  "uid": "slJmTu3Vz",
   "version": 0,
   "weekStart": ""
 }
