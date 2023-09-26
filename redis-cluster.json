@@ -29,22 +29,20 @@
       "fieldConfig": {
         "defaults": {
           "color": {
-            "mode": "thresholds"
+            "fixedColor": "yellow",
+            "mode": "fixed"
           },
           "mappings": [],
           "thresholds": {
             "mode": "absolute",
             "steps": [
               {
-                "color": "green",
+                "color": "dark-orange",
                 "value": null
-              },
-              {
-                "color": "red",
-                "value": 80
               }
             ]
-          }
+          },
+          "unit": "s"
         },
         "overrides": []
       },
@@ -54,7 +52,7 @@
         "x": 0,
         "y": 0
       },
-      "id": 2,
+      "id": 12,
       "options": {
         "colorMode": "value",
         "graphMode": "none",
@@ -67,8 +65,10 @@
           "fields": "",
           "values": false
         },
-        "text": {},
-        "textMode": "auto"
+        "text": {
+          "valueSize": 60
+        },
+        "textMode": "value"
       },
       "pluginVersion": "9.5.1",
       "targets": [
@@ -77,14 +77,16 @@
             "type": "prometheus",
             "uid": "${datasource}"
           },
+          "editorMode": "code",
           "exemplar": true,
-          "expr": "count(redis_up{namespace=~\"$namespace\",service=~\"$service\",env=~\"$env\"})",
+          "expr": "max(redis_uptime_in_seconds{namespace=~\"$namespace\",service=~\"$service\"})",
           "interval": "",
-          "legendFormat": "",
+          "legendFormat": "__auto",
+          "range": true,
           "refId": "A"
         }
       ],
-      "title": "Redis Nodes",
+      "title": "Redis Up Time",
       "type": "stat"
     },
     {
@@ -120,7 +122,7 @@
         "x": 4,
         "y": 0
       },
-      "id": 21,
+      "id": 2,
       "options": {
         "colorMode": "value",
         "graphMode": "none",
@@ -143,16 +145,14 @@
             "type": "prometheus",
             "uid": "${datasource}"
           },
-          "editorMode": "code",
           "exemplar": true,
-          "expr": "count(redis_instance_info{namespace=~\"$namespace\",service=~\"$service\",env=~\"$env\",role=\"master\"})",
+          "expr": "count(redis_up{namespace=~\"$namespace\",service=~\"$service\",env=~\"$env\"})",
           "interval": "",
           "legendFormat": "",
-          "range": true,
           "refId": "A"
         }
       ],
-      "title": "Redis Master Nodes",
+      "title": "Redis Nodes",
       "type": "stat"
     },
     {
@@ -338,7 +338,7 @@
               },
               {
                 "color": "red",
-                "value": 0
+                "value": 80
               }
             ]
           }
@@ -351,7 +351,7 @@
         "x": 0,
         "y": 4
       },
-      "id": 4,
+      "id": 21,
       "options": {
         "colorMode": "value",
         "graphMode": "none",
@@ -374,14 +374,16 @@
             "type": "prometheus",
             "uid": "${datasource}"
           },
+          "editorMode": "code",
           "exemplar": true,
-          "expr": "sum(redis_cluster_slots_fail{namespace=~\"$namespace\",service=~\"$service\",env=~\"$env\"})",
+          "expr": "count(redis_instance_info{namespace=~\"$namespace\",service=~\"$service\",env=~\"$env\",role=\"master\"})",
           "interval": "",
           "legendFormat": "",
+          "range": true,
           "refId": "A"
         }
       ],
-      "title": "Redis Slots Failed",
+      "title": "Redis Master Nodes",
       "type": "stat"
     },
     {
@@ -608,9 +610,9 @@
           },
           "editorMode": "code",
           "exemplar": true,
-          "expr": "sum(rate(redis_net_input_bytes_total{}[$__rate_interval])) by(pod)",
+          "expr": "sum(rate(redis_net_input_bytes_total{}[$__rate_interval]))",
           "interval": "",
-          "legendFormat": "{{pod}}/incomming",
+          "legendFormat": "incomming",
           "range": true,
           "refId": "A"
         },
@@ -620,9 +622,9 @@
             "uid": "${datasource}"
           },
           "editorMode": "code",
-          "expr": "sum(rate(redis_net_output_bytes_total{}[$__rate_interval])) by(pod)",
+          "expr": "sum(rate(redis_net_output_bytes_total{}[$__rate_interval]))",
           "hide": false,
-          "legendFormat": "{{pod}}/outgoing",
+          "legendFormat": "outgoing",
           "range": true,
           "refId": "B"
         }
@@ -638,20 +640,22 @@
       "fieldConfig": {
         "defaults": {
           "color": {
-            "fixedColor": "yellow",
-            "mode": "fixed"
+            "mode": "thresholds"
           },
           "mappings": [],
           "thresholds": {
             "mode": "absolute",
             "steps": [
               {
-                "color": "dark-orange",
+                "color": "green",
                 "value": null
+              },
+              {
+                "color": "red",
+                "value": 0
               }
             ]
-          },
-          "unit": "s"
+          }
         },
         "overrides": []
       },
@@ -661,7 +665,7 @@
         "x": 0,
         "y": 8
       },
-      "id": 12,
+      "id": 4,
       "options": {
         "colorMode": "value",
         "graphMode": "none",
@@ -674,10 +678,8 @@
           "fields": "",
           "values": false
         },
-        "text": {
-          "valueSize": 60
-        },
-        "textMode": "value"
+        "text": {},
+        "textMode": "auto"
       },
       "pluginVersion": "9.5.1",
       "targets": [
@@ -686,16 +688,14 @@
             "type": "prometheus",
             "uid": "${datasource}"
           },
-          "editorMode": "code",
           "exemplar": true,
-          "expr": "max(redis_uptime_in_seconds{namespace=~\"$namespace\",service=~\"$service\"})",
+          "expr": "sum(redis_cluster_slots_fail{namespace=~\"$namespace\",service=~\"$service\",env=~\"$env\"})",
           "interval": "",
-          "legendFormat": "__auto",
-          "range": true,
+          "legendFormat": "",
           "refId": "A"
         }
       ],
-      "title": "Redis Up Time",
+      "title": "Redis Slots Failed",
       "type": "stat"
     },
     {
@@ -1723,7 +1723,7 @@
       },
       {
         "current": {
-          "selected": true,
+          "selected": false,
           "text": "redis",
           "value": "redis"
         },
@@ -1750,7 +1750,7 @@
       },
       {
         "current": {
-          "selected": true,
+          "selected": false,
           "text": "redis-cluster-metrics",
           "value": "redis-cluster-metrics"
         },
@@ -1813,6 +1813,6 @@
   "timezone": "",
   "title": "Redis Cluster Dashboard",
   "uid": "OsAINfZnk",
-  "version": 2,
+  "version": 3,
   "weekStart": ""
 }
