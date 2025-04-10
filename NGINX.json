@@ -19,14 +19,14 @@
   "editable": true,
   "fiscalYearStartMonth": 0,
   "graphTooltip": 1,
-  "id": 13,
+  "id": 26,
   "links": [],
   "panels": [
     {
       "collapsed": false,
       "datasource": {
         "type": "prometheus",
-        "uid": "$ds"
+        "uid": "${datasource}"
       },
       "gridPos": {
         "h": 1,
@@ -40,7 +40,7 @@
         {
           "datasource": {
             "type": "prometheus",
-            "uid": "$ds"
+            "uid": "${datasource}"
           },
           "refId": "A"
         }
@@ -51,7 +51,7 @@
     {
       "datasource": {
         "type": "prometheus",
-        "uid": "$ds"
+        "uid": "${prometheus}"
       },
       "description": "",
       "fieldConfig": {
@@ -76,8 +76,7 @@
             "mode": "absolute",
             "steps": [
               {
-                "color": "#E02F44",
-                "value": null
+                "color": "#E02F44"
               },
               {
                 "color": "#FF9830",
@@ -95,7 +94,7 @@
       },
       "gridPos": {
         "h": 3,
-        "w": 12,
+        "w": 24,
         "x": 0,
         "y": 1
       },
@@ -124,10 +123,10 @@
         {
           "datasource": {
             "type": "prometheus",
-            "uid": "$ds"
+            "uid": "${prometheus}"
           },
           "editorMode": "code",
-          "expr": "nginx_up{instance=~\"$instance\"}",
+          "expr": "nginx_up{addr=~\"$instance\"}",
           "format": "time_series",
           "instant": false,
           "intervalFactor": 1,
@@ -141,13 +140,13 @@
       "collapsed": false,
       "datasource": {
         "type": "prometheus",
-        "uid": "$ds"
+        "uid": "${datasource}"
       },
       "gridPos": {
         "h": 1,
         "w": 24,
         "x": 0,
-        "y": 4
+        "y": 7
       },
       "id": 6,
       "panels": [],
@@ -155,7 +154,7 @@
         {
           "datasource": {
             "type": "prometheus",
-            "uid": "$ds"
+            "uid": "${datasource}"
           },
           "refId": "A"
         }
@@ -170,7 +169,7 @@
       "dashes": false,
       "datasource": {
         "type": "prometheus",
-        "uid": "$ds"
+        "uid": "${prometheus}"
       },
       "description": "",
       "fill": 1,
@@ -179,7 +178,7 @@
         "h": 10,
         "w": 12,
         "x": 0,
-        "y": 5
+        "y": 8
       },
       "hiddenSeries": false,
       "id": 10,
@@ -214,9 +213,10 @@
         {
           "datasource": {
             "type": "prometheus",
-            "uid": "$ds"
+            "uid": "${prometheus}"
           },
-          "expr": "irate(nginx_connections_accepted{instance=~\"$instance\"}[5m])",
+          "editorMode": "code",
+          "expr": "irate(nginx_connections_accepted{addr=~\"$instance\"}[5m])",
           "format": "time_series",
           "instant": false,
           "intervalFactor": 1,
@@ -226,9 +226,10 @@
         {
           "datasource": {
             "type": "prometheus",
-            "uid": "$ds"
+            "uid": "${prometheus}"
           },
-          "expr": "irate(nginx_connections_handled{instance=~\"$instance\"}[5m])",
+          "editorMode": "code",
+          "expr": "irate(nginx_connections_handled{addr=~\"$instance\"}[5m])",
           "format": "time_series",
           "instant": false,
           "intervalFactor": 1,
@@ -276,7 +277,7 @@
       "dashes": false,
       "datasource": {
         "type": "prometheus",
-        "uid": "$ds"
+        "uid": "${prometheus}"
       },
       "decimals": 0,
       "fill": 1,
@@ -285,7 +286,7 @@
         "h": 10,
         "w": 12,
         "x": 12,
-        "y": 5
+        "y": 8
       },
       "hiddenSeries": false,
       "id": 12,
@@ -319,45 +320,53 @@
         {
           "datasource": {
             "type": "prometheus",
-            "uid": "$ds"
+            "uid": "${prometheus}"
           },
-          "expr": "nginx_connections_active{instance=~\"$instance\"}",
+          "editorMode": "code",
+          "expr": "nginx_connections_active{addr=~\"$instance\"}",
           "format": "time_series",
           "intervalFactor": 1,
           "legendFormat": "{{instance}} active",
+          "range": true,
           "refId": "A"
         },
         {
           "datasource": {
             "type": "prometheus",
-            "uid": "$ds"
+            "uid": "${prometheus}"
           },
-          "expr": "nginx_connections_reading{instance=~\"$instance\"}",
+          "editorMode": "code",
+          "expr": "nginx_connections_reading{addr=~\"$instance\"}",
           "format": "time_series",
           "intervalFactor": 1,
           "legendFormat": "{{instance}} reading",
+          "range": true,
           "refId": "B"
         },
         {
           "datasource": {
             "type": "prometheus",
-            "uid": "$ds"
+            "uid": "${prometheus}"
           },
-          "expr": "nginx_connections_waiting{instance=~\"$instance\"}",
+          "editorMode": "code",
+          "expr": "nginx_connections_waiting{addr=~\"$instance\"}",
           "format": "time_series",
           "intervalFactor": 1,
           "legendFormat": "{{instance}} waiting",
+          "range": true,
           "refId": "C"
         },
         {
           "datasource": {
             "type": "prometheus",
-            "uid": "$ds"
+            "uid": "${prometheus}"
           },
-          "expr": "nginx_connections_writing{instance=~\"$instance\"}",
+          "editorMode": "code",
+          "expr": "nginx_connections_writing{addr=~\"$instance\"}",
           "format": "time_series",
           "intervalFactor": 1,
           "legendFormat": "{{instance}} writing",
+          "range": true,
           "refId": "D"
         }
       ],
@@ -400,7 +409,7 @@
       "dashes": false,
       "datasource": {
         "type": "prometheus",
-        "uid": "$ds"
+        "uid": "${prometheus}"
       },
       "fill": 1,
       "fillGradient": 0,
@@ -408,7 +417,7 @@
         "h": 8,
         "w": 24,
         "x": 0,
-        "y": 15
+        "y": 18
       },
       "hiddenSeries": false,
       "id": 15,
@@ -440,12 +449,14 @@
         {
           "datasource": {
             "type": "prometheus",
-            "uid": "$ds"
+            "uid": "${prometheus}"
           },
-          "expr": "irate(nginx_http_requests_total{instance=~\"$instance\"}[5m])",
+          "editorMode": "code",
+          "expr": "irate(nginx_http_requests_total{addr=~\"$instance\"}[5m])",
           "format": "time_series",
           "intervalFactor": 1,
           "legendFormat": "{{instance}} total requests",
+          "range": true,
           "refId": "A"
         }
       ],
@@ -482,24 +493,20 @@
   ],
   "refresh": "5s",
   "schemaVersion": 39,
-  "tags": [
-    "nginx",
-    "prometheus",
-    "nginx prometheus exporter"
-  ],
+  "tags": [],
   "templating": {
     "list": [
       {
         "current": {
           "selected": false,
-          "text": "default",
-          "value": "default"
+          "text": "VictoriaMetrics",
+          "value": "VictoriaMetrics"
         },
         "hide": 0,
         "includeAll": false,
         "label": "Datasource",
         "multi": false,
-        "name": "PROMETHEUS",
+        "name": "prometheus",
         "options": [],
         "query": "prometheus",
         "queryValue": "",
@@ -510,30 +517,32 @@
       },
       {
         "current": {
-          "selected": false,
-          "text": "All",
-          "value": "$__all"
+            "isNone": true,
+            "selected": false,
+            "text": "None",
+            "value": ""
         },
         "datasource": {
           "type": "prometheus",
-          "uid": "$ds"
+          "uid": "${prometheus}"
         },
-        "definition": "label_values(nginx_up, instance)",
+        "definition": "label_values(nginx_up,addr)",
         "hide": 0,
-        "includeAll": true,
+        "includeAll": false,
         "label": "",
-        "multi": true,
+        "multi": false,
         "name": "instance",
         "options": [],
-        "query": "label_values(nginx_up, instance)",
+        "query": {
+          "qryType": 1,
+          "query": "label_values(nginx_up,addr)",
+          "refId": "PrometheusVariableQueryEditor-VariableQuery"
+        },
         "refresh": 1,
         "regex": "",
         "skipUrlSync": false,
         "sort": 0,
-        "tagValuesQuery": "",
-        "tagsQuery": "",
-        "type": "query",
-        "useTags": false
+        "type": "query"
       }
     ]
   },
@@ -566,9 +575,9 @@
       "30d"
     ]
   },
-  "timezone": "",
-  "title": "NGINX",
-  "uid": "nginx-dashboard",
-  "version": 5,
+  "timezone": "cst",
+  "title": "Nginx LB",
+  "uid": "feihx4ksq9loge",
+  "version": 4,
   "weekStart": ""
 }
