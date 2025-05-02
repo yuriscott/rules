@@ -1,0 +1,201 @@
+---
+# Copied from /deploy/charts/rook-ceph-cluster/prometheus/, CR header added, and indentation increased on the groups
+apiVersion: monitoring.coreos.com/v1
+kind: PrometheusRule
+metadata:
+  labels:
+    prometheus: rook-prometheus
+    role: alert-rules
+  name: prometheus-ceph-rules
+  namespace: ns-mec-monitoring
+spec:
+  groups:
+    - name: cluster health
+      rules:
+        - alert: CephHealthError
+          expr: ceph_health_status == 2
+          for: 15m
+          labels:
+            severity: critical
+            type: ceph_default
+          annotations:
+            description: >
+              Ceph in HEALTH_ERROR state for more than 5 minutes.
+              Please check "ceph health detail" for more information.
+
+        - alert: CephHealthWarning
+          expr: ceph_health_status == 1
+          for: 15m
+          labels:
+            severity: warning
+            type: ceph_default
+          annotations:
+            description: >
+              Ceph has been in HEALTH_WARN for more than 15 minutes.
+              Please check "ceph health detail" for more information.
+
+    - name: mon
+      rules:
+        - alert: CephMonDown
+          expr: sum(ceph_mon_quorum_status) < 3
+          for: 15m
+          labels:
+            severity: critical
+            type: ceph_default
+          annotations:
+            description: |
+              Monitor count in quorum is below three.
+
+              Only {{ $value }} of {{ with query "count(ceph_mon_quorum_status)" }}{{ . | first | value }}{{ end }} monitors are active.
+
+              The following monitors are down:
+              {{- range query "(ceph_mon_quorum_status == 0) + on(ceph_daemon) group_left(hostname) (ceph_mon_metadata * 0)" }}
+                - {{ .Labels.ceph_daemon }} on {{ .Labels.hostname }}
+              {{- end }}
+
+    - name: osd
+      rules:
+        - alert: CephOSDDownHigh
+          expr: count(ceph_osd_up == 0) / count(ceph_osd_up) * 100 >= 10
+          for: 15m
+          labels:
+            severity: critical
+            type: ceph_default
+          annotations:
+            description: |
+              {{ $value | humanize }}% or {{ with query "count(ceph_osd_up == 0)" }}{{ . | first | value }}{{ end }} of {{ with query "count(ceph_osd_up)" }}{{ . | first | value }}{{ end }} OSDs are down (≥ 10%).
+
+                  The following OSDs are down:
+              {{- range query "(ceph_osd_up * on(ceph_daemon) group_left(hostname) ceph_osd_metadata) == 0" }}
+                    - {{ .Labels.ceph_daemon }} on {{ .Labels.hostname }}
+              {{- end }}
+
+        - alert: CephOSDDown
+          expr: count(ceph_osd_up == 0) > 0
+          for: 15m
+          labels:
+            severity: warning
+            type: ceph_default
+          annotations:
+            description: |
+              {{ $s := "" }}{{ if gt $value 1.0 }}{{ $s = "s" }}{{ end }}
+              {{ $value }} OSD{{ $s }} down for more than 15 minutes.
+
+              {{ $value }} of {{ query "count(ceph_osd_up)" | first | value }} OSDs are down.
+
+                  The following OSD{{ $s }} {{ if eq $s "" }}is{{ else }}are{{ end }} down:
+                {{- range query "(ceph_osd_up * on(ceph_daemon) group_left(hostname) ceph_osd_metadata) == 0"}}
+                      - {{ .Labels.ceph_daemon }} on {{ .Labels.hostname }}
+                {{- end }}
+
+        - alert: CephOSDNearFull
+          expr: |
+            (
+              ((ceph_osd_stat_bytes_used / ceph_osd_stat_bytes) and on(ceph_daemon) ceph_osd_up == 1)
+              * on(ceph_daemon) group_left(hostname) ceph_osd_metadata
+            ) * 100 > 90
+          for: 15m
+          labels:
+            severity: critical
+            type: ceph_default
+          annotations:
+            description: >
+              OSD {{ $labels.ceph_daemon }} on {{ $labels.hostname }} is
+              dangerously full: {{ $value | humanize }}%
+
+        - alert: CephOSDFlapping
+          expr: |
+            (
+              rate(ceph_osd_up[5m])
+              * on(ceph_daemon) group_left(hostname) ceph_osd_metadata
+            ) * 60 > 1
+          for: 5m
+          labels:
+            severity: warning
+            type: ceph_default
+          annotations:
+            description: >
+              OSD {{ $labels.ceph_daemon }} on {{ $labels.hostname }} was
+              marked down and back up at {{ $value | humanize }} times once a
+              minute for 5 minutes.
+
+        # alert on high deviation from average PG count
+        - alert: CephPGImbalance
+          expr: |
+            abs(
+              (
+                (ceph_osd_numpg > 0) - on (job) group_left avg(ceph_osd_numpg > 0) by (job)
+              ) / on (job) group_left avg(ceph_osd_numpg > 0) by (job)
+            ) * on(ceph_daemon) group_left(hostname) ceph_osd_metadata > 0.30
+          for: 15m
+          labels:
+            severity: warning
+            type: ceph_default
+          annotations:
+            description: >
+              OSD {{ $labels.ceph_daemon }} on {{ $labels.hostname }} deviates
+              by more than 30% from average PG count.
+    - name: pgs
+      rules:
+        - alert: CephPGsInactive
+          expr: ceph_pool_metadata * on(pool_id,instance) group_left() (ceph_pg_total - ceph_pg_active) > 0
+          for: 5m
+          labels:
+            severity: critical
+            type: ceph_default
+          annotations:
+            description: >
+              {{ $value }} PGs have been inactive for more than 5 minutes in pool {{ $labels.name }}.
+                  Inactive placement groups aren't able to serve read/write
+                  requests.
+        - alert: CephPGsUnclean
+          expr: ceph_pool_metadata * on(pool_id,instance) group_left() (ceph_pg_total - ceph_pg_clean) > 0
+          for: 15m
+          labels:
+            severity: warning
+            type: ceph_default
+          annotations:
+            description: >
+              {{ $value }} PGs haven't been clean for more than 15 minutes in pool {{ $labels.name }}.
+                  Unclean PGs haven't been able to completely recover from a
+                  previous failure.
+    - name: pools
+      rules:
+        - alert: CephPoolFull
+          expr: |
+            ceph_pool_stored / (ceph_pool_stored + ceph_pool_max_avail)
+            * on(pool_id) group_right ceph_pool_metadata * 100 > 90
+          for: 15m
+          labels:
+            severity: critical
+            type: ceph_default
+          annotations:
+            description: Pool {{ $labels.name }} at {{ $value | humanize }}% capacity.
+
+        - alert: CephPoolGrowthWarning
+          expr: |
+            (
+              predict_linear(ceph_pool_stored[2d], 3600 * 24 * 5)
+              >= ceph_pool_stored + ceph_pool_max_avail
+            ) * on(pool_id) group_left(name) ceph_pool_metadata
+          for: 15m
+          labels:
+            severity: warning
+            type: ceph_default
+          annotations:
+            description: >
+              Pool {{ $labels.name }} will be full in less than 5 days
+              assuming the average fill-up rate of the past 48 hours.
+
+    - name: healthchecks
+      rules:
+        - alert: CephSlowOps
+          expr: ceph_healthcheck_slow_ops > 0
+          for: 15m
+          labels:
+            severity: warning
+            type: ceph_default
+          annotations:
+            description: >
+              {{ $value }} OSD requests are taking too long to process (osd_op_complaint_time exceeded)
+
